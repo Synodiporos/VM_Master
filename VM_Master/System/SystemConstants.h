@@ -9,38 +9,34 @@
 #define SYSTEM_SYSTEMCONSTANTS_H_
 
 //PIN NUMBER CONGIG
-#define HV_ANALOG_PIN (uint8_t) A1 //A1
-#define BT_ANALOG_PIN (uint8_t) A0 //A0
-#define LED_RED_PIN 8
-#define LED_BLUE_PIN 7
-#define LED_WHITE_PIN 6
-#define BUZZER_PIN 5
-#define BUTTON_PIN 3
-#define MOSFET_PIN 4
+#define LED_RED_PIN 7
+#define LED_BLUE_PIN 6
+#define LED_WHITE_PIN 5
+#define BUTTON_PIN 4
 #define RF_CE 9
 #define RF_CSN 10
-#define RF_IRQ 2
-//REFERENCE VOLTAGE
-#define AREF_VOLTAGE (float)3.335
-//HV Probe CONFIG
-#define HVPROBE_SPV (unsigned short int)32 // 32 Samples per Measurement
-#define HVPROBE_UNITS (char*)"kV"
-#define HVPROBE_MIN_MEAS_RANGE (float)0
-#define HVPROBE_MAX_MEAS_RANGE (float)45
-#define HVPROBE_PERIOD 128
-//BATTERY CONFIG
-#define BATTM_OFFSET 17 //Vdrop = 56mV, 180mV
-#define BATTM_DISC_VALUE 828 // 2.7V \\ At 2.61V worked fine
-#define BATTM_FULL_VALUE 1023 // 3.335V
-#define BATTM_ALARM_VALUE 846 // 2.76V
-#define BATTM_HYSTERISIS_VALUE 10// 2.792V - 0.0326v
-#define BATTM_MEAS_PERIOD 1024
-#define BATTM_SPV 16
-//RF CONFIG
-#define RF_READ_PIPE (byte) 00001
-#define RF_WRITE_PIPE (byte) 00002
-#define RF_CC_PERIOD 3000
+#define RF_IRQ 8
+#define RX3_PIN 2
+#define TX3_PIN 3
 
+//Serial 3
+#define SRL3_BD 115200
+//Serial
+#define SRL_BD 115200
+
+//RF CONFIG
+#define RF_READ_PIPE (byte) 00002
+#define RF_WRITE_PIPE (byte) 00001
+#define RF_CC_PERIOD 10000
+#define RF_PAYLOAD_SIZE 16
+//AT COMMANDS
+#define CMD_HV1 "HV1"
+#define CMD_SR1 "SR1"
+#define CMD_HV2 "HV2"
+#define CMD_SR2 "SR2"
+#define CMD_BAT "BAT"
+#define CMD_ACK "ACK"
+#define CMD_ACR "ACR"
 //LED NOTIFICATION MODES
 //ACTIVE
 #define LED_M1 new LEDTone(3, 40,	\

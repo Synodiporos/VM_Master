@@ -43,7 +43,6 @@ public:
 	virtual bool isExecuted();
 	uint8_t execute();
 	virtual void validate();
-
 	void print();
 
 protected:

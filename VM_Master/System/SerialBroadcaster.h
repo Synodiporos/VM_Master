@@ -10,6 +10,7 @@
 
 #include "../CMD/CMD.h"
 #include "../CMD/AT.h"
+#include "../RFTransceiver/RFTransceiver.h"
 
 class SerialBroadcaster {
 public:

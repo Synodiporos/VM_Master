@@ -8,10 +8,12 @@
 #ifndef CMD_CMDSTARTUP_H_
 #define CMD_CMDSTARTUP_H_
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include "../System/SystemConstants.h"
 #include "CMD.h"
 #include "../Timer/Timer.h"
+#include <string>
+using namespace std;
 
 #define STARTUP_INTERVAL 500
 

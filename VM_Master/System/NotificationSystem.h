@@ -10,6 +10,7 @@
 #include "SystemConstants.h"
 #include "../LEDPlayer/LEDTone.h"
 #include "../LEDPlayer/LEDTonePLayer.h"
+#include <Arduino.h>
 
 class NotificationSystem {
 public:

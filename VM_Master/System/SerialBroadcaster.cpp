@@ -65,6 +65,9 @@ void SerialBroadcaster::onSerialMessageReceived(const string msg){
 	Serial.print(F("Received: "));
 	const char* c = msg.c_str();
 	Serial.println(c);
+
+	RFTransceiver* rf = RFTransceiver::getInstance();
+	rf->write(c);
 	//msg += "\r";
 
 	//CMD* cmd = new CMDErrorReport();//AT::toCMD(msg);
