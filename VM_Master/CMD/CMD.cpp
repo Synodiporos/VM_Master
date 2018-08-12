@@ -90,8 +90,8 @@ void CMD::print(){
 }
 
 uint8_t CMD::execute(){
-	Serial.print(F("Execute "));
-	this->print();
+	//Serial.print(F("Execute "));
+	//this->print();
 	this->setState(STATE_EXECUTED);
 	uint8_t res = onExecute();
 	if(res==RES_ONPROGRESS)

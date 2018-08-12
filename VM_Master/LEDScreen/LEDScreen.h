@@ -9,6 +9,7 @@
 #define LEDSCREEN_LEDSCREEN_H_
 
 #include <Arduino.h>
+#include <string>
 #include "../System/SystemConstants.h"
 
 class LEDScreen {
@@ -22,7 +23,7 @@ public:
 	void turnOFF();
 	void brightness(uint8_t br);
 	void showMemoryData();
-	void write(char* string, int row, int col, uint8_t size);
+	void write(std::string string, int row, int col, uint8_t size);
 	void write(char ch, int row, int col, uint8_t size);
 	void drawLine(uint8_t x0, uint8_t y0,
 			uint8_t x1, uint8_t y1, bool enabled);
@@ -33,6 +34,7 @@ private:
 	static LEDScreen* instance;
 	LEDScreen();
 	bool onSendAt(char* at);
+	void onTimeout();
 };
 
 #endif /* LEDSCREEN_LEDSCREEN_H_ */

@@ -8,7 +8,7 @@
 #include "Controller.h"
 
 Controller::Controller(){
-
+	//initialization();
 }
 
 Controller::~Controller() {
@@ -22,7 +22,6 @@ void Controller::activate(){
 	if(notification){
 		notification->setActiveEnabled(true);
 	}
-	initialization();
 }
 
 void Controller::deactivate(){
@@ -34,7 +33,7 @@ void Controller::deactivate(){
 }
 
 void Controller::initialization(){
-
+	page->reprint();
 }
 
 void Controller::setNotificationSystem(NotificationSystem* ns){
@@ -60,6 +59,7 @@ void Controller::actionPerformed(Action action){
 	RFTransceiver* radio = (RFTransceiver*)action.getSource();
 	uint8_t id = action.getActionId();
 
+	if(radio==this->transceiver)
 	switch(id){
 		case RFTransceiver::ON_MESSAGE_RECEIVED:{
 			char* msg = (char*)action.getContainer();
@@ -88,14 +88,16 @@ void Controller::onMessageReceived(char* msg){
 	vector<string> params;
 	AT::parse(input, cmdN, params);
 
-	if(cmdN.compare(ATCMDs::AT_BT)==0){
+	if(cmdN.compare(ATCMDs::AT_ACK)==0){
 		char at[RF_PAYLOAD_SIZE];
 		char str[] = CMD_ACR;
 		sprintf (at, "AT+%s", str);
 		RFTransceiver::getInstance()->write(at);
 	}
 	else if(cmdN.compare(ATCMDs::AT_HV1)==0){
-
+		const std::string param = params[0];
+		float hv = std::atof(param.c_str());
+		page->setHV10350(hv);
 	}
 	else if(cmdN.compare(ATCMDs::AT_SR1)==0){
 

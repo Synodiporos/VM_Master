@@ -8,6 +8,9 @@
 #ifndef MATH_MATHUTIL_H_
 #define MATH_MATHUTIL_H_
 
+#include <string>
+using namespace std;
+
 class MathUtil {
 public:
 
@@ -41,6 +44,10 @@ public:
 
 	short int voltageToBinary(float value, float VREF){
 		return (value * 1023)/VREF;
+	}
+
+	float stringToFloat(const char* str){
+		return std::atof(str);
 	}
 
 };

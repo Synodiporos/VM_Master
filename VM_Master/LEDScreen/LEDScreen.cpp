@@ -54,13 +54,13 @@ void LEDScreen::showMemoryData(){
 	onSendAt(at);
 }
 
-void LEDScreen::write(char* string, int row, int col, uint8_t size){
-	char buffer [13 + sizeof(string)];
+void LEDScreen::write(std::string string, int row, int col, uint8_t size){
+	char buffer [13 + string.size()];
 	int n;
 	if(size<16)
-		n = sprintf (buffer, "AT81=(%d,%d,%s)", row, col, string);
+		n = sprintf (buffer, "AT81=(%d,%d,%s)", row, col, string.c_str());
 	else
-		n = sprintf (buffer, "AT83=(%d,%d,%s)", row, col, string);
+		n = sprintf (buffer, "AT83=(%d,%d,%s)", row, col, string.c_str());
 	onSendAt(buffer);
 }
 
@@ -96,6 +96,21 @@ void LEDScreen::drawRectangle(uint8_t x0, uint8_t y0,
 
 bool LEDScreen::onSendAt(char* at){
 	uint8_t res = Serial.print(at);
+
+	unsigned long time = millis();
+	bool timeout = false;
+	while(Serial.read()!='E' && !timeout){
+		timeout = millis()-time >= SC_TIMEOUT;
+	}
+	delay(1);
+
+	if(timeout)
+		onTimeout();
+	//Serial.println();
+	//delay(10);
 	return res>0;
 }
 
+void LEDScreen::onTimeout(){
+	Serial.println(F("Time out"));
+}

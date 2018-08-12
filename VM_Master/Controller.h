@@ -7,6 +7,7 @@
 
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
+#include "Math/MathUtil.h"
 #include "Commons/IActionListener.h"
 #include "Commons/Action.h"
 #include "Commons/IPropertyListener.h"
@@ -17,6 +18,8 @@
 #include "System/NotificationSystem.h"
 #include "RFTransceiver/RFTransceiver.h"
 #include "CMD/AT.h"
+#include "LEDScreen/LEDScreen.h"
+#include "LEDScreen/ScreenPage.h"
 #include <vector>
 #include <string>
 using namespace std;
@@ -42,6 +45,8 @@ public:
 protected:
 	NotificationSystem* notification = nullptr;
 	RFTransceiver* transceiver = RFTransceiver::getInstance();
+	LEDScreen* screen = LEDScreen::getInstance();
+	ScreenPage* page = new ScreenPage(screen);
 
 	void onMessageReceived(char* msg);
 	void onMessageSend(char* msg);

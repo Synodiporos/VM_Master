@@ -19,8 +19,8 @@ NotificationSystem* notification = NotificationSystem::getInstance();
 SerialBroadcaster* serialBroad = SerialBroadcaster::getInstance();
 RFTransceiver* trasnceiver = RFTransceiver::getInstance();
 CMDExecutor* executor = CMDExecutor::getInstance();
-RF24 radio(RF_CE, RF_CSN);
 LEDScreen* ledScreen = LEDScreen::getInstance();
+ScreenPage* page = new ScreenPage(ledScreen);
 Controller controller;
 
 long mil = millis();
@@ -33,19 +33,24 @@ void setup() {
 	pinMode(LED_BLUE_PIN, OUTPUT);
 
 	Serial.begin(SRL_BD);
-	Serial.println(F("MASTER OK"));
+
+	//Serial.println(F("MASTER OK"));
+	ledScreen->clear();
+	//page->reprint();
 
 	//Initialaze RF
+	RF24 radio(RF_CE, RF_CSN);
 	trasnceiver->initialize(&radio);
 
 	//Controller
 	controller.activate();
+	controller.initialization();
 
-	CMDStartUp* startUp = new CMDStartUp();
-	startUp->execute();
+	//CMDStartUp* startUp = new CMDStartUp();
+	//startUp->execute();
 
-	Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
-	Serial.println(freeMemory(), DEC);  // print how much RAM is available.
+	//Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
+	//Serial.println(freeMemory(), DEC);  // print how much RAM is available.
 	// print how much RAM is available.
 }
 

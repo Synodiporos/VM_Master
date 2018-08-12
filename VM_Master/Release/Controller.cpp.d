@@ -1,7 +1,4 @@
-Controller.cpp.o: ..\Controller.cpp ..\Controller.h \
- ..\Commons/IActionListener.h ..\Commons/Action.h ..\Commons/Action.h \
- ..\Commons/IPropertyListener.h ..\Commons/IStateListener.h \
- ..\Commons/State.h \
+Controller.cpp.o: ..\Controller.cpp ..\Controller.h ..\Math/MathUtil.h \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/string \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/basic_definitions \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/system_configuration.h \
@@ -22,9 +19,12 @@ Controller.cpp.o: ..\Controller.cpp ..\Controller.h \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/functional \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/type_traits \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/initializer_list \
- ..\System/SystemConstants.h ..\System/NotificationSystem.h \
- ..\System/SystemConstants.h ..\System/../LEDPlayer/LEDTone.h \
- ..\System/../LEDPlayer/LEDTonePLayer.h ..\System/../LEDPlayer/LEDTone.h \
+ ..\Commons/IActionListener.h ..\Commons/Action.h ..\Commons/Action.h \
+ ..\Commons/IPropertyListener.h ..\Commons/IStateListener.h \
+ ..\Commons/State.h ..\System/SystemConstants.h \
+ ..\System/NotificationSystem.h ..\System/SystemConstants.h \
+ ..\System/../LEDPlayer/LEDTone.h ..\System/../LEDPlayer/LEDTonePLayer.h \
+ ..\System/../LEDPlayer/LEDTone.h \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\packages\arduino\hardware\avr\1.6.21\cores\arduino/Arduino.h \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\packages\arduino\hardware\avr\1.6.21\cores\arduino/binary.h \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\packages\arduino\hardware\avr\1.6.21\cores\arduino/WCharacter.h \
@@ -44,21 +44,28 @@ Controller.cpp.o: ..\Controller.cpp ..\Controller.h \
  ..\RFTransceiver/../Timer/../Commons/Action.h \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\packages\arduino\hardware\avr\1.6.21\libraries\SPI\src/SPI.h \
  C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\RF24\1.3.1/RF24.h \
- C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\RF24\1.3.1/RF24_config.h
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\RF24\1.3.1/RF24_config.h \
+ ..\CMD/AT.h ..\CMD/ATCMDs.h ..\CMD/../System/SystemConstants.h \
+ ..\CMD/CMD.h ..\CMD/../Commons/IStateListener.h ..\CMD/CMDExecutor.h \
+ ..\CMD/../CMD/CMD.h ..\CMD/CMDErrorReport.h ..\CMD/CMDBatteryReport.h \
+ ..\CMD/CMDSettings.h ..\CMD/CMDTestLeds.h ..\LEDScreen/LEDScreen.h \
+ ..\LEDScreen/../System/SystemConstants.h ..\LEDScreen/ScreenPage.h \
+ ..\LEDScreen/../LEDScreen/LEDScreen.h \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/iostream \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/ios \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/locale \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/istream \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/cctype \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/streambuf \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/istream_helpers \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/ostream \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/ostream_helpers \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/string_iostream \
+ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/sstream
 
 ..\Controller.h:
 
-..\Commons/IActionListener.h:
-
-..\Commons/Action.h:
-
-..\Commons/Action.h:
-
-..\Commons/IPropertyListener.h:
-
-..\Commons/IStateListener.h:
-
-..\Commons/State.h:
+..\Math/MathUtil.h:
 
 C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/string:
 
@@ -99,6 +106,18 @@ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/funct
 C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/type_traits:
 
 C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/initializer_list:
+
+..\Commons/IActionListener.h:
+
+..\Commons/Action.h:
+
+..\Commons/Action.h:
+
+..\Commons/IPropertyListener.h:
+
+..\Commons/IStateListener.h:
+
+..\Commons/State.h:
 
 ..\System/SystemConstants.h:
 
@@ -153,3 +172,55 @@ C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\packages\arduino\hardware\avr\1.6.21
 C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\RF24\1.3.1/RF24.h:
 
 C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\RF24\1.3.1/RF24_config.h:
+
+..\CMD/AT.h:
+
+..\CMD/ATCMDs.h:
+
+..\CMD/../System/SystemConstants.h:
+
+..\CMD/CMD.h:
+
+..\CMD/../Commons/IStateListener.h:
+
+..\CMD/CMDExecutor.h:
+
+..\CMD/../CMD/CMD.h:
+
+..\CMD/CMDErrorReport.h:
+
+..\CMD/CMDBatteryReport.h:
+
+..\CMD/CMDSettings.h:
+
+..\CMD/CMDTestLeds.h:
+
+..\LEDScreen/LEDScreen.h:
+
+..\LEDScreen/../System/SystemConstants.h:
+
+..\LEDScreen/ScreenPage.h:
+
+..\LEDScreen/../LEDScreen/LEDScreen.h:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/iostream:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/ios:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/locale:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/istream:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/cctype:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/streambuf:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/istream_helpers:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/ostream:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/ostream_helpers:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/string_iostream:
+
+C:\eclipse\cpp-oxygen\eclipse\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/sstream:
