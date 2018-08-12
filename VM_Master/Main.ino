@@ -46,8 +46,8 @@ void setup() {
 	controller.activate();
 	controller.initialization();
 
-	//CMDStartUp* startUp = new CMDStartUp();
-	//startUp->execute();
+	CMDStartUp* startUp = new CMDStartUp();
+	startUp->execute();
 
 	//Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
 	//Serial.println(freeMemory(), DEC);  // print how much RAM is available.

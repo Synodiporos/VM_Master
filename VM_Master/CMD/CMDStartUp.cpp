@@ -11,7 +11,6 @@
 
 CMDStartUp::CMDStartUp() : CMD(){
 	// TODO Auto-generated constructor stub
-	Serial.println("Test");
 }
 
 CMDStartUp::~CMDStartUp() {
