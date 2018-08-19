@@ -36,7 +36,7 @@ void RFTransceiver::initialize(RF24* radio){
 		radio->openWritingPipe(RF_WRITE_PIPE); // 00001
 		radio->openReadingPipe(1, RF_READ_PIPE); // 00002
 		radio->setPALevel(RF24_PA_MIN);
-		radio->setDataRate(RF24_1MBPS );
+		radio->setDataRate(RF24_250KBPS );
 		radio->startListening();
 
 		this->radioStarted = true;
@@ -85,7 +85,7 @@ bool RFTransceiver::write(const char* msg){
 	}else{
 		Serial.println(F("RF Write SUCCED"));
 	}*/
-	//delay(1);
+	delay(1);
 	onMessageSend(msg);
 	radio->startListening();
 	return res;
@@ -104,7 +104,7 @@ void RFTransceiver::validate(){
 			return;
 	if(radio->available()){
 		char msg[RF_PAYLOAD_SIZE];
-		radio->read(msg, sizeof(msg));
+		radio->read(msg, RF_PAYLOAD_SIZE);
 		onMessageReceived(msg);
 	}
 	validateConnectivity();
@@ -112,7 +112,7 @@ void RFTransceiver::validate(){
 
 void RFTransceiver::validateConnectivity(){
 	unsigned long interval = millis()-time;
-	unsigned int ccIntervals = 1000;
+	unsigned int ccIntervals = RF_CC_INTERVALS;
 	if(isRadioStarted()){
 		//unsigned long subinterval = interval - period;
 		if(ccCount==0){

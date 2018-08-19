@@ -41,7 +41,8 @@ bool ScreenPage::isVisible(){
 bool ScreenPage::setHV10350(float voltage){
 	if(this->hv1!=voltage){
 		this->hv1 = voltage;
-		onPropertyChanged(2);
+		//onPropertyChanged(2);
+		printHV1();
 		return true;
 	}
 	return false;
@@ -54,7 +55,8 @@ float ScreenPage::getHV10350(){
 bool ScreenPage::setHV820(float voltage){
 	if(this->hv2!=voltage){
 		this->hv2 = voltage;
-		onPropertyChanged(3);
+		//onPropertyChanged(3);
+		printHV2();
 		return true;
 	}
 	return false;
@@ -155,29 +157,31 @@ void ScreenPage::print(){
 	printHV1();
 	printHV2();
 
-	screen->write("BT", 0, 14, 8);
-	screen->write("NC", 2, 14, 8);
+	//screen->write("BT", 0, 14, 8);
+	//screen->write("NC", 2, 14, 8);
 
 	//screen->drawRectangle(32,11,32,13,true);
 
-	screen->drawLine(0, 15, 96, 15, true);
+	//screen->drawLine(0, 15, 96, 15, true);
 }
 
 void ScreenPage::printHV1(){
-	char* f = toStr(getHV10350());
+	char f[6] = {0,0,0,0,0,0};
+	toStr(getHV10350(), f);
 	string str(f);
 	str += "kV";
+	//Serial.println(str.c_str());
 	screen->write(str, 0, 3, 16);
 }
 
 void ScreenPage::printHV2(){
-	char* f = toStr(getHV820());
+	char f[6] = {0,0,0,0,0,0};
+	toStr(getHV820(), f);
 	string str(f);
 	str += "kV";
 	screen->write(str, 2, 3, 16);
 }
 
-char* ScreenPage::toStr(float value){
-	char temp[6];
-	return dtostrf(value , 2, 2, temp);
+void ScreenPage::toStr(float value, char str[6]){
+	dtostrf(value , 2, 2, str);
 }

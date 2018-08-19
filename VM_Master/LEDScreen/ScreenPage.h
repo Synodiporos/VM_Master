@@ -50,7 +50,7 @@ private:
 	void resetTimer();
 	void onPropertyChanged(uint8_t property);
 	void print();
-	char* toStr(float value);
+	void toStr(float value, char str[6]);
 
 	void printHV1();
 	void printHV2();

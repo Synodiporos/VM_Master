@@ -22,6 +22,7 @@ CMDExecutor* executor = CMDExecutor::getInstance();
 LEDScreen* ledScreen = LEDScreen::getInstance();
 ScreenPage* page = new ScreenPage(ledScreen);
 Controller controller;
+RF24 radio(RF_CE, RF_CSN);
 
 long mil = millis();
 int c = 0;
@@ -39,7 +40,6 @@ void setup() {
 	//page->reprint();
 
 	//Initialaze RF
-	RF24 radio(RF_CE, RF_CSN);
 	trasnceiver->initialize(&radio);
 
 	//Controller

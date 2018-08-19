@@ -19,44 +19,42 @@ bool AT::parse(const std::string& input,
 		std::string& command, vector<string>& params){
 
 	if(std::equal(PREF.begin(), PREF.end(), input.begin())){
-		unsigned int n = PREF.size();
-		unsigned int ei = 0;
+			unsigned int n = PREF.size();
+			unsigned int ei = 0;
 
-		for(char c : input) {
-			if(c=='='){
-				ei = n;
-				break;
+			string com = "";
+			auto d = input.begin();
+			for (auto it = input.begin()+2;
+					it!=input.end(); ++it){
+				if(*it=='='){
+					ei = n;
+					break;
+				}
+				com += *it;
+				n++;
 			}
-			else if(c=='\r')
-				break;
-			command.push_back(c);
-			n++;
-		}
 
-		/*std::vector<char>::iterator it = input.begin();
-		for(it;
-				it != input.end(); ++it) {
-			if(*it=='='){
-				ei = n;
-				break;
+			if(ei>0){
+				string s = input.substr(ei+1, input.size()-1);
+				int found = s.find(&DELIM);
+				if(found!=-1){
+					split(s, params);
+				}
+				else{
+					params.push_back(
+							input.substr(ei+1, input.size()-1));
+				}
 			}
-			else if(*it=='\r')
-				break;
-			command.push_back(*it);
-			n++;
-
-			//Serial.println(*it);
-		}*/
-		if(ei>0){
-			string s = input.substr(ei+1, input.size()-1);
-			int found = s.find(&DELIM);
+			if(com.size()>0){
+				command.append( com.substr(1, com.size()-1) );
+				//command = com.substr(1, com.size()-1);
+			}
+			return true;
 		}
-		return true;
-	}
-	else{
-		// NO AT COMMAND
-		return false;
-	}
+		else{
+			// NO AT COMMAND
+			return false;
+		}
 }
 
 CMD* AT::toCMD(const std::string& at){

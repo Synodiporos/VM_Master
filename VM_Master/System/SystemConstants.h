@@ -28,6 +28,7 @@
 #define RF_READ_PIPE (byte) 00002
 #define RF_WRITE_PIPE (byte) 00001
 #define RF_CC_PERIOD 10000
+#define RF_CC_INTERVALS 500
 #define RF_PAYLOAD_SIZE 16
 //SCREEN CONFIG
 #define SC_TIMEOUT 40

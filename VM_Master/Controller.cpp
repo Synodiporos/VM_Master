@@ -80,8 +80,8 @@ void Controller::actionPerformed(Action action){
 }
 
 void Controller::onMessageReceived(char* msg){
-	Serial.print(F("Slave RF Message Received: "));
-	Serial.println(msg);
+	//Serial.print(F("Slave RF Message Received: "));
+	//Serial.println(msg);
 
 	std::string input = string(msg);
 	std::string cmdN;
@@ -96,7 +96,7 @@ void Controller::onMessageReceived(char* msg){
 	}
 	else if(cmdN.compare(ATCMDs::AT_HV1)==0){
 		const std::string param = params[0];
-		float hv = std::atof(param.c_str());
+		float hv = std::atof(param.c_str())/1000;
 		page->setHV10350(hv);
 	}
 	else if(cmdN.compare(ATCMDs::AT_SR1)==0){
