@@ -29,6 +29,8 @@ LEDTonePlayer::LEDTonePlayer(int8_t pinNumber, LEDTone* headTone,
 
 LEDTonePlayer::~LEDTonePlayer() {
 	// TODO Auto-generated destructor stub
+	//delete _headTone;
+	//delete _currentTone;
 }
 
 void LEDTonePlayer::initialize(){
@@ -51,8 +53,13 @@ short int LEDTonePlayer::getIterations(){
 }
 
 void LEDTonePlayer::setHeadTone(LEDTone* headTone){
-	this->_headTone = headTone;
-	_currentTone = _headTone;
+	if(this->_headTone!=headTone){
+		//delete this->_headTone;
+		//delete _currentTone;
+		this->_headTone = headTone;
+		_currentTone = _headTone;
+	}
+
 }
 
 uint8_t LEDTonePlayer::getState(){
@@ -151,7 +158,8 @@ void LEDTonePlayer::playTone(LEDTone* _tone){
 void LEDTonePlayer::validate(){
 	if(_state==2){
 		//_interval = (millis() - _millis);
-		if((millis()-_millis + _interval) >= _currentTone->getDuration()){
+		if((millis()-_millis + _interval) >=
+				_currentTone->getDuration()){
 			playNextTone();
 		}
 	}

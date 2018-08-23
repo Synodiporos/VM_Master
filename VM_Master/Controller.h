@@ -43,7 +43,7 @@ public:
 	void actionPerformed(Action action);
 
 protected:
-	NotificationSystem* notification = nullptr;
+	NotificationSystem* notification = NotificationSystem::getInstance();
 	RFTransceiver* transceiver = RFTransceiver::getInstance();
 	LEDScreen* screen = LEDScreen::getInstance();
 	ScreenPage* page = new ScreenPage(screen);

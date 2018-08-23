@@ -21,6 +21,7 @@ void Controller::activate(){
 	}
 	if(notification){
 		notification->setActiveEnabled(true);
+
 	}
 }
 
@@ -107,6 +108,11 @@ void Controller::onMessageReceived(char* msg){
 	}
 	else if(cmdN.compare(ATCMDs::AT_SR2)==0){
 
+	}
+	else if(cmdN.compare(ATCMDs::AT_BT)==0){
+		const std::string param = params[0];
+		float hv = std::atof(param.c_str());
+		page->setBatteryLevel(hv);
 	}
 
 

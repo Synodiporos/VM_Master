@@ -41,13 +41,21 @@ void setup() {
 
 	//Initialaze RF
 	trasnceiver->initialize(&radio);
+	trasnceiver->startConnectivityCheck();
 
 	//Controller
 	controller.activate();
 	controller.initialization();
 
-	CMDStartUp* startUp = new CMDStartUp();
-	startUp->execute();
+	digitalWrite(LED_WHITE_PIN, HIGH);
+	digitalWrite(LED_RED_PIN, HIGH);
+	digitalWrite(LED_BLUE_PIN, HIGH);
+	delay(250);
+	digitalWrite(LED_WHITE_PIN, LOW);
+	digitalWrite(LED_RED_PIN, LOW);
+	digitalWrite(LED_BLUE_PIN, LOW);
+
+	//controller.activate();
 
 	//Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
 	//Serial.println(freeMemory(), DEC);  // print how much RAM is available.
@@ -58,81 +66,14 @@ void setup() {
 void loop() {
 	long interval = millis()-mil;
 
-	/*if(interval>=2000 && c<=12){
-		switch(c){
-			case 0:{
-				ledScreen->turnOFF();
-				break;
-			}
-			case 1:{
-				ledScreen->turnON();
-				break;
-			}
-			case 2:{
-				ledScreen->showMemoryData();
-				break;
-			}
-			case 3:{
-				ledScreen->clear();
-				break;
-			}
-			case 4:{
-				char str[] = "Test1!";
-				ledScreen->write(str, 0, 0, 8);
-				break;
-			}
-			case 5:{
-				char str[] = "Test2!";
-				ledScreen->write(str, 0, 0, 16);
-				break;
-			}
-			case 6:{
-				ledScreen->write('A', 2, 2, 7);
-				break;
-			}
-			case 7:{
-				ledScreen->write('B', 0, 5, 16);
-				break;
-			}
-			case 8:{
-				ledScreen->drawLine(1, 15, 94, 15, true);
-				break;
-			}
-			case 9:{
-				ledScreen->drawRectangle(0, 0, 95, 31, true);
-				break;
-			}
-			case 10:{
-				ledScreen->brightness(1);
-				break;
-			}
-			case 11:{
-				ledScreen->brightness(6);
-				break;
-			}
-			case 12:{
-				ledScreen->brightness(11);
-				//c = -1;
-				break;
-			}
-		}
-		c++;
+	if(interval>=2000 ){
+		//Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
+		//Serial.println(freeMemory(), DEC);
 		mil = millis();
 	}
 
-	if(interval>=2000 && c>12){
-		char buffer [13 + 1];
-		sprintf (buffer, "V=%dkV", c);
-		ledScreen->write(buffer, 2, 0, 16);
-		if(c>1000)
-			c=0;
-		else
-			c++;
-		delay(50);
-	}*/
-
-	notification->validate();
-	serialBroad->validate();
 	trasnceiver->validate();
-	executor->validate();
+	notification->validate();
+	//serialBroad->validate();
+	//executor->validate();
 }

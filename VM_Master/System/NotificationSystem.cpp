@@ -47,7 +47,7 @@ void NotificationSystem::setHVWarningEnabled(bool enabled){
 
 		if(isActiveEnabled()){
 			ledWhite.stop();
-			ledWhite.setHeadTone(LED_M1);
+			ledWhite.setHeadTone(LTActive);
 			ledWhite.play();
 		}else{
 			ledWhite.stop();
@@ -56,7 +56,7 @@ void NotificationSystem::setHVWarningEnabled(bool enabled){
 		if(isBatterLowEnabled()){
 			//Serial.println(F( " - Enable Battery"));
 			ledRed.stop();
-			ledRed.setHeadTone(LED_M6);
+			ledRed.setHeadTone(LTBatteryWarning);
 			ledRed.play();
 		}
 	}
@@ -72,7 +72,7 @@ void NotificationSystem::setBatteryLowEnabled(bool enabled){
 		if(!isHVWarningEnabled()){
 			//Serial.println(F( " - Enable Battery"));
 			ledRed.stop();
-			ledRed.setHeadTone(LED_M6);
+			ledRed.setHeadTone(LTBatteryWarning);
 			ledRed.play();
 		}
 	}
@@ -84,7 +84,7 @@ void NotificationSystem::setBatteryLowEnabled(bool enabled){
 			if(isErrorEnabled()){
 				//Serial.println(F( " - Enable Error"));
 				ledRed.stop();
-				ledRed.setHeadTone(LED_M7);
+				ledRed.setHeadTone(LTError);
 				ledRed.play();
 			}
 		}
@@ -95,14 +95,13 @@ void NotificationSystem::setBatteryLowEnabled(bool enabled){
 void NotificationSystem::setErrorEnabled(bool enabled){
 	if(isErrorEnabled()==enabled)
 			return;
-	//Serial.println( " setErrorEnabled ");
 	if(enabled){
 		state |= ERROR;
 		if(!isHVWarningEnabled()){
 			if(!isBatterLowEnabled()){
 				//Serial.println(F(" - Enable Error"));
 				ledRed.stop();
-				ledRed.setHeadTone(LED_M7);
+				ledRed.setHeadTone(LTError);
 				ledRed.play();
 			}
 		}
@@ -111,7 +110,7 @@ void NotificationSystem::setErrorEnabled(bool enabled){
 		state &= 255-ERROR;
 		if(!isHVWarningEnabled()){
 			if(!isBatterLowEnabled()){
-				Serial.println(F( " - Disable RED"));
+				//Serial.println(F( " - Disable RED"));
 				ledRed.stop();
 			}
 		}
@@ -124,22 +123,24 @@ void NotificationSystem::setActiveEnabled(bool enabled){
 		return;
 	if(enabled){
 		state |= ACTIVE;
-		if(!isHVWarningEnabled()){
+	//	if(!isHVWarningEnabled()){
 			ledWhite.stop();
-			ledWhite.setHeadTone(LED_M1);
+			ledWhite.setHeadTone(LTActive);
 			ledWhite.play();
-		}
+	//	}
 	}
 	else{
 		state &= 255-ACTIVE;
-		if(!isHVWarningEnabled()){
+	//	if(!isHVWarningEnabled()){
 			ledWhite.stop();
-		}
+	//	}
 	}
 	onStateChanged(ACTIVE);
 }
 
 void NotificationSystem::setConnectionLostEnabled(bool enabled){
+	if(isConnectionLostEnabled()==enabled)
+		return;
 	if(enabled){
 		state |= CONNECTION_LOST;
 	}

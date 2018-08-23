@@ -1,6 +1,7 @@
 /CMD/
 /Commons/
 /LEDPlayer/
+/LEDScreen/
 /Memory/
 /RFTransceiver/
 /System/
@@ -10,4 +11,3 @@
 /makefile
 /sources.mk
 /subdir.mk
-/LEDScreen/
