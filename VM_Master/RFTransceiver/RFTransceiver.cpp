@@ -30,13 +30,13 @@ void RFTransceiver::initialize(RF24* radio){
 	this->radio = radio;
 	//Serial.println((long)radio);
 	if(radio->begin()){
-		radio->setRetries(15, 15);
+		radio->setRetries(15, 10);
 		radio->disableDynamicPayloads();
 		radio->setPayloadSize(RF_PAYLOAD_SIZE);
 		radio->openWritingPipe(RF_WRITE_PIPE); // 00001
 		radio->openReadingPipe(1, RF_READ_PIPE); // 00002
-		radio->setPALevel(RF24_PA_MIN);
-		radio->setDataRate(RF24_250KBPS );
+		radio->setPALevel(RF24_PA_LOW);
+		radio->setDataRate(RF24_1MBPS );
 		radio->startListening();
 
 		this->radioStarted = true;
