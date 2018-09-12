@@ -35,7 +35,10 @@
 //WIFI
 #define WIFI_SSID "RaycapWiFi_Drama" //"SynNet"
 #define WIFI_PASS "r@yL@N!!" //"Syn123NET789"
-
+#define WIFI_SERVER "192.168.11.5"
+#define WiFi_TEST_URI "surgeroom/get.php"
+#define WiFi_SURGE_URI "surgeroom/surgeRecord.php"
+#define WiFi_BATTERY_URI "surgeroom/batteryRecord.php"
 //SCREEN CONFIG
 #define SC_TIMEOUT 40
 #define SC_TURNOFF_INT 60000

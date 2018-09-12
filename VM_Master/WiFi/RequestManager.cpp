@@ -27,7 +27,7 @@ void RequestManager::initialize(){
 	}
 
 	esp->begin(SRL3_BD);
-	esp->println(F("AT"));
+	//esp->println(F("AT"));
 }
 
 uint8_t RequestManager::size(){
@@ -117,7 +117,7 @@ void RequestManager::checkESPModule(){
 }
 
 void RequestManager::initializeModule(){
-	esp->println(F("AT+CWMODE=1"));
+	esp->println(F("AT+CWMODE=3"));
 	timeout = millis();
 	setState(ST_INITIALIZING);
 }
@@ -129,15 +129,39 @@ void RequestManager::connectToWiFi(){
 
 	//Serial.println(at);
 	esp->println(at);
-	setState(ST_CONNECTING);
+	setState(ST_W_CONNECTING);
+
+	timeout = millis();
+}
+
+void RequestManager::connectToServer(){
+	char at[64];
+	sprintf (at, "AT+CIPSTART=\"TCP\",\"%s\",80",
+			WIFI_SERVER);
+
+	//Serial.println(at);
+	esp->println(at);
+	setState(ST_S_CONNECTING);
 
 	timeout = millis();
 }
 
 void RequestManager::checkWiFiConnection(){
-
+	esp->println("AT+CWJAP?");
+	setState(ST_W_CHECK);
+	timeout = millis();
 }
 
+void RequestManager::checkServerConnection(){
+	//2: The ESP8266 Station is connected to an AP and its IP is obtained.
+	//3: The ESP8266 Station has created a TCP or UDP transmission.
+	//4: The TCP or UDP transmission of ESP8266 Station is disconnected.
+	//5: The ESP8266 Station does NOT connect to an AP
+
+	esp->println("AT+CIPSTATUS");
+	setState(ST_S_CHECK);
+	timeout = millis();
+}
 
 bool RequestManager::startPosting(){
 	if(!posting){
@@ -204,25 +228,56 @@ void RequestManager::validate(){
 			break;
 		}
 		case ST_INITIALIZED:{
-			connectToWiFi();
+			checkWiFiConnection();
+			//connectToWiFi();
 			break;
 		}
-		case ST_CONNECTING:{
+		case ST_W_CHECK:{
+			if(millis()-timeout>3000){
+				setState(ST_W_DISCONNECTED);
+				timeout = millis();
+			}
+			break;
+		}
+		case ST_W_CONNECTING:{
 			if(millis()-timeout>=12000){
-				setState(ST_DISCONNECTED);
+				setState(ST_W_DISCONNECTED);
 				//timeout = millis();
 			}
 			break;
 		}
-		case ST_CONNECTED:{
+		case ST_W_CONNECTED:{
+			//connectToServer();
+			checkServerConnection();
+			break;
+		}
+		case ST_W_DISCONNECTED:{
+			if(millis()-timeout>=12000){
+				connectToWiFi();
+			}
+			break;
+		}
+		case ST_S_CHECK:{
+			//connectToServer();
+			if(millis()-timeout>=3000){
+				setState(ST_S_DISCONNECTED);
+				timeout = millis();
+			}
+			break;
+		}
+		case ST_S_CONNECTING:{
+			if(millis()-timeout>=10000){
+				setState(ST_S_DISCONNECTED);
+			}
+			break;
+		}
+		case ST_S_CONNECTED:{
 
 			break;
 		}
-		case ST_DISCONNECTED:{
-			if(millis()-timeout>=12000){
-				Serial.print(F("Free RAM = "));
-				Serial.println(freeMemory(), DEC);
-				connectToWiFi();
+		case ST_S_DISCONNECTED:{
+			if(millis()-timeout>=4000){
+				connectToServer();
 			}
 			break;
 		}
@@ -252,7 +307,6 @@ void RequestManager::validate(){
 			}
 		}
 	}
-
 }
 
 void RequestManager::fill(){
@@ -267,9 +321,6 @@ void RequestManager::fill(){
 
 bool RequestManager::setState(uint8_t state){
 	if(this->state!=state){
-		//Serial.print(F("State: "));
-		//Serial.println(state);
-
 		uint8_t old = this->state;
 		this->state = state;
 		onStateChanged(old);
@@ -279,12 +330,8 @@ bool RequestManager::setState(uint8_t state){
 }
 
 void RequestManager::onStateChanged(uint8_t oldState){
-	this->state = state;
-}
-
-bool RequestManager::onPostRequest(HttpRequest* request){
-
-	return false;
+	Serial.print(F("State: "));
+	Serial.println(state);
 }
 
 void RequestManager::onEspMessageReceived(const std::string msg){
@@ -300,7 +347,7 @@ void RequestManager::onEspMessageReceived(const std::string msg){
 			break;
 		}
 		case ST_INITIALIZING:{
-			if(msg.find("AT+CWMODE=1") != std::string::npos){
+			if(msg.compare("OK")==0){
 				setState(ST_INITIALIZED);
 			}
 			break;
@@ -309,30 +356,138 @@ void RequestManager::onEspMessageReceived(const std::string msg){
 
 			break;
 		}
-		case ST_CONNECTING:{
-			if(msg.find("WIFI GOT IP") != std::string::npos){
-				setState(ST_CONNECTED);
+		case ST_W_CHECK:{
+			if(msg.compare("OK")==0){
+				if(help=='O')
+					setState(ST_W_CONNECTED);
+				else
+					setState(ST_W_DISCONNECTED);
+			}
+			if(msg.find("+CWJAP:") != std::string::npos){
+				if(msg.find(WIFI_SSID) != std::string::npos)
+					help = 'O';
+				else{
+					help = 'F';
+				}
+			}
+			else if(msg.find("No AP:") != std::string::npos){
+				setState(ST_W_DISCONNECTED);
+				connectToWiFi();
+			}
+			break;
+		}
+		case ST_W_CONNECTING:{
+			if(msg.compare("OK")==0){
+				setState(ST_W_CONNECTED);
 			}
 			else if(msg.find("FAIL") != std::string::npos){
-				setState(ST_DISCONNECTED);
+				setState(ST_W_DISCONNECTED);
 			}
 			break;
 		}
-		case ST_CONNECTED:{
+		case ST_W_CONNECTED:{
+
+			break;
+		}
+		case ST_S_CHECK:{
+			if(msg.compare("OK")==0){
+				if(help == '2' || help == '3')
+					setState(ST_S_CONNECTED);
+				else{
+					setState(ST_S_DISCONNECTED);
+					connectToServer();
+				}
+			}
+			if(msg.compare("STATUS:2") == 0){
+				help = '2';
+			}
+			else if(msg.compare("STATUS:3") == 0){
+				help = '3';
+			}
+			break;
+		}
+		case ST_S_CONNECTING:{
+			if(msg.compare("OK") == 0){
+				setState(ST_S_CONNECTED);
+				//===============
+				postRequest();
+			}
+			else if(msg.compare("CLOSED") == 0){
+				setState(ST_S_DISCONNECTED);
+			}
+			break;
+		}
+		case ST_S_CONNECTED:{
+
+			break;
+		}
+		case ST_S_DISCONNECTED:{
 
 			break;
 		}
 	}
+	//delete c;
+}
 
-	if(msg.find("STATUS:") != std::string::npos){
-		char res = msg[7];
-		if(res == '2'){
-			setState(ST_CONNECTED);
+void RequestManager::postRequest() {
+	String data; //data for the POST request
+	String uri = "surgeroom/get.php"; //server side script to call
+
+	//esp->println("AT+CIPSTART=\"TCP\",\"" + WIFI_SERVER + "\",80"); //start a TCP connection.
+
+	//if (esp->find("OK")) {
+	//	Serial.println("TCP connection ready");
+	//}
+	//delay(1000);
+
+	String postRequest = String("GET ");
+	postRequest = postRequest + uri + " HTTP/1.1\r\n" +
+	"Host: " + WIFI_SERVER + "\r\n" +
+	//"Accept: *" + "/" + "*\r\n" +
+	//"Content-Length: " + data.length() + "\r\n" ;
+	//"Content-Type: application/x-www-form-urlencoded\r\n" +
+	//"\r\n" + data;
+
+	Serial.println("GET Request text: "); //see what the fully built POST request looks like
+	Serial.println(postRequest);
+
+	String sendCmd = "AT+CIPSEND="; //determine the number of caracters to be sent.
+	esp->print(sendCmd);
+	esp->println(postRequest.length());
+	delay(1000);
+
+	if(esp->find(">")) {
+		Serial.println("Sending..");
+		esp->print(postRequest);
+
+		Serial.println("Data to send: ");
+		Serial.println(data);
+		Serial.print("Data length: ");
+		Serial.println(data.length());
+		Serial.print("Request length: ");
+		Serial.println(postRequest.length());
+		Serial.println("Request Sent:");
+		Serial.println(postRequest);
+
+		if( esp->find("SEND OK")) {
+			Serial.println("Packet sent");
+			while (esp->available()) {
+				String tmpResp = esp->readString();
+				Serial.println(tmpResp);
+			}
+
+			// close the connection
+			esp->println("AT+CIPCLOSE");
 		}
 	}
+}
 
+void RequestManager::onPostRequest(HttpRequest* request){
 
-	//delete c;
+}
+
+void RequestManager::onGetRequest(HttpRequest* request){
+
 }
 
 void RequestManager::onResponseReceived(std::string response){
@@ -342,3 +497,4 @@ void RequestManager::onResponseReceived(std::string response){
 void RequestManager::onACKReceived(std::string ack){
 
 }
+

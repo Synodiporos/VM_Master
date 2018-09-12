@@ -10,7 +10,7 @@
 
 //#include <queue>
 #include <Arduino.h>
-//#include "WiFiEsp.h"
+//#include <WiFiEsp.h>
 #include "SoftwareSerial.h"
 #include "../Memory/MemoryFree.h"
 #include "../System/SystemConstants.h"
@@ -21,12 +21,19 @@
 #define POSTING 1
 
 #define ST_OFF 0
-#define ST_BLUGED 100
-#define ST_INITIALIZING 1
-#define ST_INITIALIZED 2
-#define ST_CONNECTING 3
-#define ST_CONNECTED 4
-#define ST_DISCONNECTED 5
+#define ST_BLUGED 1
+#define ST_INITIALIZING 3
+#define ST_INITIALIZED 4
+
+#define ST_W_DISCONNECTED 10
+#define ST_W_CHECK 11
+#define ST_W_CONNECTING 12
+#define ST_W_CONNECTED 13
+
+#define ST_S_DISCONNECTED 20
+#define ST_S_CHECK 21
+#define ST_S_CONNECTING 22
+#define ST_S_CONNECTED 23
 
 class RequestManager {
 public:
@@ -40,10 +47,12 @@ public:
 	HttpRequest* popRequest();
 
 	void checkESPModule();
+	void checkWiFiConnection();
+	void checkServerConnection();
+
 	void initializeModule();
 	void connectToWiFi();
-	void checkWiFiConnection();
-
+	void connectToServer();
 
 	bool startPosting();
 	bool stopPosting();
@@ -63,6 +72,7 @@ private:
 	bool posting = false;
 	//0:OFF, 1:INITializing, 2:INIT, 3:CONNECTING, 4:CONNECTED
 	uint8_t state = 0;
+	uint8_t help = 0;
 	//uint8_t count = 0;
 
 	unsigned long time = millis();
@@ -70,10 +80,13 @@ private:
 	uint8_t cc = 0;
 
 	void fill();
+	void postRequest();
 	bool setState(uint8_t oldState);
 	void onStateChanged(uint8_t state);
-	bool onPostRequest(HttpRequest* request);
 	void onEspMessageReceived(const std::string msg);
+
+	void onPostRequest(HttpRequest* request);
+	void onGetRequest(HttpRequest* request);
 	void onResponseReceived(std::string response);
 	void onACKReceived(std::string ack);
 

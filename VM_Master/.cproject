@@ -29,8 +29,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/RF24/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/SoftwareSerial}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/SoftwareSerial/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/WiFi}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/WiFi/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.1314932721" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -46,8 +44,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/RF24/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/SoftwareSerial}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/SoftwareSerial/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/WiFi}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/WiFi/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.893168184" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -63,8 +59,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/RF24/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/SoftwareSerial}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/SoftwareSerial/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/WiFi}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/VM_Master/libraries/WiFi/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.2061071583" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>
