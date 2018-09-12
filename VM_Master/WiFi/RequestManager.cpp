@@ -391,8 +391,11 @@ void RequestManager::onEspMessageReceived(const std::string msg){
 		}
 		case ST_S_CHECK:{
 			if(msg.compare("OK")==0){
-				if(help == '2' || help == '3')
+				if(help == '2' || help == '3'){
 					setState(ST_S_CONNECTED);
+					//===============
+					postRequest();
+				}
 				else{
 					setState(ST_S_DISCONNECTED);
 					connectToServer();
@@ -431,7 +434,7 @@ void RequestManager::onEspMessageReceived(const std::string msg){
 
 void RequestManager::postRequest() {
 	String data; //data for the POST request
-	String uri = "surgeroom/get.php"; //server side script to call
+	String uri = WiFi_TEST_URI;
 
 	//esp->println("AT+CIPSTART=\"TCP\",\"" + WIFI_SERVER + "\",80"); //start a TCP connection.
 

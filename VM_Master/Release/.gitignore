@@ -6,9 +6,10 @@
 /RFTransceiver/
 /System/
 /Timer/
+/WiFi/
 /core/
 /libraries/
 /makefile
+/objects.mk
 /sources.mk
 /subdir.mk
-/WiFi/
