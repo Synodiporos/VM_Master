@@ -54,12 +54,14 @@ sloeber.ino.cpp.o: ..\sloeber.ino.cpp \
  C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24_config.h \
  ..\RFTransceiver/RFTransceiver.h ..\LEDScreen/LEDScreen.h \
  ..\LEDScreen/../System/SystemConstants.h ..\Memory/MemoryFree.h \
- ..\Memory/pgmStrToRAM.h ..\CMD/CMD.h ..\CMD/CMDStartUp.h \
- ..\CMD/../System/SystemConstants.h ..\CMD/CMD.h ..\CMD/../Timer/Timer.h \
- ..\Controller.h ..\Math/MathUtil.h ..\Commons/IActionListener.h \
- ..\Commons/Action.h ..\Commons/IPropertyListener.h \
- ..\Commons/IStateListener.h ..\CMD/AT.h ..\LEDScreen/ScreenPage.h \
- ..\LEDScreen/../LEDScreen/LEDScreen.h \
+ ..\Memory/pgmStrToRAM.h ..\WiFi/RequestManager.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SoftwareSerial\src/SoftwareSerial.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h \
+ ..\WiFi/../Memory/MemoryFree.h ..\WiFi/../System/SystemConstants.h \
+ ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h ..\Controller.h \
+ ..\Math/MathUtil.h ..\Commons/IActionListener.h ..\Commons/Action.h \
+ ..\Commons/IPropertyListener.h ..\Commons/IStateListener.h ..\CMD/AT.h \
+ ..\LEDScreen/ScreenPage.h ..\LEDScreen/../LEDScreen/LEDScreen.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/iostream \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/ios \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/locale \
@@ -207,15 +209,19 @@ C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24_config.h:
 
 ..\Memory/pgmStrToRAM.h:
 
-..\CMD/CMD.h:
+..\WiFi/RequestManager.h:
 
-..\CMD/CMDStartUp.h:
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SoftwareSerial\src/SoftwareSerial.h:
 
-..\CMD/../System/SystemConstants.h:
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h:
 
-..\CMD/CMD.h:
+..\WiFi/../Memory/MemoryFree.h:
 
-..\CMD/../Timer/Timer.h:
+..\WiFi/../System/SystemConstants.h:
+
+..\WiFi/HttpRequest.h:
+
+..\WiFi/PostSurgeRequest.h:
 
 ..\Controller.h:
 

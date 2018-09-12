@@ -20,16 +20,22 @@
 #define TX3_PIN 3
 
 //Serial 3
-#define SRL3_BD 115200
+#define SRL3_BD 9600
 //Serial
 #define SRL_BD 115200
 
 //RF CONFIG
 #define RF_READ_PIPE (byte) 00002
 #define RF_WRITE_PIPE (byte) 00001
-#define RF_CC_PERIOD 10000
+#define RF_CC_PERIOD 8000
 #define RF_CC_INTERVALS 500
 #define RF_PAYLOAD_SIZE 16
+#define RF_PALEVEL RF24_PA_LOW
+#define RF_DATARATE RF24_250KBPS//RF24_1MBPS//RF24_250KBPS
+//WIFI
+#define WIFI_SSID "RaycapWiFi_Drama" //"SynNet"
+#define WIFI_PASS "r@yL@N!!" //"Syn123NET789"
+
 //SCREEN CONFIG
 #define SC_TIMEOUT 40
 #define SC_TURNOFF_INT 60000
@@ -57,19 +63,15 @@
 		new LEDTone(0, 2775 \
 ))))
 //HV_WARNING
-#define LED_M5 new LEDTone(255, 40, \
-		new LEDTone(0, 60, \
-		new LEDTone(255, 40, \
-		new LEDTone(0, 60, \
-		new LEDTone(255, 40, \
-		new LEDTone(0, 60, \
-		new LEDTone(255, 40, \
-		new LEDTone(0, 60, \
-		new LEDTone(255, 40, \
-		new LEDTone(0, 60, \
-		new LEDTone(255, 40, \
-		new LEDTone(0, 460 \
-))))))))))))
+#define LED_M5 new LEDTone(255, 25, \
+		new LEDTone(0, 75, \
+		new LEDTone(255, 25, \
+		new LEDTone(0, 75, \
+		new LEDTone(255, 25, \
+		new LEDTone(0, 75, \
+		new LEDTone(255, 25, \
+		new LEDTone(0, 175 \
+))))))))
 //BATTERY
 #define LED_M6 new LEDTone(255, 25, \
 		new LEDTone(0, 2985 \
