@@ -218,18 +218,20 @@ bool RequestManager::isPosting(){
 }
 
 void RequestManager::validate(){
-	if(millis()-time>500){
+	/*if(millis()-time>500){
 		Serial.println(F("R"));
 		time = millis();
-	}
+	}*/
 
 	if(!isEnabled())
 		return;
 
-	if(help==200){
-		if(millis()-timeout>250){
+	if(waitTime>0){
+		if(millis()-timeout>waitTime){
 			timeout = millis();
-			help = 0;
+			waitTime = 0;
+		}else{
+			return;
 		}
 	}
 
@@ -272,9 +274,9 @@ void RequestManager::validate(){
 		}
 		case ST_INITIALIZED:{
 			//checkWiFiConnection();
-			wait();
-			initializeModule();
-			//connectToWiFi();
+			//wait();
+			//initializeModule();
+			connectToWiFi();
 			break;
 		}
 		case ST_W_CHECK:{
@@ -399,8 +401,8 @@ void RequestManager::fill(){
 	//delay(20);
 }
 
-void RequestManager::wait(){
-	help = 200;
+void RequestManager::wait(unsigned int interval){
+	waitTime = interval;
 	timeout = millis();
 }
 
@@ -429,12 +431,13 @@ void RequestManager::onStateChanged(uint8_t oldState){
 	if(state==ST_S_CONNECTED){
 		postRequest();
 	}
+	wait(2000);
 }
 
 void RequestManager::onEspMessageReceived(const std::string msg){
-	Serial.print(F("Received: "));
-	const char* c = msg.c_str();
-	Serial.println(c);
+	//Serial.print(F("-- Received: "));
+	//const char* c = msg.c_str();
+	//Serial.println(c);
 
 	switch(state){
 		case ST_OFF:{
@@ -555,6 +558,7 @@ void RequestManager::onEspMessageReceived(const std::string msg){
 			break;
 		}
 	}
+	//delay(50);
 	//delete c;
 }
 
@@ -571,9 +575,7 @@ void RequestManager::postRequest() {
 	//"Content-Type: application/x-www-form-urlencoded\r\n" +
 	//"\r\n" + data;
 
-	Serial.println("GET Request text: ");
-	Serial.print("AT+CIPSEND=");
-	Serial.println(currentRequest.length()-0);
+	Serial.println(F("GET Request text: "));
 
 	String sendCmd = "AT+CIPSEND="; //determine the number of caracters to be sent.
 	esp->print(sendCmd);
@@ -618,7 +620,7 @@ void RequestManager::onGetRequest(HttpRequest* request){
 
 void RequestManager::sendRequest(){
 	this->posting = ST_P_SEND_REQUEST;
-	Serial.println("Sending...");
+	Serial.println(F("Sending..."));
 	Serial.println(currentRequest.c_str());
 	esp->print(currentRequest.c_str());
 	currentRequest.empty();

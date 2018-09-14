@@ -108,7 +108,6 @@ bool LEDScreen::onSendAt(char* at){
 		onTimeout();
 	//Serial.println();
 	//delay(10);
-	//delete at;
 	return res>0;
 }
 

@@ -64,12 +64,10 @@ void setup() {
 
 	requestManager = RequestManager::getInstance();
 
-	//Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
-	//Serial.println(freeMemory(), DEC);  // print how much RAM is available.
+	Serial.println(F("START"));
+	Serial.print(F("Free RAM = "));
+	Serial.println(freeMemory(), DEC);
 	// print how much RAM is available.
-
-
-
 }
 
 // the loop routine runs over and over again forever:

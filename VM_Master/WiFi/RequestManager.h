@@ -88,13 +88,14 @@ private:
 	uint8_t help = 0; //200 WAIT
 	unsigned long time = millis();
 	unsigned long timeout = millis();
+	unsigned int waitTime = 0;
 	uint8_t cc = 0;
 	std::string currentRequest;
 	IActionListener* actionListener = nullptr;
 
 	RequestManager();
 	void fill();
-	void wait();
+	void wait(unsigned int interval);
 	void postRequest();
 	bool setState(uint8_t oldState);
 	void onStateChanged(uint8_t state);
