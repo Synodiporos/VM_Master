@@ -37,7 +37,7 @@ void NotificationSystem::setHVWarningEnabled(bool enabled){
 		//Serial.println(F( " - Enabled HV"));
 
 		ledRed.stop();
-		ledRed.setHeadTone(LED_M5);
+		//ledRed.setHeadTone(LED_M5);
 		ledRed.play();
 	}
 	else{
@@ -47,7 +47,7 @@ void NotificationSystem::setHVWarningEnabled(bool enabled){
 
 		if(isActiveEnabled()){
 			ledWhite.stop();
-			ledWhite.setHeadTone(LTActive);
+			//ledWhite.setHeadTone(LTActive);
 			ledWhite.play();
 		}else{
 			ledWhite.stop();
@@ -56,7 +56,7 @@ void NotificationSystem::setHVWarningEnabled(bool enabled){
 		if(isBatterLowEnabled()){
 			//Serial.println(F( " - Enable Battery"));
 			ledRed.stop();
-			ledRed.setHeadTone(LTBatteryWarning);
+			//ledRed.setHeadTone(LTBatteryWarning);
 			ledRed.play();
 		}
 	}
@@ -72,7 +72,7 @@ void NotificationSystem::setBatteryLowEnabled(bool enabled){
 		if(!isHVWarningEnabled()){
 			//Serial.println(F( " - Enable Battery"));
 			ledRed.stop();
-			ledRed.setHeadTone(LTBatteryWarning);
+			//ledRed.setHeadTone(LTBatteryWarning);
 			ledRed.play();
 		}
 	}
@@ -84,7 +84,7 @@ void NotificationSystem::setBatteryLowEnabled(bool enabled){
 			if(isErrorEnabled()){
 				//Serial.println(F( " - Enable Error"));
 				ledRed.stop();
-				ledRed.setHeadTone(LTError);
+				//ledRed.setHeadTone(LTError);
 				ledRed.play();
 			}
 		}
@@ -101,7 +101,7 @@ void NotificationSystem::setErrorEnabled(bool enabled){
 			if(!isBatterLowEnabled()){
 				//Serial.println(F(" - Enable Error"));
 				ledRed.stop();
-				ledRed.setHeadTone(LTError);
+				//ledRed.setHeadTone(LTError);
 				ledRed.play();
 			}
 		}
@@ -125,7 +125,7 @@ void NotificationSystem::setActiveEnabled(bool enabled){
 		state |= ACTIVE;
 	//	if(!isHVWarningEnabled()){
 			ledWhite.stop();
-			ledWhite.setHeadTone(LTActive);
+			//ledWhite.setHeadTone(LTActive);
 			ledWhite.play();
 	//	}
 	}

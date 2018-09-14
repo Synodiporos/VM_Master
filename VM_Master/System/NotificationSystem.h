@@ -49,10 +49,10 @@ private:
 	LEDTonePlayer ledBlue =
 			LEDTonePlayer(LED_BLUE_PIN, nullptr, 0);
 
-	LEDTone* LTActive = LED_M1;
-	LEDTone* LTHVWarning = LED_M5;
-	LEDTone* LTBatteryWarning = LED_M6;
-	LEDTone* LTError = LED_M7;
+	//LEDTone* LTActive = LED_M1;
+	//LEDTone* LTHVWarning = LED_M5;
+	//LEDTone* LTBatteryWarning = LED_M6;
+	//LEDTone* LTError = LED_M7;
 
 	NotificationSystem();
 	void onStateChanged(byte change);

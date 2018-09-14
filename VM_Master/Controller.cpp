@@ -19,26 +19,34 @@ void Controller::activate(){
 	if(transceiver){
 		transceiver->setActionListener(this);
 	}
-	if(notification){
-		notification->setActiveEnabled(true);
-
+	if(requestManager){
+		requestManager->setActionListener(this);
 	}
+	//if(notification){
+	//	notification->setActiveEnabled(true);
+	//}
 }
 
 void Controller::deactivate(){
 	if(transceiver){
 		transceiver->setActionListener(nullptr);
 	}
-	if(notification)
-		notification->stopNotify();
+	if(requestManager){
+		requestManager->setActionListener(nullptr);
+	}
+	//if(notification)
+	//	notification->stopNotify();
 }
 
 void Controller::initialization(){
-	page->reprint();
+	requestManager->setEnabled(true);
+	requestManager->startPosting();
+
+	//page->reprint();
 }
 
 void Controller::setNotificationSystem(NotificationSystem* ns){
-	this->notification = ns;
+	//this->notification = ns;
 }
 
 void Controller::setLoggerSystem(){
@@ -57,10 +65,10 @@ void Controller::propertyChanged(
 }
 
 void Controller::actionPerformed(Action action){
-	RFTransceiver* radio = (RFTransceiver*)action.getSource();
+	void* source = action.getSource();
 	uint8_t id = action.getActionId();
 
-	if(radio==this->transceiver)
+	if(source==this->transceiver)
 	switch(id){
 		case RFTransceiver::ON_MESSAGE_RECEIVED:{
 			char* msg = (char*)action.getContainer();
@@ -78,6 +86,77 @@ void Controller::actionPerformed(Action action){
 			break;
 		}
 	}
+
+	if(source==this->requestManager)
+	switch(id){
+		case ST_OFF:{
+			Serial.println(F("WIFI OFF"));
+			break;
+		}
+		case ST_BLUGED:{
+			Serial.println(F("WIFI BLUDED"));
+			break;
+		}
+		case ST_INITIALIZING:{
+			Serial.println(F("WIFI INITIALIZING"));
+			break;
+		}
+		case ST_INITIALIZED:{
+			Serial.println(F("WIFI INITIALIZED"));
+			break;
+		}
+		case ST_W_DISCONNECTED:{
+			Serial.println(F("WIFI WLAN DISCONNECTED"));
+			break;
+		}
+		case ST_W_CHECK:{
+			Serial.println(F("WIFI WLAN CHECK"));
+			break;
+		}
+		case ST_W_CONNECTING:{
+			Serial.println(F("WIFI WLAN CONNECTING"));
+			break;
+		}
+		case ST_W_CONNECTED:{
+			Serial.println(F("WIFI WLAN CONNECTED"));
+			break;
+		}
+		case ST_S_DISCONNECTED:{
+			Serial.println(F("WIFI WLAN DISCONNECTED"));
+			break;
+		}
+		case ST_S_CHECK:{
+			Serial.println(F("WIFI SERVER CHECK"));
+			break;
+		}
+		case ST_S_CONNECTING:{
+			Serial.println(F("WIFI SERVER CONNECTING"));
+			break;
+		}
+		case ST_S_CONNECTED:{
+			Serial.println(F("WIFI SERVER CONNECTED"));
+			break;
+		}
+		case ST_P_STOP_POSTING:{
+			Serial.println(F("WIFI STOP POSTING"));
+			break;
+		}
+		case ST_P_POSTING:{
+			Serial.println(F("WIFI START POSTING"));
+			break;
+		}
+		case ST_P_POST_REQUEST:{
+			Serial.println(F("WIFI POST REQUEST"));
+			break;
+		}
+		case ST_P_SEND_REQUEST:{
+			Serial.println(F("WIFI SEND REQUEST"));
+			break;
+		}
+	}
+
+	Serial.print(F("$ Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
+	Serial.println(freeMemory(), DEC);
 }
 
 void Controller::onMessageReceived(char* msg){
@@ -133,5 +212,5 @@ void Controller::onMessageSend(char* msg){
 void Controller::onConnectionStateChanged(bool state){
 	//Serial.print(F("Connection State: "));
 	//Serial.println(state);
-	this->notification->setConnectionLostEnabled(!state);
+	//this->notification->setConnectionLostEnabled(!state);
 }

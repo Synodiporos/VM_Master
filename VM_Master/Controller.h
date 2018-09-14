@@ -17,6 +17,7 @@
 #include "System/SystemConstants.h"
 #include "System/NotificationSystem.h"
 #include "RFTransceiver/RFTransceiver.h"
+#include "WiFi/RequestManager.h"
 #include "CMD/AT.h"
 #include "LEDScreen/LEDScreen.h"
 #include "LEDScreen/ScreenPage.h"
@@ -43,10 +44,16 @@ public:
 	void actionPerformed(Action action);
 
 protected:
-	NotificationSystem* notification = NotificationSystem::getInstance();
+	//NotificationSystem* notification = NotificationSystem::getInstance();
 	RFTransceiver* transceiver = RFTransceiver::getInstance();
+	RequestManager* requestManager = RequestManager::getInstance();
+
 	LEDScreen* screen = LEDScreen::getInstance();
 	ScreenPage* page = new ScreenPage(screen);
+
+	unsigned long HV1 = 0;
+	unsigned long HV2 = 0;
+	float batteryVoltage = 0;
 
 	void onMessageReceived(char* msg);
 	void onMessageSend(char* msg);

@@ -33,10 +33,11 @@
 #define RF_PALEVEL RF24_PA_LOW
 #define RF_DATARATE RF24_250KBPS//RF24_1MBPS//RF24_250KBPS
 //WIFI
-#define WIFI_SSID "SynNet" //"RaycapWiFi_Drama" //"SynNet"
-#define WIFI_PASS "Syn123NET789" //"r@yL@N!!" //"Syn123NET789"
+#define WIFI_CHECK_INTERVAL 10000
+#define WIFI_SSID "RaycapWiFi_Drama" //"SynNet"
+#define WIFI_PASS "r@yL@N!!" //"Syn123NET789"
 #define WIFI_SERVER "synet.sytes.net" //"192.168.11.5"
-#define WiFi_TEST_URI "surges/test.php" //"surgeroom/get.php"
+#define WiFi_TEST_URI "/surges/test.php" //"surgeroom/get.php"
 #define WiFi_SURGE_URI "surgeroom/surgeRecord.php"
 #define WiFi_BATTERY_URI "surgeroom/batteryRecord.php"
 //SCREEN CONFIG
@@ -51,6 +52,7 @@
 #define CMD_ACK "ACK"
 #define CMD_ACR "ACR"
 //LED NOTIFICATION MODES
+/*
 //ACTIVE
 #define LED_M1 new LEDTone(3, 40,	\
 		new LEDTone(255, 20, \
@@ -82,6 +84,7 @@
 //ERROR
 #define LED_M7 new LEDTone(255, 750,\
 		new LEDTone(0, 750))
+*/
 
 
 #endif /* SYSTEM_SYSTEMCONSTANTS_H_ */

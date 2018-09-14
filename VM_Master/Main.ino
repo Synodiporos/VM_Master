@@ -1,7 +1,7 @@
 
 #include "System/SystemConstants.h"
 #include "System/NotificationSystem.h"
-#include "System/SerialBroadcaster.h"
+//#include "System/SerialBroadcaster.h"
 #include "RFTransceiver/RFTransceiver.h"
 #include "LEDScreen/LEDScreen.h"
 #include "Memory/MemoryFree.h"
@@ -25,8 +25,10 @@ using namespace std;
 //LEDScreen* ledScreen = LEDScreen::getInstance();
 //ScreenPage* page = new ScreenPage(ledScreen);
 //SoftwareSerial esp(RX3_PIN, TX3_PIN); // RX, TX
-RequestManager* requestManager;
-//Controller controller;
+RequestManager* requestManager ;
+Controller controller;
+
+SoftwareSerial* esp = new SoftwareSerial(RX3_PIN, TX3_PIN);
 
 
 long mil = millis();
@@ -49,8 +51,8 @@ void setup() {
 	//trasnceiver->startConnectivityCheck();
 
 	//Controller
-	//controller.activate();
-	//controller.initialization();
+	controller.activate();
+	controller.initialization();
 
 	digitalWrite(LED_WHITE_PIN, HIGH);
 	digitalWrite(LED_RED_PIN, HIGH);
@@ -60,13 +62,14 @@ void setup() {
 	digitalWrite(LED_RED_PIN, LOW);
 	digitalWrite(LED_BLUE_PIN, LOW);
 
-	//controller.activate();
+	requestManager = RequestManager::getInstance();
 
 	//Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
 	//Serial.println(freeMemory(), DEC);  // print how much RAM is available.
 	// print how much RAM is available.
 
-	requestManager = new RequestManager();
+
+
 }
 
 // the loop routine runs over and over again forever:
@@ -78,6 +81,34 @@ void loop() {
 		//Serial.println(freeMemory(), DEC);
 		mil = millis();
 	}
+
+
+	/*if(c==0){
+		esp->println(F("AT+CWMODE=3"));
+		Serial.print(F("SEVD AT"));
+		c=1;
+	}
+	delay(50);
+
+	if (esp->available()){
+		while (esp->available() > 0 ){
+			//Serial.println(F("-"));
+			String response = esp->readStringUntil('\n');
+			response.trim();
+			if(response.length()>0){
+				std::string str(response.c_str());
+
+				Serial.print(F("Received: "));
+				Serial.println(str.c_str());
+
+				if(str.compare("OK")==0){
+					c=0;
+				}
+				//onEspMessageReceived(str);
+			}
+			//Serial.println(F("+"));
+		}
+	}*/
 
 	//trasnceiver->validate();
 	//notification->validate();

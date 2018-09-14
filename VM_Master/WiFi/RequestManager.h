@@ -14,6 +14,8 @@
 #include "SoftwareSerial.h"
 #include "../Memory/MemoryFree.h"
 #include "../System/SystemConstants.h"
+#include "../Commons/Action.h"
+#include "../Commons/IActionListener.h"
 #include "HttpRequest.h"
 #include "PostSurgeRequest.h"
 
@@ -35,13 +37,24 @@
 #define ST_S_CONNECTING 22
 #define ST_S_CONNECTED 23
 
+#define ST_P_STOP_POSTING 100
+#define ST_P_POSTING 101
+#define ST_P_POST_REQUEST 102
+#define ST_P_SEND_REQUEST 103
+
+#define ST_RESP_OK "OK"
+
 class RequestManager {
 public:
-	RequestManager();
+
+	static RequestManager* getInstance();
 	virtual ~RequestManager();
 
 	void initialize();
 	uint8_t size();
+	void setActionListener(IActionListener* listener);
+	IActionListener* getActionListener();
+
 	bool pushRequest(HttpRequest* request);
 	HttpRequest* topRequest();
 	HttpRequest* popRequest();
@@ -56,30 +69,32 @@ public:
 
 	bool startPosting();
 	bool stopPosting();
+	bool setEnabled(bool enabled);
+	bool isEnabled();
 	bool isPosting();
 
 	void validate();
 
 private:
-	//std::queue<HttpRequest*> buffer;
+	static RequestManager* instance;
 	SoftwareSerial* esp = new SoftwareSerial(RX3_PIN, TX3_PIN); // RX, TX
-	//SoftwareSerial* esp; // RX, TX
-	//WiFiEspClient client;
-
 	uint8_t _size = 0;
 	HttpRequest* buf[CAPACITY];
 	uint8_t index = 0;
-	bool posting = false;
-	//0:OFF, 1:INITializing, 2:INIT, 3:CONNECTING, 4:CONNECTED
-	uint8_t state = 0;
-	uint8_t help = 0;
-	//uint8_t count = 0;
+	uint8_t posting = false;
+	uint8_t enabled = false;
 
+	uint8_t state = 0;
+	uint8_t help = 0; //200 WAIT
 	unsigned long time = millis();
 	unsigned long timeout = millis();
 	uint8_t cc = 0;
+	std::string currentRequest;
+	IActionListener* actionListener = nullptr;
 
+	RequestManager();
 	void fill();
+	void wait();
 	void postRequest();
 	bool setState(uint8_t oldState);
 	void onStateChanged(uint8_t state);
@@ -87,8 +102,10 @@ private:
 
 	void onPostRequest(HttpRequest* request);
 	void onGetRequest(HttpRequest* request);
+	void sendRequest();
 	void onResponseReceived(std::string response);
 	void onACKReceived(std::string ack);
+	void notifyActionPerformed(Action action);
 
 };
 
