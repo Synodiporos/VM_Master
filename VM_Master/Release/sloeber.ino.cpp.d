@@ -53,7 +53,8 @@ sloeber.ino.cpp.o: ..\sloeber.ino.cpp \
  ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h ..\Controller.h \
  ..\Math/MathUtil.h ..\Commons/IActionListener.h ..\Commons/Action.h \
  ..\Commons/IPropertyListener.h ..\Commons/IStateListener.h \
- ..\Commons/State.h ..\CMD/AT.h ..\CMD/ATCMDs.h \
+ ..\Commons/State.h ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h \
+ ..\WiFi/TestGetRequest.h ..\CMD/AT.h ..\CMD/ATCMDs.h \
  ..\CMD/../System/SystemConstants.h ..\CMD/CMD.h \
  ..\CMD/../Commons/IStateListener.h ..\CMD/CMDExecutor.h \
  ..\CMD/../CMD/CMD.h ..\CMD/CMDErrorReport.h ..\CMD/CMDBatteryReport.h \
@@ -207,6 +208,12 @@ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino
 ..\Commons/IStateListener.h:
 
 ..\Commons/State.h:
+
+..\WiFi/HttpRequest.h:
+
+..\WiFi/PostSurgeRequest.h:
+
+..\WiFi/TestGetRequest.h:
 
 ..\CMD/AT.h:
 

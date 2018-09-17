@@ -33,13 +33,16 @@
 #define RF_PALEVEL RF24_PA_LOW
 #define RF_DATARATE RF24_250KBPS//RF24_1MBPS//RF24_250KBPS
 //WIFI
-#define WIFI_CHECK_INTERVAL 10000
-#define WIFI_SSID "RaycapWiFi_Drama" //"SynNet"
-#define WIFI_PASS "r@yL@N!!" //"Syn123NET789"
-#define WIFI_SERVER "synet.sytes.net" //"192.168.11.5"
-#define WiFi_TEST_URI "/surges/test.php" //"surgeroom/get.php"
-#define WiFi_SURGE_URI "surgeroom/surgeRecord.php"
-#define WiFi_BATTERY_URI "surgeroom/batteryRecord.php"
+#define WIFI_CHECK_INTERVAL 30000
+#define WIFI_AUTOCONNECT true
+#define WIFI_SSID "RaycapWiFi_Drama" //"Syn-2" //"SynNet" //"RaycapWiFi_Drama"
+#define WIFI_PASS "r@yL@N!!" //"6987881596" //"Syn123NET789" //"r@yL@N!!"
+#define WIFI_SERVER "192.168.11.5" //"synet.sytes.net" //"192.168.11.5"
+#define WIFI_SURGEROOM_URI "/surgeroom" //"/surges"
+#define WiFi_TEST_URI "/get.php" //"/surges/test5.php" //"/get.php"
+#define WiFi_SURGE_URI "/surgeRecord.php"
+#define WiFi_BATTERY_URI "/batteryRecord.php"
+//http://192.168.11.5/surgeroom/get.php
 //SCREEN CONFIG
 #define SC_TIMEOUT 40
 #define SC_TURNOFF_INT 60000

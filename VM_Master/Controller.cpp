@@ -82,7 +82,7 @@ void Controller::actionPerformed(Action action){
 		}
 		case RFTransceiver::ON_CONNECTION_STATE:{
 			bool* state = (bool*)action.getContainer();
-			onConnectionStateChanged(*state);
+			onRFConnectionStateChanged(*state);
 			break;
 		}
 	}
@@ -101,8 +101,16 @@ void Controller::actionPerformed(Action action){
 			Serial.println(F("WIFI INITIALIZING"));
 			break;
 		}
+		case ST_INITIALIZING_2:{
+			Serial.println(F("WIFI INITIALIZING 2"));
+			break;
+		}
 		case ST_INITIALIZED:{
 			Serial.println(F("WIFI INITIALIZED"));
+			break;
+		}
+		case ST_INITIALIZED_2:{
+			Serial.println(F("WIFI INITIALIZED 2"));
 			break;
 		}
 		case ST_W_DISCONNECTED:{
@@ -117,12 +125,18 @@ void Controller::actionPerformed(Action action){
 			Serial.println(F("WIFI WLAN CONNECTING"));
 			break;
 		}
+		case ST_W_CONNECTING_FAIL:{
+			Serial.println(F("WIFI WLAN CONNECTING FAIL"));
+			break;
+		}
 		case ST_W_CONNECTED:{
 			Serial.println(F("WIFI WLAN CONNECTED"));
+			onWiFiConnectionStateChanged(true);
 			break;
 		}
 		case ST_S_DISCONNECTED:{
-			Serial.println(F("WIFI WLAN DISCONNECTED"));
+			Serial.println(F("WIFI SERVER DISCONNECTED"));
+			onWiFiConnectionStateChanged(false);
 			break;
 		}
 		case ST_S_CHECK:{
@@ -137,26 +151,40 @@ void Controller::actionPerformed(Action action){
 			Serial.println(F("WIFI SERVER CONNECTED"));
 			break;
 		}
-		case ST_P_STOP_POSTING:{
+		case ST_P_POSTING_OFF:{
 			Serial.println(F("WIFI STOP POSTING"));
 			break;
 		}
-		case ST_P_POSTING:{
+
+		case ST_P_POSTING_ON:{
 			Serial.println(F("WIFI START POSTING"));
 			break;
 		}
-		case ST_P_POST_REQUEST:{
-			Serial.println(F("WIFI POST REQUEST"));
+		case ST_P_POSTING_READY:{
+			Serial.println(F("WIFI POSTING READY"));
+			break;
+		}
+		case ST_P_POSTING_REQUEST:{
+			Serial.println(F("WIFI REQUEST IS POSTING"));
 			break;
 		}
 		case ST_P_SEND_REQUEST:{
-			Serial.println(F("WIFI SEND REQUEST"));
+			Serial.println(F("WIFI REQUEST SEND"));
+			break;
+		}
+		case ST_P_WAIT_RESP:{
+			Serial.println(F("WIFI WAITING REQ RESPONSE"));
+			break;
+		}
+		case ST_P_REQUEST_POSTED:{
+			Serial.println(F("WIFI REQUEST POSTED"));
+			break;
+		}
+		case ST_P_REQUEST_POST_ERROR:{
+			Serial.println(F("WIFI REQUEST POSTED ERROR"));
 			break;
 		}
 	}
-
-	Serial.print(F("$ Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
-	Serial.println(freeMemory(), DEC);
 }
 
 void Controller::onMessageReceived(char* msg){
@@ -209,8 +237,45 @@ void Controller::onMessageSend(char* msg){
 
 }
 
-void Controller::onConnectionStateChanged(bool state){
+void Controller::onRFConnectionStateChanged(bool state){
 	//Serial.print(F("Connection State: "));
 	//Serial.println(state);
 	//this->notification->setConnectionLostEnabled(!state);
+}
+
+void Controller::onWiFiConnectionStateChanged(bool state){
+
+}
+
+void Controller::validate(){
+	requestManager->validate();
+
+	if(helper==0 && millis()-time > 4000){
+		/*for(int i=0; i<4; i++){
+			PostSurgeRequest* req = new PostSurgeRequest(c, c*1000, 0);
+			requestManager->pushRequest(req);
+			c++;
+		}*/
+
+		HttpRequest* req1 = new TestGetRequest();
+		HttpRequest* req2 = new PostSurgeRequest(2, 2000, 0);
+		HttpRequest* req3 = new PostSurgeRequest(3, 3000, 0);
+
+		requestManager->pushRequest(req1);
+		requestManager->pushRequest(req2);
+		//requestManager->pushRequest(req3);
+
+		time = millis();
+		helper = 1;
+	}
+	if(helper==1 && millis()-time > 4000){
+		//requestManager->startPosting();
+		//time = millis();
+		helper = 2;
+	}
+	if(helper==2 && millis()-time > 15000){
+		time = millis();
+		helper = 2;
+	}
+
 }

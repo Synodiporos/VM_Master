@@ -25,10 +25,8 @@ using namespace std;
 //LEDScreen* ledScreen = LEDScreen::getInstance();
 //ScreenPage* page = new ScreenPage(ledScreen);
 //SoftwareSerial esp(RX3_PIN, TX3_PIN); // RX, TX
-RequestManager* requestManager ;
+//RequestManager* requestManager ;
 Controller controller;
-
-SoftwareSerial* esp = new SoftwareSerial(RX3_PIN, TX3_PIN);
 
 
 long mil = millis();
@@ -62,19 +60,22 @@ void setup() {
 	digitalWrite(LED_RED_PIN, LOW);
 	digitalWrite(LED_BLUE_PIN, LOW);
 
-	requestManager = RequestManager::getInstance();
+	//requestManager = RequestManager::getInstance();
 
+	Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
+	Serial.println(freeMemory(), DEC);
 	Serial.println(F("START"));
 	Serial.print(F("Free RAM = "));
 	Serial.println(freeMemory(), DEC);
 	// print how much RAM is available.
+
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
 	long interval = millis()-mil;
 
-	if(interval>=2000 ){
+	if(interval>= 2000 ){
 		//Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
 		//Serial.println(freeMemory(), DEC);
 		mil = millis();
@@ -112,5 +113,5 @@ void loop() {
 	//notification->validate();
 	//serialBroad->validate();
 	//executor->validate();
-	requestManager->validate();
+	controller.validate();
 }

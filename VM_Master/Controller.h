@@ -18,6 +18,9 @@
 #include "System/NotificationSystem.h"
 #include "RFTransceiver/RFTransceiver.h"
 #include "WiFi/RequestManager.h"
+#include "WiFi/HttpRequest.h"
+#include "WiFi/PostSurgeRequest.h"
+#include "WiFi/TestGetRequest.h"
 #include "CMD/AT.h"
 #include "LEDScreen/LEDScreen.h"
 #include "LEDScreen/ScreenPage.h"
@@ -43,6 +46,8 @@ public:
 				const void* oldPropery);
 	void actionPerformed(Action action);
 
+	void validate();
+
 protected:
 	//NotificationSystem* notification = NotificationSystem::getInstance();
 	RFTransceiver* transceiver = RFTransceiver::getInstance();
@@ -55,9 +60,14 @@ protected:
 	unsigned long HV2 = 0;
 	float batteryVoltage = 0;
 
+	uint8_t helper = 0;
+	unsigned long time = millis();
+	uint8_t c = 0;
+
 	void onMessageReceived(char* msg);
 	void onMessageSend(char* msg);
-	void onConnectionStateChanged(bool state);
+	void onRFConnectionStateChanged(bool state);
+	void onWiFiConnectionStateChanged(bool state);
 };
 
 #endif /* CONTROLLER_H_ */

@@ -50,7 +50,8 @@ Controller.cpp.o: ..\Controller.cpp ..\Controller.h ..\Math/MathUtil.h \
  C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h \
  ..\WiFi/../Memory/MemoryFree.h ..\WiFi/../System/SystemConstants.h \
  ..\WiFi/../Commons/Action.h ..\WiFi/../Commons/IActionListener.h \
- ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h ..\CMD/AT.h \
+ ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h ..\WiFi/HttpRequest.h \
+ ..\WiFi/PostSurgeRequest.h ..\WiFi/TestGetRequest.h ..\CMD/AT.h \
  ..\CMD/ATCMDs.h ..\CMD/../System/SystemConstants.h ..\CMD/CMD.h \
  ..\CMD/../Commons/IStateListener.h ..\CMD/CMDExecutor.h \
  ..\CMD/../CMD/CMD.h ..\CMD/CMDErrorReport.h ..\CMD/CMDBatteryReport.h \
@@ -196,6 +197,12 @@ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino
 ..\WiFi/HttpRequest.h:
 
 ..\WiFi/PostSurgeRequest.h:
+
+..\WiFi/HttpRequest.h:
+
+..\WiFi/PostSurgeRequest.h:
+
+..\WiFi/TestGetRequest.h:
 
 ..\CMD/AT.h:
 

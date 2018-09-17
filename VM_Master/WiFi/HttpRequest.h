@@ -9,6 +9,7 @@
 #define WIFI_HTTPREQUEST_H_
 
 #include <string>
+#include "../System/SystemConstants.h"
 using namespace std;
 
 class HttpRequest {
@@ -16,7 +17,7 @@ public:
 	HttpRequest();
 	virtual ~HttpRequest();
 
-	virtual std::string getRequest() = 0;
+	virtual char* getRequest() = 0;
 };
 
 #endif /* WIFI_HTTPREQUEST_H_ */

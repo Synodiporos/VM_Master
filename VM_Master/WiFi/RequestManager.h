@@ -20,38 +20,59 @@
 #include "PostSurgeRequest.h"
 
 #define CAPACITY 8
-#define POSTING 1
+#define SERIAL_BUFFER 48
 
 #define ST_OFF 0
 #define ST_BLUGED 1
 #define ST_INITIALIZING 3
+#define ST_INITIALIZING_2 5
 #define ST_INITIALIZED 4
+#define ST_INITIALIZED_2 6
 
 #define ST_W_DISCONNECTED 10
 #define ST_W_CHECK 11
 #define ST_W_CONNECTING 12
+#define ST_W_CONNECTING_FAIL 14
 #define ST_W_CONNECTED 13
 
 #define ST_S_DISCONNECTED 20
 #define ST_S_CHECK 21
 #define ST_S_CONNECTING 22
-#define ST_S_CONNECTED 23
+#define ST_S_ERROR 23
+#define ST_S_CONNECTED 24
 
-#define ST_P_STOP_POSTING 100
-#define ST_P_POSTING 101
-#define ST_P_POST_REQUEST 102
-#define ST_P_SEND_REQUEST 103
+#define ST_P_POSTING_OFF 50
+#define ST_P_POSTING_ON 51
+#define ST_P_POSTING_READY 52 // WHEN CONNECTED TO SERVER
+#define ST_P_POSTING_REQUEST 53
+#define ST_P_SEND_REQUEST 54
+#define ST_P_WAIT_RESP 55
+#define ST_P_REQUEST_POSTED 56
+#define ST_P_REQUEST_POST_ERROR 57
 
-#define ST_RESP_OK "OK"
+#define RESP_WIFI_OK "OK"
+#define RESP_WIFI_DISC "WIFI DISCONNECT"
+#define RESP_WIFI_CONN "WIFI GOT IP"
+#define RESP_SERVER_CONNECT "CONNECT"
+#define RESP_SERVER_CLOSED "CLOSED"
+#define RESP_SERVER_ER "HTTP/1.1 40"
+#define RESP_SERVER_OK "HTTP/1.1 200"
 
 class RequestManager {
 public:
+
+	static const char OK[3];
 
 	static RequestManager* getInstance();
 	virtual ~RequestManager();
 
 	void initialize();
 	uint8_t size();
+	uint8_t getState();
+	uint8_t getPostingState();
+	uint8_t getWiFiState();
+	uint8_t getServerState();
+
 	void setActionListener(IActionListener* listener);
 	IActionListener* getActionListener();
 
@@ -64,14 +85,20 @@ public:
 	void checkServerConnection();
 
 	void initializeModule();
+	void setAutoConnect(bool autoC);
 	void connectToWiFi();
 	void connectToServer();
+	void disconnectToServer();
 
-	bool startPosting();
-	bool stopPosting();
 	bool setEnabled(bool enabled);
 	bool isEnabled();
+	bool startPosting();
+	bool stopPosting();
 	bool isPosting();
+
+	bool isInitialized();
+	bool isWifiConnected();
+	bool isServerConnected();
 
 	void validate();
 
@@ -81,31 +108,39 @@ private:
 	uint8_t _size = 0;
 	HttpRequest* buf[CAPACITY];
 	uint8_t index = 0;
-	uint8_t posting = false;
 	uint8_t enabled = false;
-
 	uint8_t state = 0;
+	uint8_t postState = 0;
+	uint8_t wifiState = ST_W_DISCONNECTED;
+	uint8_t serverState = ST_S_DISCONNECTED;
 	uint8_t help = 0; //200 WAIT
 	unsigned long time = millis();
 	unsigned long timeout = millis();
+	unsigned long timeoutP = millis();
 	unsigned int waitTime = 0;
-	uint8_t cc = 0;
-	std::string currentRequest;
+	String request;
 	IActionListener* actionListener = nullptr;
 
 	RequestManager();
 	void fill();
 	void wait(unsigned int interval);
-	void postRequest();
-	bool setState(uint8_t oldState);
-	void onStateChanged(uint8_t state);
-	void onEspMessageReceived(const std::string msg);
+	void postNextRequest();
+	void postRequest(HttpRequest* request);
+	bool setState(uint8_t state);
+	bool setPostingState(uint8_t state);
+	void onEspMessageReceived(const String& msg);
+	void readStream();
+	void validatePosting();
 
+
+	void onStateChanged(uint8_t oldState);
+	void onPostingStateChanged(uint8_t oldState);
+	void onServerStateChanged(uint8_t oldState);
 	void onPostRequest(HttpRequest* request);
 	void onGetRequest(HttpRequest* request);
 	void sendRequest();
-	void onResponseReceived(std::string response);
-	void onACKReceived(std::string ack);
+	void onResponseReceived(const String& response);
+	void onACKReceived(const char* ack);
 	void notifyActionPerformed(Action action);
 
 };
