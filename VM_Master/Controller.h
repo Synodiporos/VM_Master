@@ -27,10 +27,14 @@
 #include "LEDScreen/ScreenPage.h"
 #include <vector>
 #include <string>
+#include <SPI.h>
+#include <RF24.h>
 using namespace std;
+
 
 class Controller : public IPropertyListener, IActionListener{
 public:
+
 	Controller();
 	virtual ~Controller();
 
@@ -39,7 +43,7 @@ public:
 	void initialization();
 	void setNotificationSystem(NotificationSystem* ns);
 	void setLoggerSystem();
-	void setRFDevice();
+	void setRadioInstance(RF24* radio);
 
 	void propertyChanged(
 				void* source,

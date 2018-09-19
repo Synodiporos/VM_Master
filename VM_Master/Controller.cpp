@@ -39,8 +39,10 @@ void Controller::deactivate(){
 }
 
 void Controller::initialization(){
-	requestManager->setEnabled(true);
-	requestManager->startPosting();
+	//requestManager->setEnabled(true);
+	//requestManager->startPosting();
+
+	this->transceiver->startConnectivityCheck();
 
 	//page->reprint();
 }
@@ -53,8 +55,8 @@ void Controller::setLoggerSystem(){
 
 }
 
-void Controller::setRFDevice(){
-
+void Controller::setRadioInstance(RF24* radio){
+	this->transceiver->initialize(radio);
 }
 
 void Controller::propertyChanged(
@@ -188,8 +190,8 @@ void Controller::actionPerformed(Action action){
 }
 
 void Controller::onMessageReceived(char* msg){
-	//Serial.print(F("Slave RF Message Received: "));
-	//Serial.println(msg);
+	Serial.print(F("Slave RF Message Received: "));
+	Serial.println(msg);
 
 	std::string input = string(msg);
 	std::string cmdN;

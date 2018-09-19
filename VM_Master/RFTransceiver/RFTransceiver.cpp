@@ -40,11 +40,11 @@ void RFTransceiver::initialize(RF24* radio){
 		radio->startListening();
 
 		this->radioStarted = true;
-		//Serial.println(F("Radio Begin"));
-		//printDetails();
+		Serial.println(F("Radio Begin"));
+		printDetails();
 	}
 	else{
-		//Serial.println(F("Radio ERROR"));
+		Serial.println(F("Radio ERROR"));
 		this->radioStarted = false;
 	}
 	resetCCTimer();

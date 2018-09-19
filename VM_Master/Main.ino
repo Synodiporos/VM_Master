@@ -24,7 +24,7 @@ using namespace std;
 //NotificationSystem* notification = NotificationSystem::getInstance();
 //SerialBroadcaster* serialBroad = SerialBroadcaster::getInstance();
 RF24 radio(RF_CE, RF_CSN);
-RFTransceiver* trasnceiver = RFTransceiver::getInstance();
+//RFTransceiver* trasnceiver = RFTransceiver::getInstance();
 Controller controller;
 
 
@@ -44,10 +44,11 @@ void setup() {
 	//page->reprint();
 
 	//Initialaze RF
-	trasnceiver->initialize(&radio);
-	trasnceiver->startConnectivityCheck();
+	//trasnceiver->initialize(&radio);
+	//trasnceiver->startConnectivityCheck();
 
 	//Controller
+	controller.setRadioInstance(&radio);
 	controller.activate();
 	controller.initialization();
 
