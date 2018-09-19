@@ -33,8 +33,6 @@ void RequestManager::initialize(){
 	}
 
 	esp->begin(SRL3_BD);
-	//esp->setTimeout(500);
-	//esp->println(F("AT"));
 }
 
 void RequestManager::setActionListener(IActionListener* listener){
@@ -62,28 +60,20 @@ uint8_t RequestManager::getPostingState(){
 	return this->postState;
 }
 
-uint8_t RequestManager::getWiFiState(){
-	return this->wifiState;
-}
-
-uint8_t RequestManager::getServerState(){
-	return this->serverState;
-}
-
 bool RequestManager::pushRequest(HttpRequest* request){
 	//buffer.push(request);
-	Serial.print(F("+ PUSH index:"));
+	/*Serial.print(F("+ PUSH index:"));
 	Serial.print(index);
 	Serial.print(F(" pointer:"));
-	Serial.print((long)request);
+	Serial.print((long)request);*/
 
 	if(_size<CAPACITY){
 		uint8_t i = index + _size;
 		if(i>=CAPACITY)
 			i = i%CAPACITY;
 
-		Serial.print(F(" i="));
-		Serial.println(i);
+		/*Serial.print(F(" i="));
+		Serial.println(i);*/
 
 		buf[i] = request;
 		_size++;
@@ -99,11 +89,11 @@ bool RequestManager::pushRequest(HttpRequest* request){
 	}
 
 
-	Serial.print(F(" size:"));
+	/*Serial.print(F(" size:"));
 	Serial.print(_size);
 
 	Serial.print(F(" Free RAM = "));
-	Serial.println(freeMemory(), DEC);
+	Serial.println(freeMemory(), DEC);*/
 
 	return true;
 }
@@ -121,8 +111,8 @@ HttpRequest* RequestManager::popRequest(){
 //		buffer.pop();
 //		return r;
 //	}
-	Serial.print(F("-  Pop index:"));
-	Serial.print(index);
+	/*Serial.print(F("-  Pop index:"));
+	Serial.print(index);*/
 
 	if(this->_size>0){
 		HttpRequest* req =  buf[index];
@@ -135,14 +125,14 @@ HttpRequest* RequestManager::popRequest(){
 			index = 0;
 		_size--;
 
-		Serial.print(F(" size:"));
+		/*Serial.print(F(" size:"));
 		Serial.print(_size);
 		Serial.print(F(" pointer:"));
 		Serial.print((long)req);
 
 		Serial.print(F(" Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
 		Serial.print(freeMemory(), DEC);
-		Serial.println();
+		Serial.println();*/
 		return req;
 	}
 	return nullptr;
@@ -247,15 +237,15 @@ bool RequestManager::isPosting(){
 }
 
 bool RequestManager::isInitialized(){
-	return this->state==ST_INITIALIZED_2;
+	return this->state>=ST_INITIALIZED_2;
 }
 
 bool RequestManager::isWifiConnected(){
-	return this->wifiState==ST_W_CONNECTED;
+	return this->state>=ST_W_CONNECTED;
 }
 
 bool RequestManager::isServerConnected(){
-	return this->serverState==ST_S_CONNECTED;
+	return this->state>=ST_S_CONNECTED;
 }
 
 void RequestManager::validate(){
@@ -326,9 +316,6 @@ void RequestManager::validate(){
 			if(millis()-timeout>=WIFI_CHECK_INTERVAL){
 				checkWiFiConnection();
 				timeout = millis();
-			}
-			if(isPosting() && size()>0){
-				connectToServer();
 			}
 			break;
 		}
@@ -442,7 +429,6 @@ void RequestManager::validatePosting(){
 }
 
 void RequestManager::fill(){
-
 	for(int i=0; i<35; i++){
 		PostSurgeRequest* req = new PostSurgeRequest(i, 0, 0);
 		pushRequest(req);
@@ -457,9 +443,8 @@ void RequestManager::wait(unsigned int interval){
 
 bool RequestManager::setState(uint8_t state){
 	if(this->state!=state){
-		uint8_t old = this->state;
 		this->state = state;
-		onStateChanged(old);
+		onStateChanged();
 		return true;
 	}
 	return false;
@@ -467,15 +452,14 @@ bool RequestManager::setState(uint8_t state){
 
 bool RequestManager::setPostingState(uint8_t state){
 	if(this->postState!=state){
-		uint8_t old = this->postState;
 		this->postState = state;
-		onPostingStateChanged(old);
+		onPostingStateChanged();
 		return true;
 	}
 	return false;
 }
 
-void RequestManager::onStateChanged(uint8_t oldState){
+void RequestManager::onStateChanged(){
 	Action action(this, getState(), nullptr, nullptr);
 	notifyActionPerformed(action);
 
@@ -498,6 +482,10 @@ void RequestManager::onStateChanged(uint8_t oldState){
 			//	connectToWiFi();
 			break;
 		}
+		case ST_W_CONNECTING_FAIL:{
+			setState(ST_W_DISCONNECTED);
+			break;
+		}
 		case ST_S_CONNECTED:{
 		//	postRequest();
 			break;
@@ -509,7 +497,7 @@ void RequestManager::onStateChanged(uint8_t oldState){
 	wait(50);
 }
 
-void RequestManager::onPostingStateChanged(uint8_t oldState){
+void RequestManager::onPostingStateChanged(){
 	Action action(this, postState, nullptr, nullptr);
 	notifyActionPerformed(action);
 
@@ -541,18 +529,6 @@ void RequestManager::onPostingStateChanged(uint8_t oldState){
 			timeoutP = millis();
 			setPostingState(ST_P_POSTING_ON);
 			wait(5000);
-			break;
-		}
-	}
-}
-
-void RequestManager::onServerStateChanged(uint8_t oldState){
-	Action action(this, getState(), nullptr, nullptr);
-	notifyActionPerformed(action);
-
-	switch(getServerState()){
-		case ST_S_DISCONNECTED:{
-
 			break;
 		}
 	}
@@ -621,7 +597,7 @@ void RequestManager::onEspMessageReceived(const String& msg){
 				setState(ST_W_CONNECTED);
 				help = 0;
 			}
-			else if(msg.indexOf("FAIL") >= 0){
+			else if(msg.indexOf(RESP_WIFI_FAIL) >= 0){
 				//setState(ST_W_DISCONNECTED);
 				setState(ST_W_CONNECTING_FAIL);
 			}
@@ -653,10 +629,10 @@ void RequestManager::onEspMessageReceived(const String& msg){
 				}
 				help = 0;
 			}
-			if(msg.compareTo("STATUS:2") == 0){
+			if(msg.compareTo("TUS:2") == 0){
 				help = '2';
 			}
-			else if(msg.compareTo("STATUS:3") == 0){
+			else if(msg.compareTo("TUS:3") == 0){
 				help = '3';
 			}
 			break;
@@ -668,14 +644,20 @@ void RequestManager::onEspMessageReceived(const String& msg){
 			else if(msg.compareTo(RESP_SERVER_CLOSED) == 0){
 				setState(ST_S_DISCONNECTED);
 			}
-			else if(msg.startsWith("ALR")){
+			else if(msg.indexOf("ALR")>=0){
 				help = 24;
 			}
-			else if(msg.indexOf(RESP_SERVER_CONNECT)>=0){
+			else if(msg.compareTo(RESP_SERVER_CONNECT)==0){
 				help = 25;
 			}
-			if(help==24 && msg.startsWith("E")){
-				setState(ST_S_CONNECTED);
+			else if(msg.indexOf(RESP_SERVER_FAIL)>=0){
+				help = 26;
+			}
+			if(msg.startsWith("ER")){
+				if(help==24)
+					setState(ST_S_CONNECTED);
+				else if(help==26)
+					setState(ST_S_DISCONNECTED);
 			}
 			break;
 		}
@@ -709,7 +691,7 @@ void RequestManager::onEspMessageReceived(const String& msg){
 			break;
 		}
 		case ST_P_SEND_REQUEST:{
-			if(msg.compareTo("SEND OK") == 0) {
+			if(msg.compareTo(RESP_SERVER_SEND) == 0) {
 				setPostingState(ST_P_WAIT_RESP);
 			}
 			break;
@@ -737,33 +719,24 @@ void RequestManager::postNextRequest(){
 }
 
 void RequestManager::postRequest(HttpRequest* httpRequest) {
-	Serial.print(F("$ Free RAM = "));
-	Serial.println(freeMemory(), DEC);
-
 	if(httpRequest){
-		char* req = httpRequest->getRequest();
+		httpReq = httpRequest;
+		uint8_t size = strlen(httpRequest->getRequest());
+		onPostRequest(httpRequest);
 
-		//onPostRequest(httpRequest);
-
-		String request(req);
-		Serial.println(request);
-
-		Serial.print(F("Post Request text: "));
-		Serial.println( request.length() );
-
-		//String sendCmd = "AT+CIPSEND="; //determine the number of caracters to be sent.
+		Serial.println(F("AT+CIPSEND="));
+		Serial.println(size-0);
 		esp->print(F("AT+CIPSEND="));
-		esp->println(request.length()-0);
+		esp->println(size-0);
 
 		setPostingState(ST_P_POSTING_REQUEST);
 		timeoutP = millis();
-		this->request = request;
 	}
 }
 
 void RequestManager::onPostRequest(HttpRequest* request){
-	Serial.print(F("On Post: "));
-	Serial.println(request->getRequest());
+	//Serial.print(F("On Post: "));
+	//Serial.println(request->getRequest());
 }
 
 void RequestManager::onGetRequest(HttpRequest* request){
@@ -772,10 +745,15 @@ void RequestManager::onGetRequest(HttpRequest* request){
 
 void RequestManager::sendRequest(){
 	setPostingState(ST_P_SEND_REQUEST);
-	timeoutP = millis();
-	//Serial.println(F("Sending..."));
-	//Serial.println(request);
-	esp->print(request);
+	if(httpReq){
+		char* str = httpReq->getRequest();
+		Serial.println(F("Sending..."));
+		Serial.println(str);
+		esp->print(str);
+	}
+
+	Serial.print(F("$ Free RAM = "));
+	Serial.println(freeMemory(), DEC);
 }
 
 void RequestManager::onResponseReceived(const String& response){

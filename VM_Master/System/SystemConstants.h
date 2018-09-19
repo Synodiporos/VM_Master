@@ -42,6 +42,7 @@
 #define WiFi_TEST_URI "/get.php" //"/surges/test5.php" //"/get.php"
 #define WiFi_SURGE_URI "/surgeRecord.php"
 #define WiFi_BATTERY_URI "/batteryRecord.php"
+
 //http://192.168.11.5/surgeroom/get.php
 //SCREEN CONFIG
 #define SC_TIMEOUT 40

@@ -21,25 +21,19 @@ PostSurgeRequest::~PostSurgeRequest() {
 }
 
 char* PostSurgeRequest::getRequest(){
-	char at[40];
-	uint8_t length = snprintf(at, 40, POST_SURGE_REQUEST_DATA,
+	char content[30];
+	strcpy_P(content, (char*)pgm_read_word(&(postRequests[1])));
+	char format[129];
+	strcpy_P(format, (char*)pgm_read_word(&(postRequests[0])));
+
+	char data[56];
+	uint8_t length = snprintf(data, 56, content,
 			source, charge, slope);
 
-	char server[] = WIFI_SERVER;
-	char uri[] = WIFI_SURGEROOM_URI;
-	char surge_uri[] = WiFi_SURGE_URI;
-
-	//char currentRequest[] = std::string("GET ");
-	//currentRequest += uri + " HTTP/1.1\r\n" +
-	//		"Host: " + server + "\r\n\r\n" ;
-	//"Accept: *" + "/" + "*\r\n" +
-	//"Content-Length: " + data.length() + "\r\n" ;
-	//"Content-Type: application/x-www-form-urlencoded\r\n" +
-	//"\r\n" + data;
-
-	char req[192];
-	snprintf(req, 192, POST_SURGE_REQUEST,
-			uri, surge_uri, server, length, at);
+	char req[208];
+	snprintf(req, 208, format,
+			WIFI_SURGEROOM_URI, WiFi_SURGE_URI,
+			WIFI_SERVER, length, data);
 
 	return req;
 }

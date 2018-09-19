@@ -20,6 +20,7 @@
 #include "WiFi/RequestManager.h"
 #include "WiFi/HttpRequest.h"
 #include "WiFi/PostSurgeRequest.h"
+#include "WiFi/PostBatteryRequest.h"
 #include "WiFi/TestGetRequest.h"
 #include "CMD/AT.h"
 #include "LEDScreen/LEDScreen.h"

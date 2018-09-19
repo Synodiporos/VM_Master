@@ -1,31 +1,30 @@
 
 #include "System/SystemConstants.h"
 #include "System/NotificationSystem.h"
-//#include "System/SerialBroadcaster.h"
 #include "RFTransceiver/RFTransceiver.h"
 #include "LEDScreen/LEDScreen.h"
 #include "Memory/MemoryFree.h"
 #include "Memory/pgmStrToRAM.h"
-//#include "CMD/CMD.h"
-//#include "CMD/CMDStartUp.h"
 #include "WiFi/RequestManager.h"
+#include "WiFi/HttpRequest.h"
+#include "WiFi/PostSurgeRequest.h"
+#include "WiFi/PostBatteryRequest.h"
+#include "WiFi/TestGetRequest.h"
 #include "Controller.h"
 #include "SoftwareSerial.h"
 #include <SPI.h>
 #include <RF24.h>
 #include <string>
 #include <Arduino.h>
+#include <avr/pgmspace.h>
 using namespace std;
+
+
 
 //NotificationSystem* notification = NotificationSystem::getInstance();
 //SerialBroadcaster* serialBroad = SerialBroadcaster::getInstance();
-//RF24 radio(RF_CE, RF_CSN);
-//RFTransceiver* trasnceiver = RFTransceiver::getInstance();
-//CMDExecutor* executor = CMDExecutor::getInstance();
-//LEDScreen* ledScreen = LEDScreen::getInstance();
-//ScreenPage* page = new ScreenPage(ledScreen);
-//SoftwareSerial esp(RX3_PIN, TX3_PIN); // RX, TX
-//RequestManager* requestManager ;
+RF24 radio(RF_CE, RF_CSN);
+RFTransceiver* trasnceiver = RFTransceiver::getInstance();
 Controller controller;
 
 
@@ -45,8 +44,8 @@ void setup() {
 	//page->reprint();
 
 	//Initialaze RF
-	//trasnceiver->initialize(&radio);
-	//trasnceiver->startConnectivityCheck();
+	trasnceiver->initialize(&radio);
+	trasnceiver->startConnectivityCheck();
 
 	//Controller
 	controller.activate();
@@ -65,9 +64,10 @@ void setup() {
 	Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
 	Serial.println(freeMemory(), DEC);
 	Serial.println(F("START"));
-	Serial.print(F("Free RAM = "));
+
+
+	Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
 	Serial.println(freeMemory(), DEC);
-	// print how much RAM is available.
 
 }
 

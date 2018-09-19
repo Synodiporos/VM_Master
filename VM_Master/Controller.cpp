@@ -250,7 +250,7 @@ void Controller::onWiFiConnectionStateChanged(bool state){
 void Controller::validate(){
 	requestManager->validate();
 
-	if(helper==0 && millis()-time > 4000){
+	if(helper==0 && millis()-time > 10000){
 		/*for(int i=0; i<4; i++){
 			PostSurgeRequest* req = new PostSurgeRequest(c, c*1000, 0);
 			requestManager->pushRequest(req);
@@ -258,12 +258,12 @@ void Controller::validate(){
 		}*/
 
 		HttpRequest* req1 = new TestGetRequest();
-		HttpRequest* req2 = new PostSurgeRequest(2, 2000, 0);
-		HttpRequest* req3 = new PostSurgeRequest(3, 3000, 0);
+		HttpRequest* req2 = new PostSurgeRequest(1, 45000, 523);
+		HttpRequest* req3 = new PostBatteryRequest(0, 0, 0);
 
 		requestManager->pushRequest(req1);
 		requestManager->pushRequest(req2);
-		//requestManager->pushRequest(req3);
+		requestManager->pushRequest(req3);
 
 		time = millis();
 		helper = 1;

@@ -32,8 +32,8 @@
 #define ST_W_DISCONNECTED 10
 #define ST_W_CHECK 11
 #define ST_W_CONNECTING 12
-#define ST_W_CONNECTING_FAIL 14
-#define ST_W_CONNECTED 13
+#define ST_W_CONNECTING_FAIL 13
+#define ST_W_CONNECTED 14
 
 #define ST_S_DISCONNECTED 20
 #define ST_S_CHECK 21
@@ -51,12 +51,15 @@
 #define ST_P_REQUEST_POST_ERROR 57
 
 #define RESP_WIFI_OK "OK"
-#define RESP_WIFI_DISC "WIFI DISCONNECT"
-#define RESP_WIFI_CONN "WIFI GOT IP"
+#define RESP_WIFI_DISC "WIFI DIS"
+#define RESP_WIFI_CONN "GOT IP"
+#define RESP_WIFI_FAIL "FAIL"
 #define RESP_SERVER_CONNECT "CONNECT"
 #define RESP_SERVER_CLOSED "CLOSED"
-#define RESP_SERVER_ER "HTTP/1.1 40"
-#define RESP_SERVER_OK "HTTP/1.1 200"
+#define RESP_SERVER_FAIL "CONNECT FAIL"
+#define RESP_SERVER_SEND "SEND OK"
+#define RESP_SERVER_ER "1.1 40"
+#define RESP_SERVER_OK "1.1 200"
 
 class RequestManager {
 public:
@@ -70,8 +73,6 @@ public:
 	uint8_t size();
 	uint8_t getState();
 	uint8_t getPostingState();
-	uint8_t getWiFiState();
-	uint8_t getServerState();
 
 	void setActionListener(IActionListener* listener);
 	IActionListener* getActionListener();
@@ -111,14 +112,13 @@ private:
 	uint8_t enabled = false;
 	uint8_t state = 0;
 	uint8_t postState = 0;
-	uint8_t wifiState = ST_W_DISCONNECTED;
-	uint8_t serverState = ST_S_DISCONNECTED;
 	uint8_t help = 0; //200 WAIT
-	unsigned long time = millis();
+	//unsigned long time = millis();
 	unsigned long timeout = millis();
 	unsigned long timeoutP = millis();
 	unsigned int waitTime = 0;
-	String request;
+	//char* request;
+	HttpRequest* httpReq;
 	IActionListener* actionListener = nullptr;
 
 	RequestManager();
@@ -133,9 +133,8 @@ private:
 	void validatePosting();
 
 
-	void onStateChanged(uint8_t oldState);
-	void onPostingStateChanged(uint8_t oldState);
-	void onServerStateChanged(uint8_t oldState);
+	void onStateChanged();
+	void onPostingStateChanged();
 	void onPostRequest(HttpRequest* request);
 	void onGetRequest(HttpRequest* request);
 	void sendRequest();
