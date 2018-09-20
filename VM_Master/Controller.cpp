@@ -42,7 +42,7 @@ void Controller::initialization(){
 	//requestManager->setEnabled(true);
 	//requestManager->startPosting();
 
-	this->transceiver->startConnectivityCheck();
+	//this->transceiver->startConnectivityCheck();
 
 	//page->reprint();
 }
@@ -103,20 +103,17 @@ void Controller::actionPerformed(Action action){
 			Serial.println(F("WIFI INITIALIZING"));
 			break;
 		}
-		case ST_INITIALIZING_2:{
-			Serial.println(F("WIFI INITIALIZING 2"));
-			break;
-		}
 		case ST_INITIALIZED:{
 			Serial.println(F("WIFI INITIALIZED"));
 			break;
 		}
-		case ST_INITIALIZED_2:{
-			Serial.println(F("WIFI INITIALIZED 2"));
+		case ST_INITIALIZE_ERROR:{
+			Serial.println(F("WIFI INITIALIZING ERROR"));
 			break;
 		}
 		case ST_W_DISCONNECTED:{
 			Serial.println(F("WIFI WLAN DISCONNECTED"));
+			onWiFiConnectionStateChanged(false);
 			break;
 		}
 		case ST_W_CHECK:{
@@ -138,11 +135,10 @@ void Controller::actionPerformed(Action action){
 		}
 		case ST_S_DISCONNECTED:{
 			Serial.println(F("WIFI SERVER DISCONNECTED"));
-			onWiFiConnectionStateChanged(false);
 			break;
 		}
-		case ST_S_CHECK:{
-			Serial.println(F("WIFI SERVER CHECK"));
+		case ST_S_ERROR:{
+			Serial.println(F("WIFI SERVER ERROR"));
 			break;
 		}
 		case ST_S_CONNECTING:{
@@ -252,20 +248,27 @@ void Controller::onWiFiConnectionStateChanged(bool state){
 void Controller::validate(){
 	requestManager->validate();
 
-	if(helper==0 && millis()-time > 10000){
+	if(helper==0 && millis()-time > 16000){
 		/*for(int i=0; i<4; i++){
 			PostSurgeRequest* req = new PostSurgeRequest(c, c*1000, 0);
 			requestManager->pushRequest(req);
 			c++;
 		}*/
+		Serial.println(F("===> PUSH REQUESTS"));
 
 		HttpRequest* req1 = new TestGetRequest();
-		HttpRequest* req2 = new PostSurgeRequest(1, 45000, 523);
-		HttpRequest* req3 = new PostBatteryRequest(0, 0, 0);
+		//HttpRequest* req2 = new TestGetRequest();// new PostSurgeRequest(1, 45000, 523);
+		HttpRequest* req3 = new PostBatteryRequest(415, 100, 0);
+		//HttpRequest* req4 = new PostSurgeRequest(0, 100000, 2000);
+		//HttpRequest* req4 = new PostSurgeRequest(0, 45000, 5000);
 
 		requestManager->pushRequest(req1);
-		requestManager->pushRequest(req2);
+		//requestManager->pushRequest(req2);
 		requestManager->pushRequest(req3);
+		//requestManager->pushRequest(req4);
+
+		Serial.print(F("Free RAM AFTER= "));
+		Serial.println(freeMemory(), DEC);
 
 		time = millis();
 		helper = 1;

@@ -19,16 +19,8 @@ public:
 			unsigned long charge, unsigned int slope);
 	virtual ~PostSurgeRequest();
 
-	char* getRequest();
-
-	unsigned long foo1();
-	unsigned long foo2();
-	unsigned long foo3();
-	unsigned long foo4();
-	unsigned long foo5();
-	unsigned long foo6();
-	unsigned long foo7();
-
+	uint8_t getRequestType();
+	uint8_t createRequestContent(char* buffer);
 
 private:
 

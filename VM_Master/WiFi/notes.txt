@@ -4,14 +4,16 @@ AT+RST
 
 
 
-AT+CWJAP_CUR="RaycapWiFi_Drama","r@yL@N!!"
+AT+CWJAP_CUR="SynNet","Syn123NET789"
+AT+CWAUTOCONN=1
 
 AT+CWJAP?
 AT+CGACT?
 AT+CIPSTATUS
 
 AT+CIPSTART=?
-AT+CIPSTART="TCP","192.168.11.5",80
+AT+CIPSTART="TCP","www.google.com",80
+www.google.com
 
 
 AT+CIPSEND=48

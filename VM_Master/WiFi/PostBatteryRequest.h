@@ -9,8 +9,7 @@
 #define WIFI_POSTBATTERYREQUEST_H_
 
 #include "HttpRequest.h"
-
-#define TE "123456789012345678901234567890"
+#include <iostream>
 
 class PostBatteryRequest: public HttpRequest {
 public:
@@ -18,7 +17,8 @@ public:
 			uint8_t percentage, bool alarm);
 	virtual ~PostBatteryRequest();
 
-	char* getRequest();
+	uint8_t getRequestType();
+	uint8_t createRequestContent(char* buffer);
 
 private:
 	unsigned int voltage = 0;

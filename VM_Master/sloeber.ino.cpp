@@ -2,7 +2,7 @@
 //This is a automatic generated file
 //Please do not modify this file
 //If you touch this file your change will be overwritten during the next build
-//This file has been generated on 2018-09-19 17:28:08
+//This file has been generated on 2018-09-20 16:01:39
 
 #include "Arduino.h"
 #include "System/SystemConstants.h"
@@ -16,6 +16,7 @@
 #include "WiFi/PostSurgeRequest.h"
 #include "WiFi/PostBatteryRequest.h"
 #include "WiFi/TestGetRequest.h"
+#include "WiFi/HttpRequestCreator.h"
 #include "Controller.h"
 #include "SoftwareSerial.h"
 #include <SPI.h>

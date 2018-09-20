@@ -9,16 +9,16 @@
 #define WIFI_TESTGETREQUEST_H_
 
 #include "HttpRequest.h"
-
-#define POST_HTTP_REQUEST "GET %s%s HTTP/1.1\r\nHost: %s\r\n\r\n"
+#include <stdio.h>
+#include <stdlib.h>
 
 class TestGetRequest: public HttpRequest {
 public:
 	TestGetRequest();
 	virtual ~TestGetRequest();
 
-	char* getRequest();
-
+	uint8_t getRequestType();
+	uint8_t createRequestContent(char* buffer);
 };
 
 #endif /* WIFI_TESTGETREQUEST_H_ */

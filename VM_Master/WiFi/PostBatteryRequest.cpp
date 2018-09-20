@@ -20,22 +20,20 @@ PostBatteryRequest::~PostBatteryRequest() {
 	// TODO Auto-generated destructor stub
 }
 
-char* PostBatteryRequest::getRequest(){
-	char content[27];
-	strcpy_P(content, (char*)pgm_read_word(&(postRequests[2])));
-	char format[129];
-	strcpy_P(format, (char*)pgm_read_word(&(postRequests[0])));
+uint8_t PostBatteryRequest::getRequestType(){
+	return REQUEST_TYPE_BATTERY;
+}
 
-	char data[40];
-	uint8_t length = snprintf(data, 40,
-			content,
+uint8_t PostBatteryRequest::createRequestContent(char* buffer){
+	char contentFormat[URL_CONTENT_LENGHT];
+	strcpy_P(contentFormat,
+			(char*)pgm_read_word(&(formats_of_contents[1])));
+
+	uint8_t length = snprintf(buffer, URL_CONTENT_LENGHT,
+			contentFormat,
 			voltage, percentage, alarm);
 
+	buffer[URL_CONTENT_LENGHT-1] = '\0';
 
-	char req[192];
-	snprintf(req, 192, format,
-			WIFI_SURGEROOM_URI, WiFi_BATTERY_URI,
-			WIFI_SERVER, length, data);
-
-	return req;
+	return (unsigned)strlen(buffer);
 }

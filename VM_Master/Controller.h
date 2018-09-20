@@ -25,6 +25,8 @@
 #include "CMD/AT.h"
 #include "LEDScreen/LEDScreen.h"
 #include "LEDScreen/ScreenPage.h"
+#include "Memory/MemoryFree.h"
+#include "Memory/pgmStrToRAM.h"
 #include <vector>
 #include <string>
 #include <SPI.h>

@@ -24,10 +24,9 @@
 
 #define ST_OFF 0
 #define ST_BLUGED 1
-#define ST_INITIALIZING 3
-#define ST_INITIALIZING_2 5
+#define ST_INITIALIZING 2
+#define ST_INITIALIZE_ERROR 3
 #define ST_INITIALIZED 4
-#define ST_INITIALIZED_2 6
 
 #define ST_W_DISCONNECTED 10
 #define ST_W_CHECK 11
@@ -36,7 +35,6 @@
 #define ST_W_CONNECTED 14
 
 #define ST_S_DISCONNECTED 20
-#define ST_S_CHECK 21
 #define ST_S_CONNECTING 22
 #define ST_S_ERROR 23
 #define ST_S_CONNECTED 24
@@ -50,8 +48,8 @@
 #define ST_P_REQUEST_POSTED 56
 #define ST_P_REQUEST_POST_ERROR 57
 
-#define RESP_WIFI_OK "OK"
-#define RESP_WIFI_DISC "WIFI DIS"
+#define RESP_OK "OK"
+#define RESP_WIFI_DISC "WIFI DISC"
 #define RESP_WIFI_CONN "GOT IP"
 #define RESP_WIFI_FAIL "FAIL"
 #define RESP_SERVER_CONNECT "CONNECT"
@@ -63,8 +61,6 @@
 
 class RequestManager {
 public:
-
-	static const char OK[3];
 
 	static RequestManager* getInstance();
 	virtual ~RequestManager();
@@ -83,7 +79,6 @@ public:
 
 	void checkESPModule();
 	void checkWiFiConnection();
-	void checkServerConnection();
 
 	void initializeModule();
 	void setAutoConnect(bool autoC);
@@ -117,7 +112,7 @@ private:
 	unsigned long timeout = millis();
 	unsigned long timeoutP = millis();
 	unsigned int waitTime = 0;
-	//char* request;
+	char * request = malloc (sizeof (char) * 196);
 	HttpRequest* httpReq;
 	IActionListener* actionListener = nullptr;
 

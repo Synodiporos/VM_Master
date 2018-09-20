@@ -10,6 +10,7 @@
 #include "WiFi/PostSurgeRequest.h"
 #include "WiFi/PostBatteryRequest.h"
 #include "WiFi/TestGetRequest.h"
+#include "WiFi/HttpRequestCreator.h"
 #include "Controller.h"
 #include "SoftwareSerial.h"
 #include <SPI.h>
@@ -27,6 +28,7 @@ RF24 radio(RF_CE, RF_CSN);
 //RFTransceiver* trasnceiver = RFTransceiver::getInstance();
 Controller controller;
 
+#define TEST "POST %s%s HTTP/1.1\r\nHost: %s\r\nAccept: */*\r\nContent-Length: %d\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n%s";
 
 long mil = millis();
 int c = 0;
@@ -67,9 +69,19 @@ void setup() {
 	Serial.println(F("START"));
 
 
-	Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
+	Serial.print(F("Free RAM = "));
 	Serial.println(freeMemory(), DEC);
 
+
+	HttpRequest* r1 = new TestGetRequest();
+	HttpRequest* r2 = new PostBatteryRequest(415, 200, 0);
+//	String req = HttpRequestCreator::createRequest(r1);
+//	uint8_t size = req.length();
+	char buffer[196];
+	uint8_t size = HttpRequestCreator::createRequest(buffer, r2);
+
+	Serial.println(size);
+	Serial.println(buffer);
 }
 
 // the loop routine runs over and over again forever:

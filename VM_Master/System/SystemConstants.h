@@ -40,8 +40,8 @@
 #define WIFI_SERVER "192.168.11.5" //"synet.sytes.net" //"192.168.11.5"
 #define WIFI_SURGEROOM_URI "/surgeroom" //"/surges"
 #define WiFi_TEST_URI "/get.php" //"/surges/test5.php" //"/get.php"
-#define WiFi_SURGE_URI "/surgeRecord.php"
-#define WiFi_BATTERY_URI "/batteryRecord.php"
+#define WiFi_SURGE_URI "/srg.php"
+#define WiFi_BATTERY_URI "/btr.php"
 
 //http://192.168.11.5/surgeroom/get.php
 //SCREEN CONFIG
