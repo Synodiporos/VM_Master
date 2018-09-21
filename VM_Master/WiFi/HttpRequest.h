@@ -13,16 +13,11 @@
 #include "../System/SystemConstants.h"
 using namespace std;
 
-#define REQUEST_TYPE_TEST 0
-#define REQUEST_TYPE_SURGE 1
-#define REQUEST_TYPE_BATTERY 2
-
-#define URL_CONTENT_LENGHT 40
-
+const char format[] PROGMEM = "GET %s%s HTTP/1.1\r\nHost: %s\r\n\r\n";
 const char psr_content[] PROGMEM = "src=%d&ch=%lu&sl=%d";
 const char pbr_content[] PROGMEM = "vin=%d&lv=%d&al=%d";
 const char* const formats_of_contents[] PROGMEM =
-	{psr_content, pbr_content};
+	{psr_content, pbr_content, format};
 
 
 class HttpRequest {

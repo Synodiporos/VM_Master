@@ -25,15 +25,15 @@ uint8_t PostBatteryRequest::getRequestType(){
 }
 
 uint8_t PostBatteryRequest::createRequestContent(char* buffer){
-	char contentFormat[URL_CONTENT_LENGHT];
+	char contentFormat[REQUEST_URL_CONTENT_LENGHT];
 	strcpy_P(contentFormat,
 			(char*)pgm_read_word(&(formats_of_contents[1])));
 
-	uint8_t length = snprintf(buffer, URL_CONTENT_LENGHT,
+	uint8_t size = snprintf(buffer, REQUEST_URL_CONTENT_LENGHT,
 			contentFormat,
 			voltage, percentage, alarm);
 
-	buffer[URL_CONTENT_LENGHT-1] = '\0';
+	buffer[REQUEST_URL_CONTENT_LENGHT-1] = '\0';
 
-	return (unsigned)strlen(buffer);
+	return size;
 }

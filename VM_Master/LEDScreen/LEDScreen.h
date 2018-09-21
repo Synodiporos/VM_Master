@@ -12,6 +12,16 @@
 #include <string>
 #include "../System/SystemConstants.h"
 
+#define AT_CLEAR "ATd0=()"
+#define AT_TURNON "ATf1=()"
+#define AT_TURNOFF "ATf0=()"
+#define AT_BRIGHT "ATf2=(%d)"
+#define AT_WRITE_STRING "AT8%d=(%d,%d,%s)"
+#define AT_WRITE_CHAR "AT8%d=(%d,%d,%c)"
+#define AT_DRAW_LINE "AT90=(%d,%d,%d,%d,%d)"
+#define AT_DRAW_RECTANGLE "AT91=(%d,%d,%d,%d,%d)"
+
+
 class LEDScreen {
 public:
 	static LEDScreen* getInstance();
@@ -22,7 +32,6 @@ public:
 	void turnON();
 	void turnOFF();
 	void brightness(uint8_t br);
-	void showMemoryData();
 	void write(std::string string, int row, int col, uint8_t size);
 	void write(char ch, int row, int col, uint8_t size);
 	void drawLine(uint8_t x0, uint8_t y0,

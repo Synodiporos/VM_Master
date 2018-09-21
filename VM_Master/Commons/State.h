@@ -1,7 +1,7 @@
 /*
  * State.h
  *
- *  Created on: 22 Απρ 2018
+ *  Created on: 22 Ξ‘Ο€Ο� 2018
  *      Author: Synodiporos
  */
 
@@ -24,7 +24,7 @@ public:
 
 private:
 	void* source = nullptr;
-	char name ;
+	char name = 0;
 	void* value = nullptr;
 };
 

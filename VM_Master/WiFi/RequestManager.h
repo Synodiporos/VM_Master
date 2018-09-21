@@ -18,6 +18,7 @@
 #include "../Commons/IActionListener.h"
 #include "HttpRequest.h"
 #include "PostSurgeRequest.h"
+#include "HttpRequestCreator.h"
 
 #define CAPACITY 8
 #define SERIAL_BUFFER 48
@@ -112,7 +113,7 @@ private:
 	unsigned long timeout = millis();
 	unsigned long timeoutP = millis();
 	unsigned int waitTime = 0;
-	char * request = malloc (sizeof (char) * 196);
+	char request[WIFI_REQUEST_LENGHT];
 	HttpRequest* httpReq;
 	IActionListener* actionListener = nullptr;
 

@@ -63,7 +63,14 @@ bool RequestManager::pushRequest(HttpRequest* request){
 	/*Serial.print(F("+ PUSH index:"));
 	Serial.print(index);
 	Serial.print(F(" pointer:"));
-	Serial.print((long)request);*/
+	Serial.println((long)request);
+
+
+	char buffer[WIFI_REQUEST_LENGHT];
+	uint8_t size =
+			HttpRequestCreator::createRequest(buffer, request);
+	Serial.println(F("STRING:"));
+	Serial.println(buffer);*/
 
 	if(_size<CAPACITY){
 		uint8_t i = index + _size;
@@ -663,11 +670,6 @@ void RequestManager::onEspMessageReceived(const String& msg){
 		}
 		case ST_P_WAIT_RESP:{
 			onResponseReceived(msg);
-			if(millis()-timeoutP>10000){
-				//Serial.println(F("... WAIT RESP TIMEOUT!"));
-				setPostingState(ST_P_POSTING_READY);
-				timeoutP = millis();
-			}
 			break;
 		}
 	}
@@ -692,21 +694,24 @@ void RequestManager::postRequest(HttpRequest* httpRequest) {
 	if(httpRequest){
 		httpReq = httpRequest;
 
-		//char* buffer[196];
-		uint8_t size = 0;//httpRequest->createRequest(buffer);
+		for(int i=0; i<WIFI_REQUEST_LENGHT; i++)
+			request[i] = '0';
+
+		uint8_t size =
+				HttpRequestCreator::createRequest(request, httpRequest);
+
 		onPostRequest(httpRequest);
 
 		Serial.print(F("AT+CIPSEND="));
-		Serial.println(size-0);
+		Serial.println(size);
 		delay(10);
 		esp->print(F("AT+CIPSEND="));
-		esp->println(size-0);
+		esp->println(size);
 
 		Serial.println(F("***   AT SEND"));
 
 		setPostingState(ST_P_POSTING_REQUEST);
 		timeoutP = millis();
-		//free(req);
 	}
 }
 

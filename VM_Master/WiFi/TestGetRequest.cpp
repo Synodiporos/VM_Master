@@ -22,5 +22,5 @@ uint8_t TestGetRequest::getRequestType(){
 
 uint8_t TestGetRequest::createRequestContent(char* buffer){
 	buffer[0] = '\0';
-	return 0;
+	return 1;
 }

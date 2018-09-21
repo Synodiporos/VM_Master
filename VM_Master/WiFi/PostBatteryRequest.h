@@ -9,7 +9,6 @@
 #define WIFI_POSTBATTERYREQUEST_H_
 
 #include "HttpRequest.h"
-#include <iostream>
 
 class PostBatteryRequest: public HttpRequest {
 public:

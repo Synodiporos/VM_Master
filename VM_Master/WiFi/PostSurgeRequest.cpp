@@ -26,24 +26,15 @@ uint8_t PostSurgeRequest::getRequestType(){
 }
 
 uint8_t PostSurgeRequest::createRequestContent(char* buffer){
-	/*char content[100];
-	strcpy_P(content, (char*)pgm_read_word(&(postRequests[1])));
-	char format[128];
-	strcpy_P(format, (char*)pgm_read_word(&(postRequests[0])));
+	char contentFormat[REQUEST_URL_CONTENT_LENGHT];
+	strcpy_P(contentFormat,
+			(char*)pgm_read_word(&(formats_of_contents[0])));
 
-	char data[100];
-	uint8_t length = snprintf(data, 100,
-			content,
-			source, charge, slope);
+	uint8_t size = snprintf(buffer, REQUEST_URL_CONTENT_LENGHT,
+		contentFormat,
+		source, charge, slope);
 
-	uint8_t size = getRequestSize();
-	snprintf(buffer, size, format,
-			WIFI_SURGEROOM_URI, WiFi_SURGE_URI,
-			WIFI_SERVER, length, data);
+	buffer[REQUEST_URL_CONTENT_LENGHT-1] = '\0';
 
-
-	buffer[size-1] = '\0';*/
-
-
-	return 0;
+	return size;
 }

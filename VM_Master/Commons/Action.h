@@ -1,7 +1,7 @@
 /*
  * Action.h
  *
- *  Created on: 29 Μαΐ 2018
+ *  Created on: 29 Ξ�Ξ±Ξ� 2018
  *      Author: Synodiporos
  */
 
@@ -11,23 +11,19 @@
 class Action {
 public:
 	Action();
-	Action(void* source, unsigned int actionId,
-			char* actionName, void* container);
+	Action(const void* source, const unsigned int actionId,
+			const char* actionName, const void* container);
 	virtual ~Action();
-	void setSource(void* source);
-	void* getSource();
-	void setContainer(void* container);
-	void* getContainer();
-	void setActionId(unsigned int actionId);
+	const void* getSource();
+	const void* getContainer();
 	unsigned int getActionId();
-	void setActionName(char* name);
-	char* getActionName();
+	const char* getActionName();
 
 private:
-	void* source = nullptr;
-	void* container = nullptr;
-	unsigned int actionId = 0;
-	char* actionName = nullptr;
+	const void* source = nullptr;
+	const unsigned int actionId = 0;
+	const char* actionName = nullptr;
+	const void* container = nullptr;
 };
 
 #endif /* COMMONS_ACTION_H_ */

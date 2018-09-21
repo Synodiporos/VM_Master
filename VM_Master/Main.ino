@@ -20,15 +20,11 @@
 #include <avr/pgmspace.h>
 using namespace std;
 
-
-
 //NotificationSystem* notification = NotificationSystem::getInstance();
 //SerialBroadcaster* serialBroad = SerialBroadcaster::getInstance();
 RF24 radio(RF_CE, RF_CSN);
 //RFTransceiver* trasnceiver = RFTransceiver::getInstance();
 Controller controller;
-
-#define TEST "POST %s%s HTTP/1.1\r\nHost: %s\r\nAccept: */*\r\nContent-Length: %d\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n%s";
 
 long mil = millis();
 int c = 0;
@@ -69,19 +65,27 @@ void setup() {
 	Serial.println(F("START"));
 
 
-	Serial.print(F("Free RAM = "));
-	Serial.println(freeMemory(), DEC);
-
-
-	HttpRequest* r1 = new TestGetRequest();
+	/*HttpRequest* r1 = new TestGetRequest();
 	HttpRequest* r2 = new PostBatteryRequest(415, 200, 0);
-//	String req = HttpRequestCreator::createRequest(r1);
-//	uint8_t size = req.length();
-	char buffer[196];
-	uint8_t size = HttpRequestCreator::createRequest(buffer, r2);
+	HttpRequest* r3 = new PostSurgeRequest(0, 100000, 10000);
+	//String req = HttpRequestCreator::createRequest(r1);
+	//uint8_t size = req.length();
 
+	char buffer[88];
+	uint8_t size = HttpRequestCreator::createRequest(buffer, r3);
 	Serial.println(size);
 	Serial.println(buffer);
+
+	size = HttpRequestCreator::createRequest(buffer, r2);
+	Serial.println(size);
+	Serial.println(buffer);
+
+	size = HttpRequestCreator::createRequest(buffer, r1);
+	Serial.println(size);
+	Serial.println(buffer);*/
+
+	Serial.print(F("Free RAM = "));
+	Serial.println(freeMemory(), DEC);
 }
 
 // the loop routine runs over and over again forever:

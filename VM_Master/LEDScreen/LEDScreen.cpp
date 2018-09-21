@@ -28,12 +28,12 @@ void LEDScreen::begin(){
 }
 
 void LEDScreen::clear(){
-	char at[] = "ATd0=()";
+	char at[] = AT_CLEAR;
 	onSendAt(at);
 }
 
 void LEDScreen::turnON(){
-	char at[] = "ATf1=()";
+	char at[] = AT_TURNON;
 	onSendAt(at);
 }
 
@@ -45,32 +45,29 @@ void LEDScreen::turnOFF(){
 void LEDScreen::brightness(uint8_t br){
 	char buffer [10];
 	int b = br;
-	sprintf (buffer, "ATf2=(%d)", b);
+	sprintf (buffer, AT_BRIGHT, b);
 	onSendAt(buffer);
-}
-
-void LEDScreen::showMemoryData(){
-	char at[] = "ATd1=()";
-	onSendAt(at);
 }
 
 void LEDScreen::write(std::string string, int row, int col, uint8_t size){
 	char buffer [13 + string.size()];
-	int n;
-	if(size<16)
-		n = sprintf (buffer, "AT81=(%d,%d,%s)", row, col, string.c_str());
-	else
-		n = sprintf (buffer, "AT83=(%d,%d,%s)", row, col, string.c_str());
+	uint8_t charSize = 1;
+	if(size>=16)
+			charSize = 3;
+	sprintf (buffer, AT_WRITE_STRING,
+			charSize, row, col, string.c_str());
+
 	onSendAt(buffer);
 }
 
 void LEDScreen::write(char ch, int row, int col, uint8_t size){
 	char buffer [13 + 1];
-	int n;
-	if(size<16)
-		n = sprintf (buffer, "AT80=(%d,%d,%c)", row, col, ch);
-	else
-		n = sprintf (buffer, "AT82=(%d,%d,%c)", row, col, ch);
+	uint8_t charSize = 0;
+	if(size>=16)
+			charSize = 2;
+	sprintf (buffer, AT_WRITE_STRING,
+			charSize, row, col, ch);
+
 	onSendAt(buffer);
 }
 
@@ -80,7 +77,7 @@ void LEDScreen::drawLine(uint8_t x0, uint8_t y0,
 	uint8_t in = 0;
 	if(enabled)
 		in = 1;
-	sprintf (buffer, "AT90=(%d,%d,%d,%d,%d)", x0, y0, x1, y1, in);
+	sprintf (buffer, AT_DRAW_LINE, x0, y0, x1, y1, in);
 	onSendAt(buffer);
 }
 
@@ -90,7 +87,7 @@ void LEDScreen::drawRectangle(uint8_t x0, uint8_t y0,
 	uint8_t in = 0;
 	if(enabled)
 		in = 1;
-	sprintf (buffer, "AT91=(%d,%d,%d,%d,%d)", x0, y0, x1, y1, in);
+	sprintf (buffer, AT_DRAW_RECTANGLE, x0, y0, x1, y1, in);
 	onSendAt(buffer);
 }
 

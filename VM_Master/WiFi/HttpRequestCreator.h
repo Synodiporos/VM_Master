@@ -13,11 +13,6 @@
 #include "../System/SystemConstants.h"
 #include "HttpRequest.h"
 
-#define URL_REQUEST_LENGHT 128
-const char format[] PROGMEM = "GET %s%s HTTP/1.1\r\nHost: %s\r\n\r\n";
-const char* const RFL[] PROGMEM = {format};
-
-
 class HttpRequestCreator {
 public:
 	HttpRequestCreator();
