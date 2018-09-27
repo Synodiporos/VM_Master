@@ -196,15 +196,27 @@ void Controller::onMessageReceived(char* msg){
 	Serial.print(F("Slave RF Message Received: "));
 	Serial.println(msg);
 
-	std::string input = string(msg);
+	/*std::string input = string(msg);
 	std::string cmdN;
 	vector<string> params;
-	AT::parse(input, cmdN, params);
+	AT::parse(input, cmdN, params);*/
 
-	if(cmdN.compare(ATCMDs::AT_ACK)==0){
-		onACKReceived();
+	uint8_t id;
+	String cmd;
+	char params[3][8] = {'\0', '\0', '\0'};
+	uint8_t res = CharUtil::parse(msg, cmd, id, params);
+
+	if(cmd.compareTo(CMD_ACK)==0){
+		//onACKReceived();
+		char at[RF_PAYLOAD_SIZE];
+		//params[0] = "";
+		//sprintf (params[0], "%lu", 123456789);
+		params[1][0] = '\0';
+		//params[2] = nullptr;
+		CharUtil::compineAT(at, CMD_ACR, id, params);
+		RFTransceiver::getInstance()->write(at);
 	}
-	else if(cmdN.compare(ATCMDs::AT_HV1)==0){
+	else if(cmd.compareTo(CMD_HV1)==0){
 		const std::string param = params[0];
 		float hv = std::atof(param.c_str())/1000;
 		if(this->HV1!=hv){
@@ -212,10 +224,10 @@ void Controller::onMessageReceived(char* msg){
 			onHighVoltage1Changed();
 		}
 	}
-	else if(cmdN.compare(ATCMDs::AT_SR1)==0){
+	else if(cmd.compareTo(CMD_SR1)==0){
 
 	}
-	else if(cmdN.compare(ATCMDs::AT_HV2)==0){
+	else if(cmd.compareTo(CMD_HV2)==0){
 		const std::string param = params[0];
 		float hv = std::atof(param.c_str())/1000;
 		if(this->HV2!=hv){
@@ -223,10 +235,10 @@ void Controller::onMessageReceived(char* msg){
 			onHighVoltage2Changed();
 		}
 	}
-	else if(cmdN.compare(ATCMDs::AT_SR2)==0){
+	else if(cmd.compareTo(CMD_SR2)==0){
 
 	}
-	else if(cmdN.compare(ATCMDs::AT_BT)==0){
+	else if(cmd.compareTo(CMD_BAT)==0){
 		const std::string param = params[0];
 		float btr = std::atof(param.c_str());
 		if(this->batteryVoltage!=btr){
@@ -259,7 +271,10 @@ void Controller::onRFConnectionStateChanged(bool state){
 
 void Controller::onACKReceived(){
 	char at[RF_PAYLOAD_SIZE];
-	sprintf (at, "AT+%s", CMD_ACR);
+	uint8_t id = 254;
+	char params[3][8] = {'\0','\0','\0'};
+	CharUtil::compineAT(at, CMD_ACR, id, params);
+	sprintf (at, at, CMD_ACR);
 	RFTransceiver::getInstance()->write(at);
 }
 

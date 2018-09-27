@@ -24,12 +24,11 @@
 #include "WiFi/PostSurgeRequest.h"
 #include "WiFi/PostBatteryRequest.h"
 #include "WiFi/TestGetRequest.h"
-#include "CMD/AT.h"
 #include "LEDScreen/LEDScreen.h"
 #include "LEDScreen/ScreenPage.h"
 #include "Memory/MemoryFree.h"
 #include "Memory/pgmStrToRAM.h"
-#include <vector>
+#include "Util/CharUtil.h"
 #include <string>
 #include <SPI.h>
 #include <RF24.h>

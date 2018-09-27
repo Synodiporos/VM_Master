@@ -54,11 +54,7 @@ Controller.cpp.o: ..\Controller.cpp ..\Controller.h ..\Math/MathUtil.h \
  ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h \
  ..\WiFi/HttpRequestCreator.h ..\WiFi/HttpRequest.h \
  ..\WiFi/PostSurgeRequest.h ..\WiFi/PostBatteryRequest.h \
- ..\WiFi/TestGetRequest.h ..\CMD/AT.h ..\CMD/ATCMDs.h \
- ..\CMD/../System/SystemConstants.h ..\CMD/CMD.h \
- ..\CMD/../Commons/IStateListener.h ..\CMD/CMDExecutor.h \
- ..\CMD/../CMD/CMD.h ..\CMD/CMDErrorReport.h ..\CMD/CMDBatteryReport.h \
- ..\CMD/CMDSettings.h ..\CMD/CMDTestLeds.h ..\LEDScreen/LEDScreen.h \
+ ..\WiFi/TestGetRequest.h ..\LEDScreen/LEDScreen.h \
  ..\LEDScreen/../System/SystemConstants.h ..\LEDScreen/ScreenPage.h \
  ..\LEDScreen/../LEDScreen/LEDScreen.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/iostream \
@@ -72,7 +68,7 @@ Controller.cpp.o: ..\Controller.cpp ..\Controller.h ..\Math/MathUtil.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/ostream_helpers \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/string_iostream \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/sstream \
- ..\Memory/MemoryFree.h ..\Memory/pgmStrToRAM.h
+ ..\Memory/MemoryFree.h ..\Memory/pgmStrToRAM.h ..\Util/CharUtil.h
 
 ..\Controller.h:
 
@@ -218,28 +214,6 @@ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino
 
 ..\WiFi/TestGetRequest.h:
 
-..\CMD/AT.h:
-
-..\CMD/ATCMDs.h:
-
-..\CMD/../System/SystemConstants.h:
-
-..\CMD/CMD.h:
-
-..\CMD/../Commons/IStateListener.h:
-
-..\CMD/CMDExecutor.h:
-
-..\CMD/../CMD/CMD.h:
-
-..\CMD/CMDErrorReport.h:
-
-..\CMD/CMDBatteryReport.h:
-
-..\CMD/CMDSettings.h:
-
-..\CMD/CMDTestLeds.h:
-
 ..\LEDScreen/LEDScreen.h:
 
 ..\LEDScreen/../System/SystemConstants.h:
@@ -273,3 +247,5 @@ C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/sstream:
 ..\Memory/MemoryFree.h:
 
 ..\Memory/pgmStrToRAM.h:
+
+..\Util/CharUtil.h:

@@ -57,11 +57,7 @@ sloeber.ino.cpp.o: ..\sloeber.ino.cpp \
  ..\Math/MathUtil.h ..\Commons/IActionListener.h ..\Commons/Action.h \
  ..\Commons/IPropertyListener.h ..\Commons/IStateListener.h \
  ..\Commons/State.h ..\Commons/State.h ..\Button/Button.h \
- ..\Button/../Commons/IStateListener.h ..\CMD/AT.h ..\CMD/ATCMDs.h \
- ..\CMD/../System/SystemConstants.h ..\CMD/CMD.h \
- ..\CMD/../Commons/IStateListener.h ..\CMD/CMDExecutor.h \
- ..\CMD/../CMD/CMD.h ..\CMD/CMDErrorReport.h ..\CMD/CMDBatteryReport.h \
- ..\CMD/CMDSettings.h ..\CMD/CMDTestLeds.h ..\LEDScreen/ScreenPage.h \
+ ..\Button/../Commons/IStateListener.h ..\LEDScreen/ScreenPage.h \
  ..\LEDScreen/../LEDScreen/LEDScreen.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/iostream \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/ios \
@@ -74,7 +70,7 @@ sloeber.ino.cpp.o: ..\sloeber.ino.cpp \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/ostream_helpers \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/string_iostream \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/sstream \
- ..\Main.ino
+ ..\Util/CharUtil.h ..\Main.ino
 
 C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h:
 
@@ -230,28 +226,6 @@ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino
 
 ..\Button/../Commons/IStateListener.h:
 
-..\CMD/AT.h:
-
-..\CMD/ATCMDs.h:
-
-..\CMD/../System/SystemConstants.h:
-
-..\CMD/CMD.h:
-
-..\CMD/../Commons/IStateListener.h:
-
-..\CMD/CMDExecutor.h:
-
-..\CMD/../CMD/CMD.h:
-
-..\CMD/CMDErrorReport.h:
-
-..\CMD/CMDBatteryReport.h:
-
-..\CMD/CMDSettings.h:
-
-..\CMD/CMDTestLeds.h:
-
 ..\LEDScreen/ScreenPage.h:
 
 ..\LEDScreen/../LEDScreen/LEDScreen.h:
@@ -277,5 +251,7 @@ C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/ostream_helpers:
 C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/string_iostream:
 
 C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/sstream:
+
+..\Util/CharUtil.h:
 
 ..\Main.ino:
