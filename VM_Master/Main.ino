@@ -13,8 +13,6 @@
 #include "WiFi/HttpRequestCreator.h"
 #include "Controller.h"
 #include "SoftwareSerial.h"
-#include <SPI.h>
-#include <RF24.h>
 #include <string>
 #include <Arduino.h>
 #include <avr/pgmspace.h>
@@ -22,7 +20,7 @@ using namespace std;
 
 //NotificationSystem* notification = NotificationSystem::getInstance();
 //SerialBroadcaster* serialBroad = SerialBroadcaster::getInstance();
-RF24 radio(RF_CE, RF_CSN);
+//RF24 radio(RF_CE, RF_CSN);
 //RFTransceiver* trasnceiver = RFTransceiver::getInstance();
 Controller controller;
 
@@ -36,17 +34,13 @@ void setup() {
 	pinMode(LED_BLUE_PIN, OUTPUT);
 
 	Serial.begin(SRL_BD);
+	Serial.println(F("STARTING"));
 
 	//Serial.println(F("MASTER OK"));
 	//ledScreen->clear();
 	//page->reprint();
 
-	//Initialaze RF
-	//trasnceiver->initialize(&radio);
-	//trasnceiver->startConnectivityCheck();
-
 	//Controller
-	controller.setRadioInstance(&radio);
 	controller.activate();
 	controller.initialization();
 

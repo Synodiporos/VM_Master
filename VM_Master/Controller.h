@@ -17,6 +17,7 @@
 #include "Commons/Action.h"
 #include "System/SystemConstants.h"
 #include "System/NotificationSystem.h"
+#include "System/UnixTime.h"
 #include "Button/Button.h"
 #include "RFTransceiver/RFTransceiver.h"
 #include "WiFi/RequestManager.h"
@@ -30,8 +31,6 @@
 #include "Memory/pgmStrToRAM.h"
 #include "Util/CharUtil.h"
 #include <string>
-#include <SPI.h>
-#include <RF24.h>
 using namespace std;
 
 
@@ -45,7 +44,6 @@ public:
 	void activate();
 	void deactivate();
 	void initialization();
-	void setRadioInstance(RF24* radio);
 
 	void propertyChanged(
 				void* source,
@@ -58,23 +56,24 @@ public:
 
 protected:
 	Button* button = new Button(BUTTON_PIN);
-	//NotificationSystem* notification = NotificationSystem::getInstance();
+	NotificationSystem* notification = NotificationSystem::getInstance();
 	RFTransceiver* transceiver = RFTransceiver::getInstance();
 	RequestManager* requestManager = RequestManager::getInstance();
 	LEDScreen* screen = LEDScreen::getInstance();
-	//ScreenPage* page = new ScreenPage(screen);
+	ScreenPage* page = new ScreenPage(screen);
 
 
-	unsigned long HV1 = 0;
-	unsigned long HV2 = 0;
+	float HV1 = 0;
+	float HV2 = 0;
 	float batteryVoltage = 0;
+
 
 	uint8_t helper = 0;
 	unsigned long time = millis();
 	uint8_t c = 0;
 
-	void onMessageReceived(char* msg);
-	void onMessageSend(char* msg);
+	void onRFMessageReceived(char* msg);
+	void onRFMessageSend(char* msg);
 	void onRFConnectionStateChanged(bool state);
 	void onACKReceived();
 	void onWiFiConnectionStateChanged(bool state);

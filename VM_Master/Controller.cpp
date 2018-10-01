@@ -45,6 +45,11 @@ void Controller::deactivate(){
 }
 
 void Controller::initialization(){
+	transceiver->powerUp();
+	transceiver->initialize();
+	transceiver->startListening();
+	transceiver->setEnabled(true);
+
 	//requestManager->setEnabled(true);
 	//requestManager->startPosting();
 
@@ -52,10 +57,6 @@ void Controller::initialization(){
 
 	//page->reprint();
 
-}
-
-void Controller::setRadioInstance(RF24* radio){
-	this->transceiver->initialize(radio);
 }
 
 void Controller::propertyChanged(
@@ -71,21 +72,22 @@ void Controller::actionPerformed(Action action){
 
 	if(source==this->transceiver)
 	switch(id){
-		case RFTransceiver::ON_MESSAGE_RECEIVED:{
-			char* msg = (char*)action.getContainer();
-			onMessageReceived(msg);
-			break;
-		}
-		case RFTransceiver::ON_MESSAGE_SEND:{
-			char* msg = (char*)action.getContainer();
-			onMessageSend(msg);
-			break;
-		}
 		case RFTransceiver::ON_CONNECTION_STATE:{
 			bool* state = (bool*)action.getContainer();
 			onRFConnectionStateChanged(*state);
 			break;
 		}
+		case RFTransceiver::ON_MESSAGE_RECEIVED:{
+			char* msg = (char*)action.getContainer();
+			onRFMessageReceived(msg);
+			break;
+		}
+		case RFTransceiver::ON_MESSAGE_SEND:{
+			char* msg = (char*)action.getContainer();
+			onRFMessageSend(msg);
+			break;
+		}
+
 	}
 
 	if(source==this->requestManager)
@@ -192,7 +194,7 @@ void Controller::stateChanged(State state){
 	source = nullptr;
 }
 
-void Controller::onMessageReceived(char* msg){
+void Controller::onRFMessageReceived(char* msg){
 	Serial.print(F("Slave RF Message Received: "));
 	Serial.println(msg);
 
@@ -208,17 +210,14 @@ void Controller::onMessageReceived(char* msg){
 
 	if(cmd.compareTo(CMD_ACK)==0){
 		//onACKReceived();
-		char at[RF_PAYLOAD_SIZE];
-		//params[0] = "";
-		//sprintf (params[0], "%lu", 123456789);
+		/*char at[RF_PAYLOAD_SIZE];
 		params[1][0] = '\0';
-		//params[2] = nullptr;
 		CharUtil::compineAT(at, CMD_ACR, id, params);
-		RFTransceiver::getInstance()->write(at);
+		RFTransceiver::getInstance()->write(at);*/
 	}
 	else if(cmd.compareTo(CMD_HV1)==0){
 		const std::string param = params[0];
-		float hv = std::atof(param.c_str())/1000;
+		float hv = (float)std::atof(param.c_str())/1000;
 		if(this->HV1!=hv){
 			this->HV1 = hv;
 			onHighVoltage1Changed();
@@ -229,7 +228,7 @@ void Controller::onMessageReceived(char* msg){
 	}
 	else if(cmd.compareTo(CMD_HV2)==0){
 		const std::string param = params[0];
-		float hv = std::atof(param.c_str())/1000;
+		float hv = (float)std::atof(param.c_str())/1000;
 		if(this->HV2!=hv){
 			this->HV2 = hv;
 			onHighVoltage2Changed();
@@ -240,13 +239,21 @@ void Controller::onMessageReceived(char* msg){
 	}
 	else if(cmd.compareTo(CMD_BAT)==0){
 		const std::string param = params[0];
-		float btr = std::atof(param.c_str());
+		float btr = (float)std::atof(param.c_str());
 		if(this->batteryVoltage!=btr){
 			this->batteryVoltage = btr;
 			onBatteryVoltageChagned();
 		}
 	}
 
+	if(id>0){
+		char at[RF_PAYLOAD_SIZE];
+		params[0][0] = '\0';
+		params[1][0] = '\0';
+		params[2][0] = '\0';
+		CharUtil::compineAT(at, CMD_ACR, id, params);
+		RFTransceiver::getInstance()->write(at);
+	}
 
 	//CMD* cmd = AT::toCMD(input);
 	//cmd->execute();
@@ -258,14 +265,14 @@ void Controller::onMessageReceived(char* msg){
 	//delete cmd;
 }
 
-void Controller::onMessageSend(char* msg){
+void Controller::onRFMessageSend(char* msg){
 	Serial.print(F("ON RF MESSAGE SEND: "));
 	Serial.println(msg);
 }
 
 void Controller::onRFConnectionStateChanged(bool state){
-	//Serial.print(F("Connection State: "));
-	//Serial.println(state);
+	Serial.print(F("Connection State: "));
+	Serial.println(state);
 	//this->notification->setConnectionLostEnabled(!state);
 }
 
@@ -283,11 +290,11 @@ void Controller::onWiFiConnectionStateChanged(bool state){
 }
 
 void Controller::onHighVoltage1Changed(){
-	//page->setHV10350(this->HV1);
+	page->setHV10350(this->HV1);
 }
 
 void Controller::onHighVoltage2Changed(){
-	//page->setHV820(this->HV2);
+	page->setHV820(this->HV2);
 }
 
 void Controller::onBatteryVoltageChagned(){
@@ -327,8 +334,9 @@ void Controller::onButtonStateChanged(){
 void Controller::validate(){
 
 	transceiver->validate();
-	requestManager->validate();
+	//requestManager->validate();
 	button->validate();
+	notification->validate();
 
 	if(helper==0 && millis()-time > 5000){
 		/*for(int i=0; i<4; i++){

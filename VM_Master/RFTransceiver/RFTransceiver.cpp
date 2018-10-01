@@ -6,6 +6,8 @@
  */
 
 #include "RFTransceiver.h"
+#include <SPI.h>
+#include <RF24.h>
 
 RFTransceiver* RFTransceiver::instance = nullptr;
 
@@ -13,7 +15,7 @@ RFTransceiver::~RFTransceiver() {
 	// TODO Auto-generated destructor stub
 }
 
-RFTransceiver::RFTransceiver() {
+RFTransceiver::RFTransceiver()  {
 	// TODO Auto-generated constructor stub
 	//initialize();
 }
@@ -25,141 +27,242 @@ RFTransceiver* RFTransceiver::getInstance(){
 	return instance;
 }
 
-//MASTER
-void RFTransceiver::initialize(RF24* radio){
-	this->radio = radio;
-	//Serial.println((long)radio);
-	if(radio->begin()){
-		radio->setRetries(15, 10);
-		radio->disableDynamicPayloads();
-		radio->setPayloadSize(RF_PAYLOAD_SIZE);
-		radio->openWritingPipe(RF_WRITE_PIPE); // 00001
-		radio->openReadingPipe(1, RF_READ_PIPE); // 00002
-		radio->setPALevel(RF_PALEVEL);
-		radio->setDataRate(RF_DATARATE);
-		radio->startListening();
-
-		this->radioStarted = true;
-		Serial.println(F("Radio Begin"));
-		//printDetails();
+bool RFTransceiver::setEnabled(bool enabled){
+	if(this->enabled!=enabled){
+		this->enabled = enabled;
+		return true;
 	}
-	else{
-		Serial.println(F("Radio ERROR"));
-		this->radioStarted = false;
-	}
-	resetCCTimer();
+	return false;
 }
 
-bool RFTransceiver::isRadioStarted(){
-	return this->radioStarted;
+bool RFTransceiver::isEnabled(){
+	return this->enabled;
+}
+
+uint8_t RFTransceiver::getState(){
+	return this->state;
+}
+
+//SLAVE
+void RFTransceiver::initialize() {
+//	this->radio = radio;
+	if(radio.begin()){
+		radio.setRetries(10, 4);
+		radio.disableDynamicPayloads();
+		radio.setPayloadSize(RF_PAYLOAD_SIZE);
+		radio.openWritingPipe(RF_WRITE_PIPE); // 00002
+		radio.openReadingPipe(1, RF_READ_PIPE); // 00001
+		radio.setPALevel(RF_PALEVEL);
+		radio.setDataRate(RF_DATARATE);
+		//radio.startListening();
+		setState(RF_STATE_INITIALIZED);
+	}
+	else{
+		setState(RF_STATE_INITIALIZE_ERROR);
+	}
+}
+
+bool RFTransceiver::isActivated(){
+	return this->active;
+}
+
+bool RFTransceiver::isInitialized(){
+	return getState() >= RF_STATE_INITIALIZED;
+}
+
+bool RFTransceiver::isSending(){
+	uint8_t state = getState();
+	return state>=RF_STATE_REQUEST_SENDING &&
+			state<=(RF_STATE_REQUEST_SENDING + RF_RETRIES);
 }
 
 bool RFTransceiver::isConnected(){
-	return this->connected;
+	return getState() >= RF_STATE_REQUEST_SEND;
 }
 
-void RFTransceiver::startConnectivityCheck(){
-	this->ccCount = 0;
-	resetCCTimer();
+/*void RFTransceiver::startConnectivityCheck(){
+	uint8_t state = getState();
+	if(state==RF_STATE_CONNECTED ||
+			(state==RF_STATE_INITIALIZED ||
+					state==RF_STATE_DISCONNECTED)){
+		setState(RF_STATE_CONNECTING);
+		helper = 2;
+		time = millis();
+	}
 }
 
 void RFTransceiver::stopConnectivityCheck(){
-	this->ccCount = 4;
-}
+	if(isConnecting()){
+		setState(RF_STATE_DISCONNECTED);
+	}
+}*/
 
 void RFTransceiver::setActionListener(IActionListener* listener){
 	this->actionListener = listener;
 }
 
-bool RFTransceiver::write(const char* msg){
-	if(!isRadioStarted())
+bool RFTransceiver::powerUp(){
+	if(!isEnabled() || !isInitialized()
+			|| isActivated())
 		return false;
+
+	radio.powerUp();
+	this->active = true;
+	Serial.println(F("Radio PowerUp"));
+	return true;
+}
+
+
+bool RFTransceiver::powerDown(){
+	if(!isEnabled() || !isInitialized()
+			|| !isActivated())
+		return false;
+
+	stopListening();
+	delay(2);
+	radio.powerDown();
+	this->active = false;
+	Serial.println(F("Radio PowerDown"));
+	return true;
+}
+
+bool RFTransceiver::startListening(){
+	if(isInitialized() && !isListening()){
+		radio.startListening();
+		listen = true;
+		return true;
+	}
+	return false;
+}
+
+bool RFTransceiver::stopListening(){
+	if(isInitialized() && isListening()){
+		radio.stopListening();
+		listen = false;
+		return true;
+	}
+	return false;
+}
+
+bool RFTransceiver::isListening(){
+	return this->listen;
+}
+
+bool RFTransceiver::write(const char* msg){
+	if(!isEnabled() || !isActivated() ||
+			!isInitialized())
+		return false;
+	//powerUp();
 	//Serial.print(F("RF Sent: "));
 	//Serial.println(msg);
 
-	radio->stopListening();
+	stopListening();
+	//delay(4);
 
-	bool res = radio->write(msg, RF_PAYLOAD_SIZE);
-	/*if(!res){
-		Serial.println(F("RF Write Error"));
+	bool res = radio.write(msg, strlen(msg)+1);
+	if(!res){
+		onMessageSendError(msg);
 	}else{
-		Serial.println(F("RF Write SUCCED"));
-	}*/
-	delay(1);
-	onMessageSend(msg);
-	radio->startListening();
+		onMessageSend(msg);
+	}
+
+	//delay(4);
+	startListening();
+
 	return res;
 }
 
+bool RFTransceiver::send(const char* msg, uint8_t ackId){
+	if(!isEnabled() || !isActivated() ||
+				!isInitialized() || isSending())
+			return false;
+
+	CharUtil::copyCharArray(msg, request, 24);
+	this->requestId = ackId;
+	setState(RF_STATE_REQUEST_SENDING);
+	return true;
+}
+
 void RFTransceiver::printDetails(){
-	if(!isRadioStarted()){
-		Serial.println(F("Radio ERROR"));
-			return;
+	if(!isInitialized()){
+		return;
 	}
-	radio->printDetails();
+	radio.printDetails();
 }
 
 void RFTransceiver::validate(){
-	if(!isRadioStarted())
-			return;
-	if(radio->available()){
+	if(!isEnabled())
+		return;
+	if(!isInitialized())
+		return;
+
+	if(radio.available()){
 		char msg[RF_PAYLOAD_SIZE];
-		radio->read(msg, RF_PAYLOAD_SIZE);
+		radio.read(msg, RF_PAYLOAD_SIZE);
+		msg[RF_PAYLOAD_SIZE] = '\0';
 		onMessageReceived(msg);
 	}
-	validateConnectivity();
-}
 
-void RFTransceiver::validateConnectivity(){
-	unsigned long interval = millis()-time;
-	unsigned int ccIntervals = RF_CC_INTERVALS;
-	if(isRadioStarted()){
-		//unsigned long subinterval = interval - period;
-		if(ccCount==0){
-			onSendACK(ccCount);
-			resetCCTimer();
-			ccCount++;
-		}
-		else if(ccCount==1 && interval > ccIntervals){
-			onSendACK(ccCount);
-			resetCCTimer();
-			ccCount++;
-		}
-		else if(ccCount==2 && interval > ccIntervals){
-			onSendACK(ccCount);
-			resetCCTimer();
-			ccCount++;
-		}
-		else if(ccCount==3 && interval > ccIntervals){
-			setConnectionState(false);
-			resetCCTimer();
-			ccCount++;
-		}
-
-		if(ccCount==4 && interval > RF_CC_PERIOD){
-			startConnectivityCheck();
+	if(isSending()){
+		if(helper==1){
+			if(millis()-time > RF_CONNECTION_CHECK_INTERVALS){
+				if(state >= RF_STATE_REQUEST_SENDING + RF_RETRIES-1){
+					onRequestPostError(request, requestId);
+				}
+				else{
+					helper = 2;
+				}
+			}
+		}else if(helper==2){
+			uint8_t st = state + 1;
+			setState(st);
 		}
 	}
 }
 
-void RFTransceiver::resetCCTimer(){
-	this->time = millis();
-}
-
-void RFTransceiver::setConnectionState(bool state){
-	if(connected != state){
-		connected = state;
-		onConnectionStateChanged(state);
+bool RFTransceiver::setActiveState(bool active){
+	if(this->active!=active){
+		this->active = active;
+		return true;
 	}
+	return false;
 }
 
-void RFTransceiver::onMessageReceived(const char* msg){
-	resetCCTimer();
-	stopConnectivityCheck();
-	setConnectionState(true);
-
-	Action action(this, ON_MESSAGE_RECEIVED, nullptr, msg);
+void RFTransceiver::onActiveStateChanged(){
+	Action action(this, ON_ACTIVE_STATE, nullptr, &active);
 	notifyActionPerformed(action);
+}
+
+bool RFTransceiver::setState(uint8_t state){
+	if(this->state != state){
+		this->state = state;
+		onStateChanged();
+		return true;
+	}
+	return false;
+}
+
+void RFTransceiver::onStateChanged(){
+	Action action(this, ON_CONNECTION_STATE, nullptr, &state);
+	notifyActionPerformed(action);
+
+	if(state==RF_STATE_REQUEST_SEND){
+		helper = 0;
+		time = millis();
+	}
+	else if(state >= RF_STATE_REQUEST_SENDING &&
+			state < RF_STATE_REQUEST_SENDING + RF_RETRIES){
+		onSendRequest();
+		helper = 1;
+		time = millis();
+	}
+	else if(state == RF_STATE_REQUEST_ERROR){
+		helper = 0;
+		time = millis();
+	}
+	else {
+
+	}
 }
 
 void RFTransceiver::onMessageSend(const char* msg){
@@ -167,8 +270,54 @@ void RFTransceiver::onMessageSend(const char* msg){
 	notifyActionPerformed(action);
 }
 
-void RFTransceiver::onConnectionStateChanged(bool state){
-	Action action(this, ON_CONNECTION_STATE, nullptr, &state);
+void RFTransceiver::onMessageSendError(const char* msg){
+	Action action(this, ON_MESSAGE_SEND_ERROR, nullptr, msg);
+	notifyActionPerformed(action);
+}
+
+void RFTransceiver::onRequestPosted(const char* msg, uint8_t id){
+	char c = id;
+	Action action(this, ON_REQUEST_SEND_OK, &c, msg);
+	notifyActionPerformed(action);
+
+	request[0] = 0;
+	requestId = 0;
+	setState(RF_STATE_REQUEST_SEND);
+}
+
+void RFTransceiver::onRequestPostError(const char* msg, uint8_t id){
+	char c = id;
+	Action action(this, ON_REQUEST_SEND_FAIL, &c, msg);
+	notifyActionPerformed(action);
+
+	request[0] = '\0';
+	requestId = 0;
+	setState(RF_STATE_REQUEST_ERROR);
+}
+
+void RFTransceiver::onMessageReceived(const char* msg){
+	Action action(this, ON_MESSAGE_RECEIVED, nullptr, msg);
+	notifyActionPerformed(action);
+
+	if(isInitialized()){
+		String cmd;
+		uint8_t id;
+		char params[3][8] = {'\0','\0','0'};
+		uint8_t res = CharUtil::parse(msg, cmd, id, params);
+		if(res){
+			if(cmd.compareTo(CMD_ACR)==0){
+				onResponseReceived(msg, id);
+				if(id>0 && requestId==id){
+					onRequestPosted(msg, requestId);
+				}
+			}
+		}
+	}
+}
+
+void RFTransceiver::onResponseReceived(const char* msg, uint8_t id){
+	char c = id;
+	Action action(this, ON_RESPONSE_RECEIVED, &c, msg);
 	notifyActionPerformed(action);
 }
 
@@ -177,9 +326,8 @@ void RFTransceiver::notifyActionPerformed(Action& action){
 		this->actionListener->actionPerformed(action);
 }
 
-void RFTransceiver::onSendACK(uint8_t count){
-	char at[RF_PAYLOAD_SIZE];
-	char str[] = CMD_ACK;
-	sprintf (at, "AT+%s", str);
-	write(at);
+void RFTransceiver::onSendRequest(){
+	if(strlen(request)>0)
+		write(request);
 }
+
