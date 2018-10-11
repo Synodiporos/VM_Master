@@ -45,13 +45,15 @@ void Controller::deactivate(){
 }
 
 void Controller::initialization(){
+	requestBuffer->initialize();
+
 	transceiver->powerUp();
 	transceiver->initialize();
 	transceiver->startListening();
 	transceiver->setEnabled(true);
 
-	//requestManager->setEnabled(true);
-	//requestManager->startPosting();
+	requestManager->setEnabled(true);
+	requestManager->startPosting();
 
 	//this->transceiver->startConnectivityCheck();
 
@@ -85,6 +87,11 @@ void Controller::actionPerformed(Action action){
 		case RFTransceiver::ON_MESSAGE_SEND:{
 			char* msg = (char*)action.getContainer();
 			onRFMessageSend(msg);
+			break;
+		}
+		case RFTransceiver::ON_MESSAGE_SEND_ERROR:{
+			char* msg = (char*)action.getContainer();
+			onRFMessageSendError(msg);
 			break;
 		}
 
@@ -216,30 +223,43 @@ void Controller::onRFMessageReceived(char* msg){
 		RFTransceiver::getInstance()->write(at);*/
 	}
 	else if(cmd.compareTo(CMD_HV1)==0){
-		const std::string param = params[0];
-		float hv = (float)std::atof(param.c_str())/1000;
+		float hv = (float)std::atof(params[0])/1000;
 		if(this->HV1!=hv){
 			this->HV1 = hv;
 			onHighVoltage1Changed();
 		}
 	}
 	else if(cmd.compareTo(CMD_SR1)==0){
-
+		uint32_t charge = std::atof(params[0]);
+		uint16_t slope = std::atof(params[1]);
+		uint32_t datetime = std::atof(params[2]);
+		Surge surge ;
+		surge.device = 1;
+		surge.charge = charge;
+		surge.slope = slope;
+		surge.datetime = datetime;
+		onRFSurgeRequestReceived(surge);
 	}
 	else if(cmd.compareTo(CMD_HV2)==0){
-		const std::string param = params[0];
-		float hv = (float)std::atof(param.c_str())/1000;
+		float hv = (float)std::atof(params[0])/1000;
 		if(this->HV2!=hv){
 			this->HV2 = hv;
 			onHighVoltage2Changed();
 		}
 	}
 	else if(cmd.compareTo(CMD_SR2)==0){
-
+		uint32_t charge = std::atof(params[0]);
+		uint16_t slope = std::atof(params[1]);
+		uint32_t datetime = std::atof(params[2]);
+		Surge surge ;
+		surge.device = 2;
+		surge.charge = charge;
+		surge.slope = slope;
+		surge.datetime = datetime;
+		onRFSurgeRequestReceived(surge);
 	}
 	else if(cmd.compareTo(CMD_BAT)==0){
-		const std::string param = params[0];
-		float btr = (float)std::atof(param.c_str());
+		float btr = (float)(std::atof(params[0])/100);
 		if(this->batteryVoltage!=btr){
 			this->batteryVoltage = btr;
 			onBatteryVoltageChagned();
@@ -270,9 +290,18 @@ void Controller::onRFMessageSend(char* msg){
 	Serial.println(msg);
 }
 
+void Controller::onRFMessageSendError(char* msg){
+	Serial.print(F("ON RF MESSAGE SEND ERROR: "));
+	Serial.println(msg);
+}
+
+void Controller::onRFSurgeRequestReceived(Surge surge){
+	this->requestBuffer->push(surge);
+}
+
 void Controller::onRFConnectionStateChanged(bool state){
-	Serial.print(F("Connection State: "));
-	Serial.println(state);
+	//Serial.print(F("Connection State: "));
+	//Serial.println(state);
 	//this->notification->setConnectionLostEnabled(!state);
 }
 
@@ -290,11 +319,23 @@ void Controller::onWiFiConnectionStateChanged(bool state){
 }
 
 void Controller::onHighVoltage1Changed(){
+	onHVWarningStateChanged();
 	page->setHV10350(this->HV1);
 }
 
 void Controller::onHighVoltage2Changed(){
+	onHVWarningStateChanged();
 	page->setHV820(this->HV2);
+}
+
+void Controller::onHVWarningStateChanged(){
+	bool state = HV1>3 || HV2>3;
+	if(HVWARNING!=state){
+		HVWARNING = state;
+		if(HVWARNING){
+
+		}
+	}
 }
 
 void Controller::onBatteryVoltageChagned(){
@@ -309,7 +350,10 @@ void Controller::onButtonStateChanged(){
 			break;
 		}
 		case ButtonState::PRESSED:{
-			//Serial.println(F("PRESSED"));
+			Serial.print(F("BUFFER size: "));
+			Serial.println(requestBuffer->getSize());
+			Serial.print(F("Free RAM BT= "));
+			Serial.println(freeMemory(), DEC);
 			break;
 		}
 		case ButtonState::RELEASED:{
@@ -317,15 +361,9 @@ void Controller::onButtonStateChanged(){
 			break;
 		}
 		case ButtonState::HOLDED:{
-			//Serial.println(F("HOLDED"));
-
-
-			char at[RF_PAYLOAD_SIZE];
-			sprintf (at, "AT+%s", CMD_ACR);
-			RFTransceiver::getInstance()->write(at);
-
-			Serial.print(F("Free RAM BT= "));
-			Serial.println(freeMemory(), DEC);
+			requestBuffer->clear();
+			Serial.print(F("BUFFER size: "));
+			Serial.println(requestBuffer->getSize());
 			break;
 		}
 	}
@@ -359,7 +397,8 @@ void Controller::validate(){
 
 		for(int i=0; i<4; i++){
 			HttpRequest* req1 = new TestGetRequest();
-			HttpRequest* req2 = new PostSurgeRequest(1, 10000, 10000);
+			HttpRequest* req2 =
+					new PostSurgeRequest(123456, 1, 100000, 1000);
 			HttpRequest* req3 = new PostBatteryRequest(415, 200, 0);
 			requestManager->pushRequest(req1);
 			requestManager->pushRequest(req2);

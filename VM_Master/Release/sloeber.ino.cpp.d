@@ -57,6 +57,8 @@ sloeber.ino.cpp.o: ..\sloeber.ino.cpp \
  ..\Math/MathUtil.h ..\Commons/IActionListener.h ..\Commons/Action.h \
  ..\Commons/IPropertyListener.h ..\Commons/IStateListener.h \
  ..\Commons/State.h ..\Commons/State.h ..\System/UnixTime.h \
+ ..\System/PersistBuffer.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\EEPROM\src/EEPROM.h \
  ..\Button/Button.h ..\Button/../Commons/IStateListener.h \
  ..\LEDScreen/ScreenPage.h ..\LEDScreen/../LEDScreen/LEDScreen.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/iostream \
@@ -225,6 +227,10 @@ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino
 ..\Commons/State.h:
 
 ..\System/UnixTime.h:
+
+..\System/PersistBuffer.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\EEPROM\src/EEPROM.h:
 
 ..\Button/Button.h:
 

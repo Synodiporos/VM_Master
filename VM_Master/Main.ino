@@ -34,11 +34,14 @@ void setup() {
 	pinMode(LED_BLUE_PIN, OUTPUT);
 
 	Serial.begin(SRL_BD);
-	Serial.println(F("STARTING"));
 
 	//Serial.println(F("MASTER OK"));
 	//ledScreen->clear();
 	//page->reprint();
+
+	//Initialaze RF
+	//trasnceiver->initialize(&radio);
+	//trasnceiver->startConnectivityCheck();
 
 	//Controller
 	controller.activate();

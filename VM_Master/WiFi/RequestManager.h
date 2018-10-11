@@ -19,6 +19,7 @@
 #include "HttpRequest.h"
 #include "PostSurgeRequest.h"
 #include "HttpRequestCreator.h"
+#include "HttpResponse.h"
 
 #define CAPACITY 8
 #define SERIAL_BUFFER 48
@@ -45,9 +46,14 @@
 #define ST_P_POSTING_READY 52 // WHEN CONNECTED TO SERVER
 #define ST_P_POSTING_REQUEST 53
 #define ST_P_SEND_REQUEST 54
-#define ST_P_WAIT_RESP 55
-#define ST_P_REQUEST_POSTED 56
-#define ST_P_REQUEST_POST_ERROR 57
+#define ST_P_WAIT_RESP 60
+#define ST_P_WAIT_RESP_PARSE_CODE 62
+#define ST_P_WAIT_RESP_PARSE_CLENGHT 63
+#define ST_P_WAIT_RESP_PARSE_CTYPE 64
+#define ST_P_WAIT_RESP_PARSE_CONTENT 65
+#define ST_P_WAIT_RESP_PARSING_COMPLETED 66
+#define ST_P_REQUEST_POSTED 80
+#define ST_P_REQUEST_POST_ERROR 81
 
 #define RESP_OK "OK"
 #define RESP_WIFI_DISC "WIFI DISC"
@@ -59,6 +65,10 @@
 #define RESP_SERVER_SEND "SEND OK"
 #define RESP_SERVER_ER "1.1 40"
 #define RESP_SERVER_OK "1.1 200"
+
+#define HTTP_RESP_CODE "HTTP/1.1"
+#define HTTP_RESP_CLENGHT "Content-Length:"
+#define HTTP_RESP_CTYPE "Content-Type:"
 
 class RequestManager {
 public:
@@ -92,10 +102,10 @@ public:
 	bool startPosting();
 	bool stopPosting();
 	bool isPosting();
-
 	bool isInitialized();
 	bool isWifiConnected();
 	bool isServerConnected();
+	bool isReadyToPost();
 
 	void validate();
 
@@ -115,6 +125,7 @@ private:
 	unsigned int waitTime = 0;
 	char request[WIFI_REQUEST_LENGHT];
 	HttpRequest* httpReq;
+	HttpResponse response;
 	IActionListener* actionListener = nullptr;
 
 	RequestManager();
@@ -134,7 +145,8 @@ private:
 	void onPostRequest(HttpRequest* request);
 	void onGetRequest(HttpRequest* request);
 	void sendRequest();
-	void onResponseReceived(const String& response);
+	void onResponseParcing(const String& response);
+	void onResponseReceived(const HttpResponse& response);
 	void onACKReceived(const char* ack);
 	void notifyActionPerformed(Action action);
 

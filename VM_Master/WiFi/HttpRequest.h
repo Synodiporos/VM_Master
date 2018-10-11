@@ -14,7 +14,7 @@
 using namespace std;
 
 const char format[] PROGMEM = "GET %s%s HTTP/1.1\r\nHost: %s\r\n\r\n";
-const char psr_content[] PROGMEM = "src=%d&ch=%lu&sl=%d";
+const char psr_content[] PROGMEM = "src=%d&ch=%lu&sl=%d&dt=lu";
 const char pbr_content[] PROGMEM = "vin=%d&lv=%d&al=%d";
 const char* const formats_of_contents[] PROGMEM =
 	{psr_content, pbr_content, format};

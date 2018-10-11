@@ -246,6 +246,11 @@ bool RequestManager::isServerConnected(){
 	return this->state>=ST_S_CONNECTED;
 }
 
+bool RequestManager::isReadyToPost(){
+	return isWifiConnected() &&
+			postState == ST_P_POSTING_ON;
+}
+
 void RequestManager::validate(){
 	readStream();
 	if(!isEnabled())
@@ -537,7 +542,6 @@ void RequestManager::onEspMessageReceived(const String& msg){
 	const char* c = msg.c_str();
 	Serial.println(c);
 
-
 	switch(state){
 		case ST_OFF:{
 			if(msg.compareTo(RESP_OK)==0){
@@ -651,26 +655,33 @@ void RequestManager::onEspMessageReceived(const String& msg){
 		setState(ST_W_DISCONNECTED);
 	}
 
-	if(isPosting())
-	switch(getPostingState()){
-		case ST_P_POSTING_ON:{
-			break;
+	if(isPosting()){
+		uint8_t pstate = getPostingState();
+		if(pstate>=ST_P_WAIT_RESP && pstate<ST_P_REQUEST_POSTED){
+			onResponseParcing(msg);
 		}
-		case ST_P_POSTING_REQUEST:{
-			if(msg.indexOf(">") >= 0) {
-				sendRequest();
+		else{
+			switch(pstate){
+				case ST_P_POSTING_ON:{
+					break;
+				}
+				case ST_P_POSTING_REQUEST:{
+					if(msg.indexOf(">") >= 0) {
+						sendRequest();
+					}
+					break;
+				}
+				case ST_P_SEND_REQUEST:{
+					if(msg.compareTo(RESP_SERVER_SEND) == 0) {
+						setPostingState(ST_P_WAIT_RESP);
+					}
+					break;
+				}
+				//case ST_P_WAIT_RESP:{
+					//onResponseReceived(msg);
+				//	break;
+				//}
 			}
-			break;
-		}
-		case ST_P_SEND_REQUEST:{
-			if(msg.compareTo(RESP_SERVER_SEND) == 0) {
-				setPostingState(ST_P_WAIT_RESP);
-			}
-			break;
-		}
-		case ST_P_WAIT_RESP:{
-			onResponseReceived(msg);
-			break;
 		}
 	}
 
@@ -737,7 +748,7 @@ void RequestManager::sendRequest(){
 	Serial.println(freeMemory(), DEC);
 }
 
-void RequestManager::onResponseReceived(const String& response){
+void RequestManager::onResponseParcing(const String& response){
 	if(response.indexOf(RESP_SERVER_OK)>=0){
 		setPostingState(ST_P_REQUEST_POSTED);
 	}
@@ -746,6 +757,36 @@ void RequestManager::onResponseReceived(const String& response){
 	}
 	else{
 		//setPostingState(ST_P_REQUEST_POST_ERROR);
+	}
+
+	switch(state){
+		case ST_P_WAIT_RESP:{
+			uint8_t index = response.indexOf(HTTP_RESP_CODE);
+			if(index>=0){
+				char* strcode = response[index + strlen(HTTP_RESP_CODE)-1];
+				uint8_t code = atoi(strcode);
+				this->response.setHttpCode(code);
+
+				Serial.print(F("PARSE RESP CODE: "));
+				Serial.println(code);
+			}
+			break;
+		}
+		case ST_P_WAIT_RESP_PARSE_CODE:{
+			break;
+		}
+		case ST_P_WAIT_RESP_PARSE_CLENGHT:{
+			break;
+		}
+		case ST_P_WAIT_RESP_PARSE_CTYPE:{
+			break;
+		}
+		case ST_P_WAIT_RESP_PARSE_CONTENT:{
+			break;
+		}
+		case ST_P_WAIT_RESP_PARSING_COMPLETED:{
+			break;
+		}
 	}
 }
 
@@ -761,9 +802,5 @@ void RequestManager::notifyActionPerformed(Action action){
 }
 
 void RequestManager::fill(){
-	for(int i=0; i<35; i++){
-		PostSurgeRequest* req = new PostSurgeRequest(i, 0, 0);
-		pushRequest(req);
-	}
-	//delay(20);
+
 }

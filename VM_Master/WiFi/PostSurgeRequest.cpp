@@ -9,8 +9,10 @@
 #include <string>
 #include <sstream>
 
-PostSurgeRequest::PostSurgeRequest(uint8_t source,
-			unsigned long charge, unsigned int slope):
+PostSurgeRequest::PostSurgeRequest(uint32_t datetime,
+			uint8_t source,
+			uint32_t charge, uint16_t slope):
+			datetime(datetime),
 			source(source),
 			charge(charge),
 			slope(slope){

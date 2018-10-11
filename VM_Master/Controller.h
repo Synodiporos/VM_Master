@@ -18,6 +18,7 @@
 #include "System/SystemConstants.h"
 #include "System/NotificationSystem.h"
 #include "System/UnixTime.h"
+#include "System/PersistBuffer.h"
 #include "Button/Button.h"
 #include "RFTransceiver/RFTransceiver.h"
 #include "WiFi/RequestManager.h"
@@ -58,6 +59,7 @@ protected:
 	Button* button = new Button(BUTTON_PIN);
 	NotificationSystem* notification = NotificationSystem::getInstance();
 	RFTransceiver* transceiver = RFTransceiver::getInstance();
+	PersistBuffer* requestBuffer = PersistBuffer::getInstance();
 	RequestManager* requestManager = RequestManager::getInstance();
 	LEDScreen* screen = LEDScreen::getInstance();
 	ScreenPage* page = new ScreenPage(screen);
@@ -65,6 +67,7 @@ protected:
 
 	float HV1 = 0;
 	float HV2 = 0;
+	bool HVWARNING = false;
 	float batteryVoltage = 0;
 
 
@@ -74,11 +77,14 @@ protected:
 
 	void onRFMessageReceived(char* msg);
 	void onRFMessageSend(char* msg);
+	void onRFMessageSendError(char* msg);
+	void onRFSurgeRequestReceived(Surge surge);
 	void onRFConnectionStateChanged(bool state);
 	void onACKReceived();
 	void onWiFiConnectionStateChanged(bool state);
 	void onHighVoltage1Changed();
 	void onHighVoltage2Changed();
+	void onHVWarningStateChanged();
 	void onBatteryVoltageChagned();
 	void onButtonStateChanged();
 };

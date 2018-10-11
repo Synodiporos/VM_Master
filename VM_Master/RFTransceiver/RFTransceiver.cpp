@@ -160,11 +160,11 @@ bool RFTransceiver::write(const char* msg){
 	//delay(4);
 
 	bool res = radio.write(msg, strlen(msg)+1);
-	if(!res){
+	/*if(!res){
 		onMessageSendError(msg);
-	}else{
+	}else{*/
 		onMessageSend(msg);
-	}
+	//}
 
 	//delay(4);
 	startListening();

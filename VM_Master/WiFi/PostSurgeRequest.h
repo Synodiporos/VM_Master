@@ -15,18 +15,18 @@
 
 class PostSurgeRequest : public HttpRequest{
 public:
-	PostSurgeRequest(uint8_t source,
-			unsigned long charge, unsigned int slope);
+	PostSurgeRequest(uint32_t datetime, uint8_t source,
+			uint32_t charge, uint16_t slope);
 	virtual ~PostSurgeRequest();
 
 	uint8_t getRequestType();
 	uint8_t createRequestContent(char* buffer);
 
 private:
-
+	uint32_t datetime;
 	uint8_t source ;
-	unsigned long charge ;
-	unsigned int slope ;
+	uint32_t charge ;
+	uint16_t slope ;
 };
 
 #endif /* WIFI_POSTSURGEREQUEST_H_ */
