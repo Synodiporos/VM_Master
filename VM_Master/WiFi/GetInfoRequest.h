@@ -5,20 +5,22 @@
  *      Author: sgeorgiadis
  */
 
-#ifndef WIFI_TESTGETREQUEST_H_
-#define WIFI_TESTGETREQUEST_H_
+#ifndef WIFI_GETINFOREQUEST_H_
+#define WIFI_GETINFOREQUEST_H_
 
 #include "HttpRequest.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-class TestGetRequest: public HttpRequest {
+class GetInfoRequest: public HttpRequest {
 public:
-	TestGetRequest();
-	virtual ~TestGetRequest();
+	GetInfoRequest();
+	GetInfoRequest(uint8_t id);
+	virtual ~GetInfoRequest();
 
 	uint8_t getRequestType();
 	uint8_t createRequestContent(char* buffer);
+
 };
 
-#endif /* WIFI_TESTGETREQUEST_H_ */
+#endif /* WIFI_GETINFOREQUEST_H_ */

@@ -166,36 +166,34 @@ void ScreenPage::print(){
 }
 
 void ScreenPage::printHV1(){
+	char str[8];
 	float hv = getHV10350();
 	char f[6] = {0,0,0,0,0,0};
 	toStr(hv, f);
 
-	string str;
+	//string str;
+
 	if(hv<10){
-		str += " ";
-		str += f;
+		snprintf(str, 8, " %skV", f);
 	}
 	else{
-		str += f;
+		snprintf(str, 8, "%skV", f);
 	}
-	str += "kV";
 	//Serial.println(str.c_str());
 	screen->write(str, 0, 3, 16);
 }
 
 void ScreenPage::printHV2(){
+	char str[8];
 	float hv = getHV820();
 	char f[6] = {0,0,0,0,0,0};
-	toStr(hv, f);
-	string str;
 	if(hv<10){
-		str += " ";
-		str += f;
+		snprintf(str, 8, " %skV", f);
 	}
 	else{
-		str += f;
+		snprintf(str, 8, "%skV", f);
 	}
-	str += "kV";
+	//Serial.println(str.c_str());
 	screen->write(str, 2, 3, 16);
 }
 

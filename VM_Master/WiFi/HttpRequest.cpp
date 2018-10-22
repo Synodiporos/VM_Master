@@ -16,3 +16,10 @@ HttpRequest::~HttpRequest() {
 	// TODO Auto-generated destructor stub
 }
 
+void HttpRequest::setId(uint8_t id){
+	this->id = id;
+}
+
+uint8_t HttpRequest::getId(){
+	return this->id;
+}

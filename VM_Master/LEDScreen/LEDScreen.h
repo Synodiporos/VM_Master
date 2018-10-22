@@ -9,7 +9,6 @@
 #define LEDSCREEN_LEDSCREEN_H_
 
 #include <Arduino.h>
-#include <string>
 #include "../System/SystemConstants.h"
 
 #define AT_CLEAR "ATd0=()"
@@ -32,8 +31,8 @@ public:
 	void turnON();
 	void turnOFF();
 	void brightness(uint8_t br);
-	void write(std::string string, int row, int col, uint8_t size);
-	void write(char ch, int row, int col, uint8_t size);
+	void write(const char* string, int row, int col, uint8_t size);
+	void write(const char ch, int row, int col, uint8_t size);
 	void drawLine(uint8_t x0, uint8_t y0,
 			uint8_t x1, uint8_t y1, bool enabled);
 	void drawRectangle(uint8_t x0, uint8_t y0,

@@ -1,7 +1,4 @@
 eclipse.preferences.version=1
 encoding//Button/Button.cpp=UTF-8
 encoding//Button/Button.h=UTF-8
-encoding//Commons/Action.cpp=UTF-8
 encoding//Commons/Action.h=UTF-8
-encoding//Commons/IStateListener.h=UTF-8
-encoding//Commons/State.h=UTF-8

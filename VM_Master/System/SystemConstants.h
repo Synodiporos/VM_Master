@@ -36,15 +36,16 @@
 #define WIFI_SSID "RaycapWiFi_Drama" //"Syn-2" //"SynNet" //"RaycapWiFi_Drama"
 #define WIFI_PASS "r@yL@N!!" //"6987881596" //"Syn123NET789" //"r@yL@N!!"
 #define WIFI_SERVER "192.168.11.5" //"synet.sytes.net" //"192.168.11.5"
-#define WIFI_SURGEROOM_URI "/surgeroom" //"/surges"
-#define WiFi_TEST_URI "/get.php" //"/surges/test5.php" //"/get.php"
-#define WiFi_SURGE_URI "/srg.php"
-#define WiFi_BATTERY_URI "/btr.php"
-#define REQUEST_TYPE_TEST 0
-#define REQUEST_TYPE_SURGE 1
-#define REQUEST_TYPE_BATTERY 2
-#define WIFI_REQUEST_LENGHT 80
-#define REQUEST_URL_CONTENT_LENGHT 38
+#define WIFI_SURGEROOM_URI "/rnd/util" //"/surges"
+#define WIFI_TEST_URI "/test.php" //"/surges/test5.php" //"/get.php"
+#define WIFI_DATETIME_URI "/dt.php"
+#define WIFI_INFO_URI "/dt.php"
+#define WIFI_SURGE_URI "/srg.php"
+#define WIFI_BATTERY_URI "/btr.php"
+
+#define REQUEST_URL_PARAMS_LENGHT 40
+#define REQUEST_URL_LENGHT 48
+#define REQUEST_HEADER_LENGHT 88
 //SCREEN CONFIG
 #define SC_TIMEOUT 40
 #define SC_TURNOFF_INT 60000
@@ -56,39 +57,5 @@
 #define CMD_BAT "BAT"
 #define CMD_ACK "ACK"
 #define CMD_ACR "ACR"
-#define CMD_SLP "SLP"
-//LED NOTIFICATION MODES
-//ACTIVE
-#define LED_M1 new LEDTone(3, 40,	\
-		new LEDTone(255, 20, \
-		new LEDTone(0, 2940)))
-//CONNECTION_LOST
-#define LED_M3 new LEDTone(255, 50, \
-		new LEDTone(0, 950))
-//TRANSFER
-#define LED_M4_ITER 1;
-#define LED_M4 new LEDTone(255, 25, \
-		new LEDTone(0, 75, \
-		new LEDTone(255, 25, \
-		new LEDTone(0, 2775 \
-))))
-//HV_WARNING
-#define LED_M5 new LEDTone(255, 25, \
-		new LEDTone(0, 75, \
-		new LEDTone(255, 25, \
-		new LEDTone(0, 75, \
-		new LEDTone(255, 25, \
-		new LEDTone(0, 75, \
-		new LEDTone(255, 25, \
-		new LEDTone(0, 175 \
-))))))))
-//BATTERY
-#define LED_M6 new LEDTone(255, 25, \
-		new LEDTone(0, 2985 \
-))
-//ERROR
-#define LED_M7 new LEDTone(255, 750,\
-		new LEDTone(0, 750))
-
 
 #endif /* SYSTEM_SYSTEMCONSTANTS_H_ */

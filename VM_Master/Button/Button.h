@@ -5,7 +5,7 @@
  *      Author: Synodiporos
  */
 #include <Arduino.h>
-#include "../Commons/IStateListener.h"
+#include "../Commons/IActionListener.h"
 #include <stdint.h>
 
 #ifndef BUTTON_H_
@@ -24,15 +24,15 @@ public:
 	ButtonState getButtonState();
 	unsigned long getLastEventTime();
 	unsigned long getIntervalFromLastEvent();
-	IStateListener* getButtonListener();
-	void setButtonListener(IStateListener* l);
+	IActionListener* getActionListener();
+	void setActionListener(IActionListener* l);
 	void validate();
 
 private:
 	uint8_t pinNumber = -1;
 	unsigned long lastEventTime = 0;
 	ButtonState buttonState = ButtonState::RELEASED;
-	IStateListener* listener = 0;
+	IActionListener* listener = 0;
 
 	void setButtonState(const ButtonState state);
 	void press();

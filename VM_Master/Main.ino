@@ -9,13 +9,11 @@
 #include "WiFi/HttpRequest.h"
 #include "WiFi/PostSurgeRequest.h"
 #include "WiFi/PostBatteryRequest.h"
-#include "WiFi/TestGetRequest.h"
 #include "WiFi/HttpRequestCreator.h"
 #include "Controller.h"
 #include "SoftwareSerial.h"
-#include <string>
 #include <Arduino.h>
-#include <avr/pgmspace.h>
+//#include <avr/pgmspace.h>
 using namespace std;
 
 //NotificationSystem* notification = NotificationSystem::getInstance();
@@ -56,9 +54,6 @@ void setup() {
 	digitalWrite(LED_BLUE_PIN, LOW);
 
 	//requestManager = RequestManager::getInstance();
-
-	Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
-	Serial.println(freeMemory(), DEC);
 	Serial.println(F("START"));
 
 
@@ -87,45 +82,5 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-	long interval = millis()-mil;
-
-	if(interval>= 2000 ){
-		//Serial.print(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
-		//Serial.println(freeMemory(), DEC);
-		mil = millis();
-	}
-
-
-	/*if(c==0){
-		esp->println(F("AT+CWMODE=3"));
-		Serial.print(F("SEVD AT"));
-		c=1;
-	}
-	delay(50);
-
-	if (esp->available()){
-		while (esp->available() > 0 ){
-			//Serial.println(F("-"));
-			String response = esp->readStringUntil('\n');
-			response.trim();
-			if(response.length()>0){
-				std::string str(response.c_str());
-
-				Serial.print(F("Received: "));
-				Serial.println(str.c_str());
-
-				if(str.compare("OK")==0){
-					c=0;
-				}
-				//onEspMessageReceived(str);
-			}
-			//Serial.println(F("+"));
-		}
-	}*/
-
-	//trasnceiver->validate();
-	//notification->validate();
-	//serialBroad->validate();
-	//executor->validate();
 	controller.validate();
 }

@@ -12,13 +12,12 @@ HttpResponse::HttpResponse() {
 
 }
 
-HttpResponse::HttpResponse(uint16_t http_code, uint8_t content_type,
-			uint16_t content_lenght, const char content[]):
-		http_code(http_code),
-		content_type(content_type),
-		content_lenght(content_lenght),
-		content(content){
-
+HttpResponse::HttpResponse(uint16_t http_code, char content[64]):
+		http_code(http_code){
+	uint8_t size = strlen(content);
+	for(int i=0; i<size; i++){
+		this->content[i] = content[i];
+	}
 }
 
 HttpResponse::~HttpResponse() {
@@ -29,30 +28,37 @@ void HttpResponse::setHttpCode(uint16_t code){
 	this->http_code = code;
 }
 
-void HttpResponse::setContentType(uint8_t type){
-	this->content_type = type;
+void HttpResponse::setContent(char content[64]){
+	uint8_t size = strlen(content);
+	for(int i=0; i<size; i++){
+		this->content[i] = content[i];
+	}
+	this->lenght = size;
 }
 
-void HttpResponse::setContentLenght(uint16_t lenght){
-	this->content_lenght = lenght;
-}
-
-void HttpResponse::setContent(char content[]){
-	this->content = content;
+void HttpResponse::appendContent(String str){
+	uint8_t l = str.length();
+	Serial.println(l);
+	const char* in = str.c_str();
+	uint8_t end = 64-lenght;
+	if(l<end)
+		end = l;
+	for(int i=0; i<end; i++){
+		this->content[i+lenght] = in[i];
+	}
+	this->lenght += end;
+	this->content[lenght] = '\0';
+	Serial.println(lenght);
 }
 
 uint16_t HttpResponse::getHttpCode(){
 	return this->http_code;
 }
 
-uint8_t HttpResponse::getContentType(){
-	return this->content_type;
-}
-
-uint16_t HttpResponse::getContentLenght(){
-	return this->content_lenght;
-}
-
 const char* HttpResponse::getContent(){
 	return this->content;
+}
+
+uint8_t HttpResponse::getLenght(){
+	return this->lenght;
 }

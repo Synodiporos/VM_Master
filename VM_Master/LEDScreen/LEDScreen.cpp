@@ -49,13 +49,13 @@ void LEDScreen::brightness(uint8_t br){
 	onSendAt(buffer);
 }
 
-void LEDScreen::write(std::string string, int row, int col, uint8_t size){
-	char buffer [13 + string.size()];
+void LEDScreen::write(const char* string, int row, int col, uint8_t size){
+	char buffer [13 + strlen(string)];
 	uint8_t charSize = 1;
 	if(size>=16)
 			charSize = 3;
 	sprintf (buffer, AT_WRITE_STRING,
-			charSize, row, col, string.c_str());
+			charSize, row, col, string);
 
 	onSendAt(buffer);
 }

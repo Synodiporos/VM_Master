@@ -207,7 +207,7 @@ void RFTransceiver::validate(){
 		if(helper==1){
 			if(millis()-time > RF_CONNECTION_CHECK_INTERVALS){
 				if(state >= RF_STATE_REQUEST_SENDING + RF_RETRIES-1){
-					onRequestPostError(request, requestId);
+					//onRequestPostError(request, requestId);
 				}
 				else{
 					helper = 2;
@@ -229,7 +229,7 @@ bool RFTransceiver::setActiveState(bool active){
 }
 
 void RFTransceiver::onActiveStateChanged(){
-	Action action(this, ON_ACTIVE_STATE, nullptr, &active);
+	Action action = {this, ON_ACTIVE_STATE, &active};
 	notifyActionPerformed(action);
 }
 
@@ -243,7 +243,7 @@ bool RFTransceiver::setState(uint8_t state){
 }
 
 void RFTransceiver::onStateChanged(){
-	Action action(this, ON_CONNECTION_STATE, nullptr, &state);
+	Action action = {this, ON_CONNECTION_STATE, &state};
 	notifyActionPerformed(action);
 
 	if(state==RF_STATE_REQUEST_SEND){
@@ -266,18 +266,18 @@ void RFTransceiver::onStateChanged(){
 }
 
 void RFTransceiver::onMessageSend(const char* msg){
-	Action action(this, ON_MESSAGE_SEND, nullptr, msg);
+	Action action = {this, ON_MESSAGE_SEND, msg};
 	notifyActionPerformed(action);
 }
-
+/*
 void RFTransceiver::onMessageSendError(const char* msg){
-	Action action(this, ON_MESSAGE_SEND_ERROR, nullptr, msg);
+	Action action = {this, ON_MESSAGE_SEND_ERROR, msg};
 	notifyActionPerformed(action);
 }
 
 void RFTransceiver::onRequestPosted(const char* msg, uint8_t id){
 	char c = id;
-	Action action(this, ON_REQUEST_SEND_OK, &c, msg);
+	Action action = {this, ON_REQUEST_SEND_OK, msg};
 	notifyActionPerformed(action);
 
 	request[0] = 0;
@@ -287,16 +287,16 @@ void RFTransceiver::onRequestPosted(const char* msg, uint8_t id){
 
 void RFTransceiver::onRequestPostError(const char* msg, uint8_t id){
 	char c = id;
-	Action action(this, ON_REQUEST_SEND_FAIL, &c, msg);
+	Action action = {this, ON_REQUEST_SEND_FAIL, msg};
 	notifyActionPerformed(action);
 
 	request[0] = '\0';
 	requestId = 0;
 	setState(RF_STATE_REQUEST_ERROR);
-}
+}*/
 
 void RFTransceiver::onMessageReceived(const char* msg){
-	Action action(this, ON_MESSAGE_RECEIVED, nullptr, msg);
+	Action action = {this, ON_MESSAGE_RECEIVED, msg};
 	notifyActionPerformed(action);
 
 	if(isInitialized()){
@@ -306,20 +306,20 @@ void RFTransceiver::onMessageReceived(const char* msg){
 		uint8_t res = CharUtil::parse(msg, cmd, id, params);
 		if(res){
 			if(cmd.compareTo(CMD_ACR)==0){
-				onResponseReceived(msg, id);
+				//onResponseReceived(msg, id);
 				if(id>0 && requestId==id){
-					onRequestPosted(msg, requestId);
+					//onRequestPosted(msg, requestId);
 				}
 			}
 		}
 	}
 }
-
+/*
 void RFTransceiver::onResponseReceived(const char* msg, uint8_t id){
 	char c = id;
-	Action action(this, ON_RESPONSE_RECEIVED, &c, msg);
+	Action action = {this, ON_RESPONSE_RECEIVED, msg};
 	notifyActionPerformed(action);
-}
+}*/
 
 void RFTransceiver::notifyActionPerformed(Action& action){
 	if(this->actionListener)

@@ -1,4 +1,37 @@
-Controller.cpp.o: ..\Controller.cpp ..\Controller.h ..\Math/MathUtil.h \
+Controller.cpp.o: ..\Controller.cpp ..\Controller.h \
+ ..\Commons/IActionListener.h ..\Commons/Action.h ..\Commons/Action.h \
+ ..\System/SystemConstants.h ..\System/NotificationSystem.h \
+ ..\System/SystemConstants.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/binary.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/WCharacter.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/WString.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/HardwareSerial.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Print.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Printable.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/USBAPI.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\variants\standard/pins_arduino.h \
+ ..\System/UnixTime.h ..\Button/Button.h \
+ ..\Button/../Commons/IActionListener.h ..\RFTransceiver/RFTransceiver.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SPI\src/SPI.h \
+ C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24.h \
+ C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24_config.h \
+ ..\RFTransceiver/../System/SystemConstants.h \
+ ..\RFTransceiver/../Commons/IActionListener.h \
+ ..\RFTransceiver/../Commons/Action.h ..\RFTransceiver/../Util/CharUtil.h \
+ ..\WiFi/RequestManager.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SoftwareSerial\src/SoftwareSerial.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h \
+ ..\WiFi/../Memory/MemoryFree.h ..\WiFi/../System/SystemConstants.h \
+ ..\WiFi/../Commons/Action.h ..\WiFi/../Commons/IActionListener.h \
+ ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h \
+ ..\WiFi/HttpRequestCreator.h ..\WiFi/HttpResponse.h \
+ ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h \
+ ..\WiFi/PostBatteryRequest.h ..\LEDScreen/LEDScreen.h \
+ ..\LEDScreen/../System/SystemConstants.h ..\LEDScreen/ScreenPage.h \
+ ..\LEDScreen/../LEDScreen/LEDScreen.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/string \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/basic_definitions \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/system_configuration.h \
@@ -19,46 +52,6 @@ Controller.cpp.o: ..\Controller.cpp ..\Controller.h ..\Math/MathUtil.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/functional \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/type_traits \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/initializer_list \
- ..\Commons/IActionListener.h ..\Commons/Action.h ..\Commons/Action.h \
- ..\Commons/IPropertyListener.h ..\Commons/IStateListener.h \
- ..\Commons/State.h ..\Commons/State.h ..\System/SystemConstants.h \
- ..\System/NotificationSystem.h ..\System/SystemConstants.h \
- ..\System/../LEDPlayer/LEDTone.h ..\System/../LEDPlayer/LEDTonePLayer.h \
- ..\System/../LEDPlayer/LEDTone.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/binary.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/WCharacter.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/WString.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/HardwareSerial.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Print.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Printable.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/USBAPI.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\variants\standard/pins_arduino.h \
- ..\System/UnixTime.h ..\System/PersistBuffer.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\EEPROM\src/EEPROM.h \
- ..\Button/Button.h ..\Button/../Commons/IStateListener.h \
- ..\RFTransceiver/RFTransceiver.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SPI\src/SPI.h \
- C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24.h \
- C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24_config.h \
- ..\RFTransceiver/../System/SystemConstants.h \
- ..\RFTransceiver/../Commons/IActionListener.h \
- ..\RFTransceiver/../Commons/Action.h ..\RFTransceiver/../Timer/Timer.h \
- ..\RFTransceiver/../Timer/../Commons/IActionListener.h \
- ..\RFTransceiver/../Timer/../Commons/Action.h \
- ..\RFTransceiver/../Util/CharUtil.h ..\WiFi/RequestManager.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SoftwareSerial\src/SoftwareSerial.h \
- C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h \
- ..\WiFi/../Memory/MemoryFree.h ..\WiFi/../System/SystemConstants.h \
- ..\WiFi/../Commons/Action.h ..\WiFi/../Commons/IActionListener.h \
- ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h \
- ..\WiFi/HttpRequestCreator.h ..\WiFi/HttpRequest.h \
- ..\WiFi/PostSurgeRequest.h ..\WiFi/PostBatteryRequest.h \
- ..\WiFi/TestGetRequest.h ..\LEDScreen/LEDScreen.h \
- ..\LEDScreen/../System/SystemConstants.h ..\LEDScreen/ScreenPage.h \
- ..\LEDScreen/../LEDScreen/LEDScreen.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/iostream \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/ios \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/locale \
@@ -70,11 +63,102 @@ Controller.cpp.o: ..\Controller.cpp ..\Controller.h ..\Math/MathUtil.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/ostream_helpers \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/string_iostream \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/sstream \
- ..\Memory/MemoryFree.h ..\Memory/pgmStrToRAM.h ..\Util/CharUtil.h
+ ..\Memory/MemoryFree.h ..\Memory/pgmStrToRAM.h ..\Util/CharUtil.h \
+ ..\WiFi/GetInfoRequest.h
 
 ..\Controller.h:
 
-..\Math/MathUtil.h:
+..\Commons/IActionListener.h:
+
+..\Commons/Action.h:
+
+..\Commons/Action.h:
+
+..\System/SystemConstants.h:
+
+..\System/NotificationSystem.h:
+
+..\System/SystemConstants.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/binary.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/WCharacter.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/WString.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/HardwareSerial.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Print.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Printable.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/USBAPI.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\variants\standard/pins_arduino.h:
+
+..\System/UnixTime.h:
+
+..\Button/Button.h:
+
+..\Button/../Commons/IActionListener.h:
+
+..\RFTransceiver/RFTransceiver.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SPI\src/SPI.h:
+
+C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24.h:
+
+C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24_config.h:
+
+..\RFTransceiver/../System/SystemConstants.h:
+
+..\RFTransceiver/../Commons/IActionListener.h:
+
+..\RFTransceiver/../Commons/Action.h:
+
+..\RFTransceiver/../Util/CharUtil.h:
+
+..\WiFi/RequestManager.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SoftwareSerial\src/SoftwareSerial.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h:
+
+..\WiFi/../Memory/MemoryFree.h:
+
+..\WiFi/../System/SystemConstants.h:
+
+..\WiFi/../Commons/Action.h:
+
+..\WiFi/../Commons/IActionListener.h:
+
+..\WiFi/HttpRequest.h:
+
+..\WiFi/PostSurgeRequest.h:
+
+..\WiFi/HttpRequestCreator.h:
+
+..\WiFi/HttpResponse.h:
+
+..\WiFi/HttpRequest.h:
+
+..\WiFi/PostSurgeRequest.h:
+
+..\WiFi/PostBatteryRequest.h:
+
+..\LEDScreen/LEDScreen.h:
+
+..\LEDScreen/../System/SystemConstants.h:
+
+..\LEDScreen/ScreenPage.h:
+
+..\LEDScreen/../LEDScreen/LEDScreen.h:
 
 C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/string:
 
@@ -116,122 +200,6 @@ C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/type_traits:
 
 C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/initializer_list:
 
-..\Commons/IActionListener.h:
-
-..\Commons/Action.h:
-
-..\Commons/Action.h:
-
-..\Commons/IPropertyListener.h:
-
-..\Commons/IStateListener.h:
-
-..\Commons/State.h:
-
-..\Commons/State.h:
-
-..\System/SystemConstants.h:
-
-..\System/NotificationSystem.h:
-
-..\System/SystemConstants.h:
-
-..\System/../LEDPlayer/LEDTone.h:
-
-..\System/../LEDPlayer/LEDTonePLayer.h:
-
-..\System/../LEDPlayer/LEDTone.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/binary.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/WCharacter.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/WString.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/HardwareSerial.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Print.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Printable.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/USBAPI.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\variants\standard/pins_arduino.h:
-
-..\System/UnixTime.h:
-
-..\System/PersistBuffer.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\EEPROM\src/EEPROM.h:
-
-..\Button/Button.h:
-
-..\Button/../Commons/IStateListener.h:
-
-..\RFTransceiver/RFTransceiver.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SPI\src/SPI.h:
-
-C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24.h:
-
-C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24_config.h:
-
-..\RFTransceiver/../System/SystemConstants.h:
-
-..\RFTransceiver/../Commons/IActionListener.h:
-
-..\RFTransceiver/../Commons/Action.h:
-
-..\RFTransceiver/../Timer/Timer.h:
-
-..\RFTransceiver/../Timer/../Commons/IActionListener.h:
-
-..\RFTransceiver/../Timer/../Commons/Action.h:
-
-..\RFTransceiver/../Util/CharUtil.h:
-
-..\WiFi/RequestManager.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SoftwareSerial\src/SoftwareSerial.h:
-
-C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h:
-
-..\WiFi/../Memory/MemoryFree.h:
-
-..\WiFi/../System/SystemConstants.h:
-
-..\WiFi/../Commons/Action.h:
-
-..\WiFi/../Commons/IActionListener.h:
-
-..\WiFi/HttpRequest.h:
-
-..\WiFi/PostSurgeRequest.h:
-
-..\WiFi/HttpRequestCreator.h:
-
-..\WiFi/HttpRequest.h:
-
-..\WiFi/PostSurgeRequest.h:
-
-..\WiFi/PostBatteryRequest.h:
-
-..\WiFi/TestGetRequest.h:
-
-..\LEDScreen/LEDScreen.h:
-
-..\LEDScreen/../System/SystemConstants.h:
-
-..\LEDScreen/ScreenPage.h:
-
-..\LEDScreen/../LEDScreen/LEDScreen.h:
-
 C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/iostream:
 
 C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/ios:
@@ -259,3 +227,5 @@ C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/sstream:
 ..\Memory/pgmStrToRAM.h:
 
 ..\Util/CharUtil.h:
+
+..\WiFi/GetInfoRequest.h:

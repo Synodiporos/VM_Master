@@ -28,15 +28,15 @@ uint8_t PostSurgeRequest::getRequestType(){
 }
 
 uint8_t PostSurgeRequest::createRequestContent(char* buffer){
-	char contentFormat[REQUEST_URL_CONTENT_LENGHT];
+	char contentFormat[REQUEST_URL_PARAMS_LENGHT];
 	strcpy_P(contentFormat,
-			(char*)pgm_read_word(&(formats_of_contents[0])));
+			(char*)pgm_read_word(&(formats_of_contents[1])));
 
-	uint8_t size = snprintf(buffer, REQUEST_URL_CONTENT_LENGHT,
+	uint8_t size = snprintf(buffer, REQUEST_URL_PARAMS_LENGHT,
 		contentFormat,
 		source, charge, slope);
 
-	buffer[REQUEST_URL_CONTENT_LENGHT-1] = '\0';
+	buffer[REQUEST_URL_PARAMS_LENGHT-1] = '\0';
 
 	return size;
 }

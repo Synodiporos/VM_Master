@@ -21,7 +21,7 @@
 #include "HttpRequestCreator.h"
 #include "HttpResponse.h"
 
-#define CAPACITY 8
+#define BUFFER_CAPACITY 8
 #define SERIAL_BUFFER 48
 
 #define ST_OFF 0
@@ -47,11 +47,9 @@
 #define ST_P_POSTING_REQUEST 53
 #define ST_P_SEND_REQUEST 54
 #define ST_P_WAIT_RESP 60
-#define ST_P_WAIT_RESP_PARSE_CODE 62
-#define ST_P_WAIT_RESP_PARSE_CLENGHT 63
-#define ST_P_WAIT_RESP_PARSE_CTYPE 64
-#define ST_P_WAIT_RESP_PARSE_CONTENT 65
-#define ST_P_WAIT_RESP_PARSING_COMPLETED 66
+#define ST_P_WAIT_CONTENT_START 61
+#define ST_P_WAIT_CONTENT_END 62
+#define ST_P_RESPONSE_COMPLETED 66
 #define ST_P_REQUEST_POSTED 80
 #define ST_P_REQUEST_POST_ERROR 81
 
@@ -63,12 +61,8 @@
 #define RESP_SERVER_CLOSED "CLOSED"
 #define RESP_SERVER_FAIL "CONNECT FAIL"
 #define RESP_SERVER_SEND "SEND OK"
-#define RESP_SERVER_ER "1.1 40"
-#define RESP_SERVER_OK "1.1 200"
 
 #define HTTP_RESP_CODE "HTTP/1.1"
-#define HTTP_RESP_CLENGHT "Content-Length:"
-#define HTTP_RESP_CTYPE "Content-Type:"
 
 class RequestManager {
 public:
@@ -108,12 +102,14 @@ public:
 	bool isReadyToPost();
 
 	void validate();
+	HttpRequest* httpRequest;
+	HttpResponse httpResponse;
 
 private:
 	static RequestManager* instance;
 	SoftwareSerial* esp = new SoftwareSerial(RX3_PIN, TX3_PIN); // RX, TX
 	uint8_t _size = 0;
-	HttpRequest* buf[CAPACITY];
+	HttpRequest* buf[BUFFER_CAPACITY];
 	uint8_t index = 0;
 	uint8_t enabled = false;
 	uint8_t state = 0;
@@ -123,9 +119,8 @@ private:
 	unsigned long timeout = millis();
 	unsigned long timeoutP = millis();
 	unsigned int waitTime = 0;
-	char request[WIFI_REQUEST_LENGHT];
-	HttpRequest* httpReq;
-	HttpResponse response;
+	char request[REQUEST_HEADER_LENGHT];
+
 	IActionListener* actionListener = nullptr;
 
 	RequestManager();
@@ -142,12 +137,9 @@ private:
 
 	void onStateChanged();
 	void onPostingStateChanged();
-	void onPostRequest(HttpRequest* request);
-	void onGetRequest(HttpRequest* request);
 	void sendRequest();
 	void onResponseParcing(const String& response);
-	void onResponseReceived(const HttpResponse& response);
-	void onACKReceived(const char* ack);
+	void onResponseReceived(HttpResponse& response);
 	void notifyActionPerformed(Action action);
 
 };

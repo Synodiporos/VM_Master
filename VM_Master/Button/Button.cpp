@@ -94,49 +94,17 @@ unsigned long Button::getIntervalFromLastEvent(){
 	return millis() - Button::getLastEventTime();
 }
 
-void Button::setButtonListener(IStateListener* l){
-	Button::listener = l;
+void Button::setActionListener(IActionListener* l){
+	this->listener = l;
 }
 
-IStateListener* Button::getButtonListener(){
-	return Button::listener;
+IActionListener* Button::getActionListener(){
+	return this->listener;
 }
 
 void Button::notifyButtonStateChanged(){
-	/*Serial.print("Button");
-	Serial.print(getPinNumber());
-	Serial.print(" & ");
-	Serial.print((unsigned int)this);
-	Serial.print(": State Changed");
-
-	switch (getButtonState()){
-	case ButtonState::PRESSED:
-		Serial.print(" PRESSED");
-		break;
-	case ButtonState::RELEASED:
-		Serial.print(" RELEASED");
-		break;
-	case ButtonState::CLICKED:
-		Serial.print(" CLICKED");
-		break;
-	case ButtonState::HOLDED:
-		Serial.print(" HOLDED");
-		break;
-	}*/
-
-//	Serial.print(" , interval: ");
-//	Serial.print(getIntervalFromLastEvent());
-//	Serial.print(" , listener: ");
-//
-//	IStateListener* l = getButtonListener();
-//	Serial.print((unsigned int)l);
-//	Serial.print(" - ");
-//	Serial.println((unsigned int)&l, HEX);
-//	Serial.println();
-
-
-	if(getButtonListener()){
-		State state(this, getPinNumber(), &buttonState);
-		getButtonListener()->stateChanged(state);
+	if(getActionListener()){
+		Action action = {this, getPinNumber(), &buttonState};
+		getActionListener()->actionPerformed(action);
 	}
 }

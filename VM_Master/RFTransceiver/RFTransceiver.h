@@ -12,7 +12,6 @@
 #include "../System/SystemConstants.h"
 #include "../Commons/IActionListener.h"
 #include "../Commons/Action.h"
-#include "../Timer/Timer.h"
 #include "../Util/CharUtil.h"
 
 #define RF_STATE_OFF 0
@@ -80,11 +79,11 @@ private:
 	bool setState(uint8_t state);
 	void onStateChanged();
 	void onMessageSend(const char* msg);
-	void onMessageSendError(const char* msg);
-	void onRequestPosted(const char* msg, uint8_t id);
-	void onRequestPostError(const char* msg, uint8_t id);
+	//void onMessageSendError(const char* msg);
+	//void onRequestPosted(const char* msg, uint8_t id);
+	//void onRequestPostError(const char* msg, uint8_t id);
 	void onMessageReceived(const char* msg);
-	void onResponseReceived(const char* msg, uint8_t id);
+	//void onResponseReceived(const char* msg, uint8_t id);
 	void onSendRequest();
 	void notifyActionPerformed(Action& action);
 };
