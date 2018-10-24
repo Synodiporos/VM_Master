@@ -37,7 +37,7 @@
 #define ST_W_CONNECTED 14
 
 #define ST_S_DISCONNECTED 20
-#define ST_S_CONNECTING 22
+#define ST_S_CONNECTING 21
 #define ST_S_ERROR 23
 #define ST_S_CONNECTED 24
 

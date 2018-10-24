@@ -13,8 +13,10 @@ Controller.cpp.o: ..\Controller.cpp ..\Controller.h \
  C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/USBAPI.h \
  C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h \
  C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\variants\standard/pins_arduino.h \
- ..\System/UnixTime.h ..\Button/Button.h \
- ..\Button/../Commons/IActionListener.h ..\RFTransceiver/RFTransceiver.h \
+ ..\System/UnixTime.h ..\System/PersistBuffer.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\EEPROM\src/EEPROM.h \
+ ..\Button/Button.h ..\Button/../Commons/IActionListener.h \
+ ..\RFTransceiver/RFTransceiver.h \
  C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\SPI\src/SPI.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\RF24\1.3.0/RF24_config.h \
@@ -103,6 +105,10 @@ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino
 C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\variants\standard/pins_arduino.h:
 
 ..\System/UnixTime.h:
+
+..\System/PersistBuffer.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\EEPROM\src/EEPROM.h:
 
 ..\Button/Button.h:
 

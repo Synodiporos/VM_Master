@@ -92,7 +92,6 @@ bool RequestManager::pushRequest(HttpRequest* request){
 			index = 0;
 	}
 
-
 	/*Serial.print(F(" size:"));
 	Serial.print(_size);
 
@@ -137,6 +136,11 @@ HttpRequest* RequestManager::popRequest(){
 		Serial.print(F(" Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
 		Serial.print(freeMemory(), DEC);
 		Serial.println();*/
+
+		httpRequest = nullptr;
+		httpResponse.setContent("");
+		httpResponse.setHttpCode(0);
+
 		return req;
 	}
 	return nullptr;
@@ -230,7 +234,8 @@ bool RequestManager::stopPosting(){
 }
 
 bool RequestManager::isPosting(){
-	return this->getPostingState()>=ST_P_POSTING_ON;
+	return this->getPostingState()>=ST_P_POSTING_ON
+			&& this->getPostingState()<ST_P_RESPONSE_COMPLETED;
 }
 
 bool RequestManager::isInitialized(){
@@ -698,7 +703,7 @@ void RequestManager::onStateChanged(){
 }
 
 void RequestManager::onPostingStateChanged(){
-	Action action = {this, getState(), nullptr};
+	Action action = {this, getPostingState(), nullptr};
 	notifyActionPerformed(action);
 
 	switch(getPostingState()){
@@ -728,6 +733,8 @@ void RequestManager::onPostingStateChanged(){
 		}
 		case ST_P_RESPONSE_COMPLETED:{
 			onResponseReceived(httpResponse);
+			setPostingState(ST_P_POSTING_ON);
+			wait(200);
 			timeoutP = millis();
 			break;
 		}
@@ -772,9 +779,6 @@ void RequestManager::postRequest(HttpRequest* httpRequest) {
 		delay(2);
 		esp->print(F("AT+CIPSEND="));
 		esp->println(size);
-
-		Serial.println(F("***   AT SEND"));
-
 		setPostingState(ST_P_POSTING_REQUEST);
 		timeoutP = millis();
 	}
@@ -783,13 +787,13 @@ void RequestManager::postRequest(HttpRequest* httpRequest) {
 void RequestManager::sendRequest(){
 	setPostingState(ST_P_SEND_REQUEST);
 	if(httpRequest){
-		Serial.println(F("Sending..."));
+		Serial.println(F("SEND: "));
 		Serial.println(request);
 		esp->print(request);
 	}
 	request[0] = '\0';
 
-	Serial.print(F("$ Free RAM = "));
+	Serial.print(F("Free RAM = "));
 	Serial.println(freeMemory(), DEC);
 }
 

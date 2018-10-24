@@ -14,7 +14,7 @@
 #include "System/SystemConstants.h"
 #include "System/NotificationSystem.h"
 #include "System/UnixTime.h"
-//#include "System/PersistBuffer.h"
+#include "System/PersistBuffer.h"
 #include "Button/Button.h"
 #include "RFTransceiver/RFTransceiver.h"
 #include "WiFi/RequestManager.h"
@@ -29,13 +29,6 @@
 #include "WiFi/GetInfoRequest.h"
 using namespace std;
 
-struct Surge{
-	uint32_t datetime;
-	uint8_t device;
-	uint32_t charge;
-	uint16_t slope;
-};
-
 class Controller : public IActionListener{
 public:
 
@@ -46,10 +39,6 @@ public:
 	void deactivate();
 	void initialization();
 
-	/*void propertyChanged(
-				void* source,
-				unsigned short int propertyId,
-				const void* oldPropery);*/
 	void actionPerformed(Action action);
 
 	void validate();
@@ -58,7 +47,7 @@ protected:
 	Button* button = new Button(BUTTON_PIN);
 	NotificationSystem* notification = NotificationSystem::getInstance();
 	RFTransceiver* transceiver = RFTransceiver::getInstance();
-	//PersistBuffer* requestBuffer = PersistBuffer::getInstance();
+	PersistBuffer* requestBuffer = PersistBuffer::getInstance();
 	RequestManager* requestManager = RequestManager::getInstance();
 	LEDScreen* screen = LEDScreen::getInstance();
 	ScreenPage* page = new ScreenPage(screen);
@@ -73,8 +62,11 @@ protected:
 
 	uint8_t helper = 0;
 	unsigned long time = millis();
-	uint8_t c = 0;
+	unsigned long timeToDtRequest = millis();
+	unsigned long timeToSurgeRequest = millis();
+	//uint8_t c = 0;
 
+	void pushDatetimeRequest();
 	void onRFMessageReceived(char* msg);
 	void onRFMessageSend(char* msg);
 	void onRFSurgeRequestReceived(Surge surge);

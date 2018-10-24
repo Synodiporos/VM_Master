@@ -34,9 +34,9 @@ uint8_t PostSurgeRequest::createRequestContent(char* buffer){
 
 	uint8_t size = snprintf(buffer, REQUEST_URL_PARAMS_LENGHT,
 		contentFormat,
-		source, charge, slope);
+		source, charge, slope, datetime);
 
-	buffer[REQUEST_URL_PARAMS_LENGHT-1] = '\0';
+	buffer[size] = '\0';
 
 	return size;
 }

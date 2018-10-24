@@ -63,6 +63,6 @@ uint8_t HttpRequestCreator::createRequest(char* buffer,
 	uint8_t lenght = snprintf(buffer, size, urlFormat,
 			WIFI_SURGEROOM_URI, uri, data,
 			WIFI_SERVER, sc, data);
-	buffer[size-1] = '\0';
+	buffer[lenght] = '\0';
 	return lenght;
 }

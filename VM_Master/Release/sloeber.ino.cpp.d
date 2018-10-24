@@ -30,9 +30,10 @@ sloeber.ino.cpp.o: ..\sloeber.ino.cpp \
  ..\WiFi/HttpRequest.h ..\WiFi/PostSurgeRequest.h \
  ..\WiFi/PostBatteryRequest.h ..\WiFi/HttpRequestCreator.h \
  ..\Controller.h ..\Commons/IActionListener.h ..\Commons/Action.h \
- ..\System/UnixTime.h ..\Button/Button.h \
- ..\Button/../Commons/IActionListener.h ..\LEDScreen/ScreenPage.h \
- ..\LEDScreen/../LEDScreen/LEDScreen.h \
+ ..\System/UnixTime.h ..\System/PersistBuffer.h \
+ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\EEPROM\src/EEPROM.h \
+ ..\Button/Button.h ..\Button/../Commons/IActionListener.h \
+ ..\LEDScreen/ScreenPage.h ..\LEDScreen/../LEDScreen/LEDScreen.h \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/string \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/basic_definitions \
  C:\Eclipse-neon\arduinoPlugin\libraries\ArduinoSTL\1.0.4\src/system_configuration.h \
@@ -157,6 +158,10 @@ C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino
 ..\Commons/Action.h:
 
 ..\System/UnixTime.h:
+
+..\System/PersistBuffer.h:
+
+C:\Eclipse-neon\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\EEPROM\src/EEPROM.h:
 
 ..\Button/Button.h:
 

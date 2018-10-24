@@ -38,7 +38,6 @@ void HttpResponse::setContent(char content[64]){
 
 void HttpResponse::appendContent(String str){
 	uint8_t l = str.length();
-	Serial.println(l);
 	const char* in = str.c_str();
 	uint8_t end = 64-lenght;
 	if(l<end)
@@ -48,7 +47,6 @@ void HttpResponse::appendContent(String str){
 	}
 	this->lenght += end;
 	this->content[lenght] = '\0';
-	Serial.println(lenght);
 }
 
 uint16_t HttpResponse::getHttpCode(){

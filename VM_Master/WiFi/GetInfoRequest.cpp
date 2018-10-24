@@ -33,7 +33,7 @@ uint8_t GetInfoRequest::createRequestContent(char* buffer){
 	uint8_t size = snprintf(buffer, REQUEST_URL_PARAMS_LENGHT,
 		contentFormat, getId());
 
-	buffer[REQUEST_URL_PARAMS_LENGHT-1] = '\0';
+	buffer[size] = '\0';
 
 	//buffer[0] = '\0';
 	return size;

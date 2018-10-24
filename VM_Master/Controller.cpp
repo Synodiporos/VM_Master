@@ -45,8 +45,7 @@ void Controller::deactivate(){
 }
 
 void Controller::initialization(){
-	//requestBuffer->initialize();
-
+	requestBuffer->initialize();
 	transceiver->powerUp();
 	transceiver->initialize();
 	transceiver->startListening();
@@ -59,6 +58,7 @@ void Controller::initialization(){
 
 	//page->reprint();
 
+	pushDatetimeRequest();
 }
 
 /*void Controller::propertyChanged(
@@ -92,6 +92,7 @@ void Controller::actionPerformed(Action action){
 	}
 
 	if(source==this->requestManager){
+		Serial.print("WFS: ");
 		Serial.println(id);
 		bool wifiConnected = id >= ST_W_CONNECTED;
 		if(this->wifiConnected!=wifiConnected){
@@ -204,6 +205,12 @@ void Controller::actionPerformed(Action action){
 	source = nullptr;
 }
 
+void Controller::pushDatetimeRequest(){
+	GetInfoRequest* req = new GetInfoRequest(254);
+	this->requestManager->pushRequest(req);
+	this->timeToDtRequest = millis();
+}
+
 void Controller::onRFMessageReceived(char* msg){
 	Serial.print(F("ON MSR: "));
 	Serial.println(msg);
@@ -290,7 +297,7 @@ void Controller::onRFMessageSend(char* msg){
 }
 
 void Controller::onRFSurgeRequestReceived(Surge surge){
-	//this->requestBuffer->push(surge);
+	this->requestBuffer->push(surge);
 }
 
 void Controller::onRFConnectionStateChanged(bool state){
@@ -309,37 +316,53 @@ void Controller::onACKReceived(){
 }*/
 
 void Controller::onWiFiConnectionStateChanged(bool state){
-	digitalWrite(LED_WHITE_PIN, state);
+	//digitalWrite(LED_WHITE_PIN, state);
 }
 
 void Controller::onWifiHttpResponseReceived(
 			HttpRequest& request, HttpResponse& response){
-	uint8_t l = response.getLenght()-1;
-	char cont[l];
-	for(int i=1; i<l; i++){
-		cont[i-1] = response.getContent()[i];
-	}
-	cont[l-1] = '\0';
+	if(response.getHttpCode()==200){
+		uint8_t l = response.getLenght()-1;
+		char cont[l];
+		for(int i=1; i<l; i++){
+			cont[i-1] = response.getContent()[i];
+		}
+		cont[l-1] = '\0';
 
-	uint8_t type = request.getRequestType();
-	switch(type){
-		case REQUEST_TYPE_SURGE :{
-			break;
-		}
-		case REQUEST_TYPE_BATTERY :{
-			break;
-		}
-		case REQUEST_TYPE_INFO :{
-			unsigned long int dt = atol(cont);
-			if(dt>0)
-				UnixTime::setUnixTime(dt+2);
-			break;
-		}
-		case REQUEST_TYPE_DATETIME :{
-			unsigned long int dt = atol(cont);
-			if(dt>0)
-				UnixTime::setUnixTime(dt+2);
-			break;
+		uint8_t type = request.getRequestType();
+		//Serial.print(F("R TYPE"));
+		//Serial.println(type);
+		switch(type){
+			case REQUEST_TYPE_SURGE :{
+				//Request Status Code
+				unsigned long int rst = atol(cont);
+				if(rst==1){
+					this->requestBuffer->pop();
+					this->requestManager->popRequest();
+					Serial.println(F("REQUEST POSTED, POP"));
+				}
+				this->timeToSurgeRequest = millis();
+				break;
+			}
+			case REQUEST_TYPE_BATTERY :{
+				this->requestManager->popRequest();
+				break;
+			}
+			case REQUEST_TYPE_INFO :{
+				unsigned long int dt = atol(cont);
+				Serial.println(dt);
+				if(dt>0)
+					UnixTime::setUnixTime(dt+2);
+				this->requestManager->popRequest();
+				break;
+			}
+			case REQUEST_TYPE_DATETIME :{
+				unsigned long int dt = atol(cont);
+				if(dt>0)
+					UnixTime::setUnixTime(dt+2);
+				this->requestManager->popRequest();
+				break;
+			}
 		}
 	}
 }
@@ -358,8 +381,13 @@ void Controller::onHVWarningStateChanged(){
 	bool state = HV1>3 || HV2>3;
 	if(HVWARNING!=state){
 		HVWARNING = state;
-		if(HVWARNING){
 
+		if(HVWARNING){
+			//Hight Voltage!!!
+			this->requestManager->setEnabled(false);
+		}
+		else{
+			this->requestManager->setEnabled(true);
 		}
 	}
 }
@@ -393,12 +421,15 @@ void Controller::onButtonStateChanged(){
 			//requestBuffer->clear();
 			//Serial.print(F("BUFFER size: "));
 			//Serial.println(requestBuffer->getSize());
-			GetInfoRequest* req = new GetInfoRequest(254);
-			PostBatteryRequest* req2 = new PostBatteryRequest(411, 92, 0);
+		//	GetInfoRequest* req = new GetInfoRequest(254);
+			PostBatteryRequest* req2 = new PostBatteryRequest(287, 3, 1);
+			PostSurgeRequest* req3 =
+					new PostSurgeRequest(28413506, 2, 13300, 885);
 
 			//char buffer[REQUEST_URL_PARAMS_LENGHT];
 			//req.createRequestContent(buffer);
-			this->requestManager->pushRequest(req);
+			this->requestManager->pushRequest(req2);
+			this->requestManager->pushRequest(req3);
 			Serial.println(F("->"));
 
 			break;
@@ -412,48 +443,41 @@ void Controller::validate(){
 	button->validate();
 	notification->validate();
 
-	if(helper==0 && millis()-time > 5000){
-		/*for(int i=0; i<4; i++){
-			PostSurgeRequest* req = new PostSurgeRequest(c, c*1000, 0);
-			requestManager->pushRequest(req);
-			c++;
-		}*/
-		//Serial.println(F("===> PUSH REQUESTS"));
+	if(millis()-timeToDtRequest>DATETIME_REQUEST_INTERVAL){
+		pushDatetimeRequest();
+	}
 
-		//HttpRequest* req1 = new TestGetRequest();
-		//HttpRequest* req2 = new TestGetRequest();// new PostSurgeRequest(1, 45000, 523);
-		//HttpRequest* req3 = new PostBatteryRequest(415, 100, 0);
-		//HttpRequest* req4 = new PostSurgeRequest(0, 100000, 2000);
-		//HttpRequest* req4 = new PostSurgeRequest(0, 45000, 5000);
+	if(HV_WARNING){
 
-		//requestManager->pushRequest(req1);
-		//requestManager->pushRequest(req2);
-		//requestManager->pushRequest(req3);
-		//requestManager->pushRequest(req4);
+	}
+	//High Voltage Disabled
+	else{
+		//BUFFER CONTAINS DATA
+		if(!this->requestBuffer->isEmpty()){
+			//WIFI CONNECTED
+			if(requestManager->isWifiConnected()){
+				//WIFI IS NOT POSTING
+				if(!requestManager->isPosting()){
+					//TIME FROM LAST RESPONSE
+					if(millis()-timeToSurgeRequest<200){
+						Surge surge;
+						this->requestBuffer->top(surge);
+						PostSurgeRequest* req =
+								new PostSurgeRequest(
+										surge.charge,
+										surge.device,
+										surge.charge,
+										surge.slope);
+						//this->requestManager->pushRequest(req);
+						timeToSurgeRequest = millis();
+					}
+				}else{
 
-		for(int i=0; i<4; i++){
-			/*HttpRequest* req1 = new TestGetRequest();
-			HttpRequest* req2 =
-					new PostSurgeRequest(123456, 1, 100000, 1000);
-			HttpRequest* req3 = new PostBatteryRequest(415, 200, 0);
-			requestManager->pushRequest(req1);
-			requestManager->pushRequest(req2);
-			requestManager->pushRequest(req3);*/
+				}
+			}
+			else{
+
+			}
 		}
-
-		//Serial.print(F("Free RAM AFTER= "));
-		//Serial.println(freeMemory(), DEC);
-
-		time = millis();
-		helper = 1;
-	}
-	if(helper==1 && millis()-time > 4000){
-		//requestManager->startPosting();
-		//time = millis();
-		helper = 2;
-	}
-	if(helper==2 && millis()-time > 15000){
-		time = millis();
-		helper = 2;
 	}
 }

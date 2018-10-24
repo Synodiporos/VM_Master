@@ -33,7 +33,7 @@ uint8_t PostBatteryRequest::createRequestContent(char* buffer){
 			contentFormat,
 			voltage, percentage, alarm);
 
-	buffer[REQUEST_URL_PARAMS_LENGHT-1] = '\0';
+	buffer[size] = '\0';
 
 	return size;
 }
